@@ -54,15 +54,18 @@ const styles = StyleSheet.create({
   },
   author: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 14,
+    lineHeight: 14,
     color: secondary.dark,
   },
   company: {
     fontWeight: "bold",
     fontSize: 14,
+    lineHeight: 14,
     color: secondary.dark,
   },
   authorRow: {
+    lineHeight: 16,
     flexDirection: "column",
     color: secondary.dark,
     alignItems: "flex-end",
