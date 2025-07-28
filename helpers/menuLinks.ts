@@ -32,7 +32,8 @@ export const menuLinks = [
   },
   {
     label: "Testimonials",
-    link: PATHS.landing,
+    //link: PATHS.landing,
+    link: "/testimonials",
     section: "testimonials-section",
     scrollDuration: 500,
   },

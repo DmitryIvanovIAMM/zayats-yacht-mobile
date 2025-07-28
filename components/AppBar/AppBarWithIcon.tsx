@@ -1,11 +1,12 @@
-import * as React from "react";
-import { Appbar } from "react-native-paper";
 import { secondary } from "@/constants/Colors";
+import * as React from "react";
 import { Image, StyleSheet } from "react-native";
+import { Appbar } from "react-native-paper";
 
 export interface AppBarWithIconProps {
   toggleMenu: () => void;
 }
+
 const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
   return (
     <Appbar.Header>

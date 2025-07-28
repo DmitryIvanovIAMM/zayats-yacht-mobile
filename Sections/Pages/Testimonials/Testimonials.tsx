@@ -2,7 +2,14 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { primary, secondary } from "@/constants/Colors";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-const testimonials = [
+interface Testimonial {
+  quote: string;
+  author: string;
+  position?: string;
+  company?: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     quote:
       "Thank you for the fine work you did on the Beneteau swift trawler that we had you send down from Victoria to Ensenada. The owners are really happy with their new boat! We have more opportunities in the pipeline and we will definitely be contacting you again so that we may use your services.",
