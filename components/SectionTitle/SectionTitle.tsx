@@ -17,6 +17,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24, // h2 equivalent
     fontWeight: "bold",
+    textTransform: "uppercase",
+    //backgroundColor: "white", // No background color
     color: secondary.dark, // Use the color constant
     textAlign: "center",
     marginVertical: 16,

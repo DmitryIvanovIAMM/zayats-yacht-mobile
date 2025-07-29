@@ -37,10 +37,10 @@ const testimonials: Testimonial[] = [
 
 const styles = StyleSheet.create({
   testimonialContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     borderRadius: 2,
     padding: 12,
-    marginVertical: 12,
+    marginVertical: 20,
     marginHorizontal: 0,
     color: secondary.dark,
     shadowColor: "#000",
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flex: 1,
+    backgroundColor: "white", // Ensure the background is white
   },
 });
 

@@ -1,3 +1,6 @@
+import AppBarWithIcon from "@/components/AppBar/AppBarWithIcon";
+import { LeftNavigation } from "@/components/LeftNavigation/LeftNavigation";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,
   DefaultTheme,
@@ -8,13 +11,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import "react-native-reanimated";
 import { PaperProvider } from "react-native-paper";
-import { Appbar } from "react-native-paper";
-
-import { useColorScheme } from "@/hooks/useColorScheme";
-import AppBarWithIcon from "@/components/AppBar/AppBarWithIcon";
-import { LeftNavigation } from "@/components/LeftNavigation/LeftNavigation";
+import "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
