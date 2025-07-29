@@ -9,7 +9,7 @@ export interface AppBarWithIconProps {
 
 const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
   return (
-    <Appbar.Header>
+    <Appbar.Header style={styles.cotainer}>
       <Appbar.Action icon="menu" onPress={toggleMenu} color={secondary.dark} />
       <Appbar.Content
         title={
@@ -19,8 +19,11 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
           />
         }
       />
-      <Appbar.Action icon="calendar" onPress={() => {}} />
-      <Appbar.Action icon="magnify" onPress={() => {}} />
+      <Appbar.Action
+        icon="calendar"
+        onPress={() => {}}
+        color={secondary.dark}
+      />
     </Appbar.Header>
   );
 };
@@ -28,11 +31,18 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
 export default AppBarWithIcon;
 
 const styles = StyleSheet.create({
+  cotainer: {
+    backgroundColor: "white",
+    color: secondary.dark,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   alliedIcon: {
     height: 55,
     width: 80,
     bottom: 0,
-    //left: 0,
-    //position: "absolute",
+    alignSelf: "center",
   },
 });
