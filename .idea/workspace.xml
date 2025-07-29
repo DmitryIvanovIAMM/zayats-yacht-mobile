@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="efb42fd1-3033-49c7-8fd1-4f5f3e98f795" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Sections/Pages/Testimonials/Testimonials.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Sections/Pages/Testimonials/Testimonials.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sections/Pages/Instructions/Instructions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Sections/Pages/Instructions/Instructions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Collapsible.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Collapsible.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +45,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ZYM-1__Add__Testimonials__section&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ZYM-2-Add-Instructions-page&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/zayats/IdeaProjects/zayats-yacht-mobile/assets/images&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -100,6 +101,8 @@
       <workItem from="1753431951674" duration="924000" />
       <workItem from="1753700622435" duration="1634000" />
       <workItem from="1753757713392" duration="57000" />
+      <workItem from="1753778123213" duration="24000" />
+      <workItem from="1753780303105" duration="14000" />
     </task>
     <servers />
   </component>
