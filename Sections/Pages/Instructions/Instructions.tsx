@@ -229,7 +229,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             {"\u2022"} Unless instructed otherwise, board the tender provided
-            byAllied Yacht Transport and proceed to the designated marina for
+            by Allied Yacht Transport and proceed to the designated marina for
             ground transportation.
             {"\n"}
             {"\n"}
