@@ -108,7 +108,7 @@ export default function Instructions() {
             Transport ship.
             {"\n"}
             {"\n"}
-            If the vessel to be loaded is of a significant weight, Allied Ocean
+            If the vessel to be loaded is of a significant weight, Allied Yacht
             Transport representatives will provide additional guidance.
             {"\n"}
             {"\n"}
