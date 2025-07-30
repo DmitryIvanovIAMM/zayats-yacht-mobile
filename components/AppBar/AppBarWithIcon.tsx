@@ -9,7 +9,7 @@ export interface AppBarWithIconProps {
 
 const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
   return (
-    <Appbar.Header style={styles.cotainer}>
+    <Appbar.Header style={styles.container}>
       <Appbar.Action icon="menu" onPress={toggleMenu} color={secondary.dark} />
       <Appbar.Content
         title={
