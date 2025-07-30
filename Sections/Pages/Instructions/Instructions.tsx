@@ -265,7 +265,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             After receiving instructions from an Allied Yacht Transport
-            representatives or ship&lsquo;s crew member, riders can proceed to
+            representatives or ship's crew member, riders can proceed to
             climb the ladder and board the ship.
             {"\n"}
             {"\n"}
