@@ -31,7 +31,7 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
 export default AppBarWithIcon;
 
 const styles = StyleSheet.create({
-  cotainer: {
+  container: {
     backgroundColor: "white",
     color: secondary.dark,
     display: "flex",
