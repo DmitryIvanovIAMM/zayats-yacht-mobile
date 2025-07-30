@@ -66,7 +66,11 @@ const ContactUs = () => {
           <Text style={styles.text}>
             <ThemedText style={styles.bold}>Phone</ThemedText>
             {"\n"}
-            <TouchableOpacity onPress={handlePhonePress}>
+            <TouchableOpacity
+              onPress={handlePhonePress}
+              accessibilityRole="button"
+              accessibilityLabel="Call phone number +1 (305) 123-4567"
+            >
               <Text style={styles.link}>+1 (305) 123-4567</Text>
             </TouchableOpacity>
           </Text>
