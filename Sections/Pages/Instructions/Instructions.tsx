@@ -247,7 +247,7 @@ export default function Instructions() {
             provided tender to be transported to the ship.
             {"\n"}
             {"\n"}
-            Upon arrival by tender to theAllied Yacht Transport ship, pay close
+            Upon arrival by tender to the Allied Yacht Transport ship, pay close
             attention to Allied Ocean Transport crew instructions.
           </ThemedText>
         </Collapsible>
