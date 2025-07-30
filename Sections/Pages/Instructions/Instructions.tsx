@@ -243,7 +243,7 @@ export default function Instructions() {
         </Collapsible>
         <Collapsible title="ARRIVAL AT PORT OF DISCHARGE">
           <ThemedText style={styles.description}>
-            Arrive at designated departure dock to boardAllied Yacht Transport
+            Arrive at designated departure dock to board Allied Yacht Transport
             provided tender to be transported to the ship.
             {"\n"}
             {"\n"}
