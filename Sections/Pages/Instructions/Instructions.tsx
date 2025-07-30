@@ -3,7 +3,7 @@ import ContactUs from "@/components/ContactUs/ContactUs";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { ThemedText } from "@/components/ThemedText";
 import { secondary } from "@/constants/Colors";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Instructions() {
   return (
@@ -277,6 +277,7 @@ export default function Instructions() {
         </Collapsible>
       </View>
       <ContactUs />
+      <Text style={styles.bottom}></Text>
     </ScrollView>
   );
 }
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     paddingBottom: 40, // Ensure the scroll view has some margin at the bottom
-    marginBottom: 30,
+    //marginBottom: 30,
   },
   container: {
     width: "90%",
@@ -308,4 +309,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
   },
+  bottom: Platform.select({
+    ios: {
+      height: 30,
+      backgroundColor: "white",
+    },
+    android: {
+      height: 0,
+      backgroundColor: "white",
+    },
+    default: {
+      height: 0,
+      backgroundColor: "white",
+    },
+  }),
 });

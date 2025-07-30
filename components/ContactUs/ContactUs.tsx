@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginBottom: 50,
     alignItems: "center",
-    width: "100%",
   },
   innerContainer: {
     width: "90%",

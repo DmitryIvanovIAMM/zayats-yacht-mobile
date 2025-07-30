@@ -3,7 +3,7 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Link, Stack } from "expo-router";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function NotFoundScreen() {
   return (
@@ -16,7 +16,9 @@ export default function NotFoundScreen() {
             Go to home screen!
           </ThemedText>
         </Link>
-        <ContactUs />
+        <View style={{ width: "100%" }}>
+          <ContactUs />
+        </View>
       </ThemedView>
     </>
   );
