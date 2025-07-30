@@ -50,7 +50,11 @@ const ContactUs = () => {
           <Text style={styles.text}>
             <ThemedText style={styles.bold}>Email</ThemedText>
             {"\n"}
-            <TouchableOpacity onPress={handleEmailPress}>
+            <TouchableOpacity
+              onPress={handleEmailPress}
+              accessibilityRole="button"
+              accessibilityLabel="Send email to info@zayats-yacht.com"
+            >
               <Text style={[styles.link]}>info@zayats-yacht.com</Text>
             </TouchableOpacity>
           </Text>
