@@ -179,7 +179,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             Launch departure locations and times will be provided by authorized
-            Allied Ocean Transport representatives.
+            Allied Yacht Transport representatives.
             {"\n"}
             {"\n"}
             Customers should limit items carried. Customers should be prepared
