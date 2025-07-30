@@ -286,6 +286,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     paddingBottom: 40, // Ensure the scroll view has some margin at the bottom
+    marginBottom: 30,
   },
   container: {
     width: "90%",

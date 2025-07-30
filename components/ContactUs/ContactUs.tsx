@@ -76,8 +76,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F7F8F9",
     flexDirection: "column",
-    marginBottom: 100,
+    marginBottom: 50,
     alignItems: "center",
+    width: "100%",
   },
   innerContainer: {
     width: "90%",
