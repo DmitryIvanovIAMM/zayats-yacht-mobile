@@ -248,7 +248,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             Upon arrival by tender to the Allied Yacht Transport ship, pay close
-            attention to Allied Ocean Transport crew instructions.
+            attention to Allied Yacht Transport crew instructions.
           </ThemedText>
         </Collapsible>
         <Collapsible title="TIPS FOR VESSEL TRANSPORT RIDERS">
