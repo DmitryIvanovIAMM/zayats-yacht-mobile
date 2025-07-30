@@ -42,7 +42,7 @@ export default function Instructions() {
             each country of origin and destination.
             {"\n"}
             {"\n"}
-            Customs paperwork must be timely filed with the authorizedAllied
+            Customs paperwork must be timely filed with the authorized Allied
             Yacht Transport representative upon request. Without proper
             clearances in place, vessels will not be able to load or unload,
             resulting in significant fines from the country of origin,
