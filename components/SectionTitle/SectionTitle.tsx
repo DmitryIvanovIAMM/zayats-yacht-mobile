@@ -8,7 +8,7 @@ type SectionTitleProps = {
 };
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ children, style }) => (
-  <View>
+  <View style={styles.container}>
     <Text style={[styles.title, style]}>{children}</Text>
   </View>
 );
@@ -18,10 +18,13 @@ const styles = StyleSheet.create({
     fontSize: 24, // h2 equivalent
     fontWeight: "bold",
     textTransform: "uppercase",
-    //backgroundColor: "white", // No background color
     color: secondary.dark, // Use the color constant
     textAlign: "center",
     marginVertical: 16,
+  },
+  container: {
+    width: "80%",
+    alignSelf: "center",
   },
 });
 
