@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
   },
   link: {
     textDecorationLine: "none",
-    cursor: "pointer",
     color: secondary.dark,
   },
 });
