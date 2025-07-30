@@ -196,22 +196,22 @@ export default function Instructions() {
         </Collapsible>
         <Collapsible title="VESSEL DELIVERY PROCESS">
           <ThemedText style={styles.description}>
-            {"\u2022"} Radio check on VHF Channel 17 with theAllied Yacht
+            {"\u2022"} Radio check on VHF Channel 17 with the Allied Yacht
             Transport load master and await instruction.
             {"\n"}
             {"\n"}
             {"\u2022"} Berthing alongside an Allied Yacht Transport ship is not
-            permitted without prior authorization from theAllied Yacht Transport
+            permitted without prior authorization from the Allied Yacht Transport
             load master.
             {"\n"}
             {"\n"}
-            {"\u2022"} Upon reaching theAllied Yacht Transport ship, ensure
+            {"\u2022"} Upon reaching the Allied Yacht Transport ship, ensure
             fenders and lines are set and maintained at correct locations and
             heights.
             {"\n"}
             {"\n"}
             {"\u2022"} Pay close attention to instructions from crew and
-            theAllied Yacht Transport load master and be prepared for line
+            the Allied Yacht Transport load master and be prepared for line
             handling.
             {"\n"}
             {"\n"}
