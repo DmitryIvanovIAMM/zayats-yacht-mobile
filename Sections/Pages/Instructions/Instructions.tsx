@@ -141,7 +141,7 @@ export default function Instructions() {
         </Collapsible>
         <Collapsible title="STRICTLY PROHIBITED AND SUBJECT TO HEAVY FINES OR ARREST">
           <ThemedText style={styles.description}>
-            WhileAllied Yacht Transport representatives will never board a
+            While Allied Yacht Transport representatives will never board a
             vessel, the following are strictly prohibited to be aboard a vessel
             during transport on an Allied Yacht Transport ship:
             {"\n"}
