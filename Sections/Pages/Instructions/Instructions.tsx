@@ -57,17 +57,17 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             Copies of valid Visas and current passports will be requested by an
-            Allied Ocean Transport representative prior to approval.
+            Allied Yacht Transport representative prior to approval.
             {"\n"}
             {"\n"}
             Upon loading, the original will be securely held by the Master on
-            board Allied Ocean Transport for the duration of the voyage.
+            board Allied Yacht Transport for the duration of the voyage.
           </ThemedText>
         </Collapsible>
         <Collapsible title="PRIOR TO TRANSPORT, SECURE THE VESSEL">
           <ThemedText style={styles.description}>
             Any loose items on the vessel should be removed or properly stowed
-            aboard the vessel prior to loading on an Allied Ocean Transport
+            aboard the vessel prior to loading on an Allied Yacht Transport
             ship.
             {"\n"}
             {"\n"}
