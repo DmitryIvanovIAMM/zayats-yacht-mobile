@@ -288,7 +288,6 @@ const styles = StyleSheet.create({
   container: {
     width: "90%",
     alignSelf: "center",
-    color: secondary.dark,
     marginBottom: 100,
   },
   intro: {
