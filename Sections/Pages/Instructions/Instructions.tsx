@@ -127,7 +127,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             Plug-in connections and specifications will be provided. If
-            arrangements have been made in advance,Allied Yacht Transport can
+            arrangements have been made in advance, Allied Yacht Transport can
             also provide water connections. Standard 2&ldquo; water connections
             are available on board and vessels are responsible for supplying
             their own hoses with multiple hoses sometimes required.
