@@ -42,12 +42,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    color: secondary.dark,
   },
   content: {
     marginTop: 6,
     marginLeft: 24,
-    color: secondary.dark,
     backgroundColor: "white",
   },
   title: {
