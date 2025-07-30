@@ -241,7 +241,7 @@ export default function Instructions() {
             Transport ship at least one hour before scheduled departure
           </ThemedText>
         </Collapsible>
-        <Collapsible title="ARRIVAL AT PORT OF DISCHARG">
+        <Collapsible title="ARRIVAL AT PORT OF DISCHARGE">
           <ThemedText style={styles.description}>
             Arrive at designated departure dock to boardAllied Yacht Transport
             provided tender to be transported to the ship.
