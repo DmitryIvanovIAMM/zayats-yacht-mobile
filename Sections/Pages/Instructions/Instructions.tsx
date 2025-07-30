@@ -237,7 +237,7 @@ export default function Instructions() {
             on board one hour before scheduled departure.
             {"\n"}
             {"\n"}
-            {"\u2022"} If permitted, all visitors must leave theAllied Yacht
+            {"\u2022"} If permitted, all visitors must leave the Allied Yacht
             Transport ship at least one hour before scheduled departure
           </ThemedText>
         </Collapsible>
