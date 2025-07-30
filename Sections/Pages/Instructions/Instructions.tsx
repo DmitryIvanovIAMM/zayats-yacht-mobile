@@ -220,7 +220,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             {"\u2022"} Stay on board your vessel until the vessel is properly
-            secured to theAllied Yacht Transport ship.
+            secured to the Allied Yacht Transport ship.
             {"\n"}
             {"\n"}
             {"\u2022"} Switch off generators/main engines as soon as vessel is
