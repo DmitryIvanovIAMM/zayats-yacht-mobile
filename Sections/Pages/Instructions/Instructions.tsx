@@ -216,7 +216,7 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             {"\u2022"} Regulations in most ports strictly prohibit vessel
-            representatives from boarding an Allied Ocean Trans­port ship.
+            representatives from boarding an Allied Yacht Transport ship.
             {"\n"}
             {"\n"}
             {"\u2022"} Stay on board your vessel until the vessel is properly
