@@ -1,3 +1,4 @@
+import ContactUs from "@/components/ContactUs/ContactUs";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { primary, secondary } from "@/constants/Colors";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -111,6 +112,7 @@ export default function Testimonials() {
           </View>
         </View>
       ))}
+      <ContactUs />
     </ScrollView>
   );
 }

@@ -1,4 +1,5 @@
 import { Collapsible } from "@/components/Collapsible";
+import ContactUs from "@/components/ContactUs/ContactUs";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { ThemedText } from "@/components/ThemedText";
 import { secondary } from "@/constants/Colors";
@@ -128,9 +129,9 @@ export default function Instructions() {
             {"\n"}
             Plug-in connections and specifications will be provided. If
             arrangements have been made in advance, Allied Yacht Transport can
-            also provide water connections. Standard 2“ water connections
-            are available on board and vessels are responsible for supplying
-            their own hoses with multiple hoses sometimes required.
+            also provide water connections. Standard 2“ water connections are
+            available on board and vessels are responsible for supplying their
+            own hoses with multiple hoses sometimes required.
           </ThemedText>
         </Collapsible>
         <Collapsible title="FOR SAILING VESSELS">
@@ -201,8 +202,8 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             {"\u2022"} Berthing alongside an Allied Yacht Transport ship is not
-            permitted without prior authorization from the Allied Yacht Transport
-            load master.
+            permitted without prior authorization from the Allied Yacht
+            Transport load master.
             {"\n"}
             {"\n"}
             {"\u2022"} Upon reaching the Allied Yacht Transport ship, ensure
@@ -210,8 +211,8 @@ export default function Instructions() {
             heights.
             {"\n"}
             {"\n"}
-            {"\u2022"} Pay close attention to instructions from crew and
-            the Allied Yacht Transport load master and be prepared for line
+            {"\u2022"} Pay close attention to instructions from crew and the
+            Allied Yacht Transport load master and be prepared for line
             handling.
             {"\n"}
             {"\n"}
@@ -228,8 +229,8 @@ export default function Instructions() {
             equipment and loose items are properly sea-fastened.
             {"\n"}
             {"\n"}
-            {"\u2022"} Unless instructed otherwise, board the tender provided
-            by Allied Yacht Transport and proceed to the designated marina for
+            {"\u2022"} Unless instructed otherwise, board the tender provided by
+            Allied Yacht Transport and proceed to the designated marina for
             ground transportation.
             {"\n"}
             {"\n"}
@@ -265,8 +266,8 @@ export default function Instructions() {
             {"\n"}
             {"\n"}
             After receiving instructions from an Allied Yacht Transport
-            representatives or ship's crew member, riders can proceed to
-            climb the ladder and board the ship.
+            representatives or ship's crew member, riders can proceed to climb
+            the ladder and board the ship.
             {"\n"}
             {"\n"}
             <Text style={styles.bold}>Allied Yacht Transport</Text> does not
@@ -275,6 +276,7 @@ export default function Instructions() {
           </ThemedText>
         </Collapsible>
       </View>
+      <ContactUs />
     </ScrollView>
   );
 }
@@ -288,7 +290,7 @@ const styles = StyleSheet.create({
   container: {
     width: "90%",
     alignSelf: "center",
-    marginBottom: 100,
+    marginBottom: 40,
   },
   intro: {
     color: secondary.dark,
