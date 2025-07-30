@@ -257,7 +257,7 @@ export default function Instructions() {
             attend the orientation meeting on board the vessel prior to
             departure in order to familiarize themselves with safety protocols,
             procedures and ask any further questions of Allied Yacht Transport
-            representatives and ship&lsquo;s crew before departure from port.
+            representatives and ship's crew before departure from port.
             {"\n"}
             {"\n"}
             Riders must be physically capable of boarding an Allied Yacht
