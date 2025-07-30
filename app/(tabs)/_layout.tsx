@@ -13,9 +13,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        //tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        tabBarActiveTintColor: secondary.dark,
-        // tabBarInactiveTintColor: secondary.light,
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: secondary.light,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -23,13 +22,13 @@ export default function TabLayout() {
           ios: {
             // Use a transparent background on iOS to show the blur effect
             position: "absolute",
-            backgroundColor: secondary.light,
+            backgroundColor: secondary.dark,
           },
           android: {
             // Use a solid background on Android
-            backgroundColor: secondary.light,
+            backgroundColor: secondary.dark,
           },
-          default: { backgroundColor: secondary.light },
+          default: { backgroundColor: secondary.dark },
         }),
       }}
     >
@@ -40,6 +39,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
+          tabBarItemStyle: { backgroundColor: secondary.dark },
         }}
       />
       <Tabs.Screen
@@ -49,24 +49,27 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
+          tabBarItemStyle: { backgroundColor: secondary.dark },
         }}
       />
       <Tabs.Screen
         name="instructions"
         options={{
-          title: "Explore",
+          title: "Instructions",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="book.fill" color={color} />
           ),
+          tabBarItemStyle: { backgroundColor: secondary.dark },
         }}
       />
       <Tabs.Screen
         name="testimonials"
         options={{
-          title: "Explore",
+          title: "Testimonials",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="book.fill" color={color} />
+            <IconSymbol size={28} name="message.badge" color={color} />
           ),
+          tabBarItemStyle: { backgroundColor: secondary.dark },
         }}
       />
     </Tabs>
