@@ -33,7 +33,6 @@ export default AppBarWithIcon;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    color: secondary.dark,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
