@@ -50,21 +50,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="instructions"
+        name="quote-request"
         options={{
-          title: "Instructions",
+          title: "Get Quote",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="book.fill" color={color} />
+            <IconSymbol size={28} name="message.badge" color={color} />
           ),
           tabBarItemStyle: { backgroundColor: secondary.dark },
         }}
       />
       <Tabs.Screen
-        name="testimonials"
+        name="instructions"
         options={{
-          title: "Testimonials",
+          title: "Instructions",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="message.badge" color={color} />
+            <IconSymbol size={28} name="book.fill" color={color} />
           ),
           tabBarItemStyle: { backgroundColor: secondary.dark },
         }}

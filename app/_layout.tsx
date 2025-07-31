@@ -1,5 +1,6 @@
 import AppBarWithIcon from "@/components/AppBar/AppBarWithIcon";
 import { LeftNavigation } from "@/components/LeftNavigation/LeftNavigation";
+import { AuthProvider } from "@/cotnexts/AuthContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,
@@ -39,16 +40,23 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <PaperProvider>
-        <AppBarWithIcon toggleMenu={toggleMenu} />
-        <LeftNavigation setMenuIsOpen={setMenuIsOpen} visible={menuIsOpen} />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="light" />
-      </PaperProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <PaperProvider>
+          <AppBarWithIcon toggleMenu={toggleMenu} />
+          <LeftNavigation setMenuIsOpen={setMenuIsOpen} visible={menuIsOpen} />
+          <Stack>
+            <Stack.Screen name="login" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="testimonials"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="light" />
+        </PaperProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
