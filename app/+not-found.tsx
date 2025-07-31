@@ -16,7 +16,7 @@ export default function NotFoundScreen() {
             Go to home screen!
           </ThemedText>
         </Link>
-        <View style={{ width: "100%" }}>
+        <View style={styles.fullWidth}>
           <ContactUs />
         </View>
       </ThemedView>
@@ -41,5 +41,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingVertical: 20,
     justifyContent: "flex-start",
+  },
+  fullWidth: {
+    width: "100%",
   },
 });
