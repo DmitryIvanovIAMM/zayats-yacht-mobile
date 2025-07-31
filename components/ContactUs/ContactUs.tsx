@@ -1,4 +1,5 @@
 import { secondary } from "@/constants/Colors";
+import { formatPhoneNumber } from "@/helpers/formatPhoneNumber";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   Linking,
@@ -12,10 +13,6 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+13051234567";
 
-const formatPhoneNumber = (phoneNumber: string): string => {
-  const match = phoneNumber.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
-  return match ? `+1 (${match[1]}) ${match[2]}-${match[3]}` : phoneNumber;
-};
 const ContactUs = () => {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
@@ -76,7 +73,7 @@ const ContactUs = () => {
               accessibilityRole="button"
               accessibilityLabel="Call phone number +1 (305) 123-4567"
             >
-              <Text style={styles.link}>+1 (305) 123-4567</Text>
+              <Text style={styles.link}>{formatPhoneNumber(PHONE_NUMBER)}</Text>
             </TouchableOpacity>
           </Text>
         </View>
