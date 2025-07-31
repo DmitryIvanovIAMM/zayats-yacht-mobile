@@ -12,6 +12,10 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+13051234567";
 
+const formatPhoneNumber = (phoneNumber: string): string => {
+  const match = phoneNumber.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
+  return match ? `+1 (${match[1]}) ${match[2]}-${match[3]}` : phoneNumber;
+};
 const ContactUs = () => {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
