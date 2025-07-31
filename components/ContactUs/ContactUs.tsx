@@ -11,13 +11,14 @@ import {
 import SectionTitle from "../SectionTitle/SectionTitle";
 import { ThemedText } from "../ThemedText";
 
+const PHONE_NUMBER = "+13051234567";
 const ContactUs = () => {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
   };
 
   const handlePhonePress = () => {
-    Linking.openURL("tel:+13051234567");
+    Linking.openURL(`tel:${PHONE_NUMBER}`);
   };
 
   return (
