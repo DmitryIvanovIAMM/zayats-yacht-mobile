@@ -1,6 +1,5 @@
 import { secondary } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import React from "react";
 import {
   Linking,
   StyleSheet,
@@ -12,6 +11,7 @@ import SectionTitle from "../SectionTitle/SectionTitle";
 import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+13051234567";
+
 const ContactUs = () => {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
@@ -24,7 +24,7 @@ const ContactUs = () => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <View style={[{ justifyContent: "center", alignItems: "center" }]}>
+        <View style={styles.title}>
           <SectionTitle>Contact Us</SectionTitle>
         </View>
         <View style={styles.item}>
@@ -92,6 +92,10 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     marginBottom: 20,
+  },
+  title: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   item: {
     width: "80%",
