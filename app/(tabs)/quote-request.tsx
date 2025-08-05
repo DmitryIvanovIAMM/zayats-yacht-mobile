@@ -4,9 +4,9 @@ import { Redirect } from "expo-router";
 import { View } from "react-native";
 
 export default function GetQuotePage() {
-  const { logout, isAuthenticated } = useAuth();
+  const { authState } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!authState.isAuthenticated) {
     return <Redirect href="/login" />;
   }
 

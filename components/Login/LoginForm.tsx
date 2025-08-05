@@ -1,7 +1,10 @@
-import { secondary } from "@/constants/Colors";
+import { errorColor, secondary } from "@/constants/Colors";
+import { useAuth } from "@/cotnexts/AuthContext";
+import { PATHS } from "@/helpers/paths";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -9,29 +12,39 @@ import {
   View,
 } from "react-native";
 
-type FormData = {
+export interface LoginCredentials {
   email: string;
   password: string;
-};
+}
 
 export default function LoginForm() {
+  const { login, authState, setAuthState } = useAuth();
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>();
+  } = useForm<LoginCredentials>();
+
+  React.useEffect(() => {
+    setAuthState((prev) => ({
+      ...prev,
+      isValidating: false,
+      error: undefined,
+    }));
+  }, [setValue]);
 
   React.useEffect(() => {
     register("email", { required: "Email is required" });
     register("password", { required: "Password is required" });
   }, [register]);
 
-  const onSubmit = (data: FormData) => {
-    // Handle login logic here
-    // e.g., call API or authentication function
+  const onSubmit = (data: LoginCredentials) => {
     console.log(data);
+    login(data, PATHS.quoteRequest);
   };
+
+  const formDisabled = isSubmitting || authState.isValidating;
 
   return (
     <View style={styles.container}>
@@ -46,6 +59,7 @@ export default function LoginForm() {
           onChangeText={(text) =>
             setValue("email", text, { shouldValidate: true })
           }
+          editable={!formDisabled}
         />
         {errors.email && (
           <Text style={styles.error}>{errors.email.message}</Text>
@@ -60,6 +74,7 @@ export default function LoginForm() {
           onChangeText={(text) =>
             setValue("password", text, { shouldValidate: true })
           }
+          editable={!formDisabled}
         />
         {errors.password && (
           <Text style={styles.error}>{errors.password.message}</Text>
@@ -68,15 +83,18 @@ export default function LoginForm() {
       <TouchableOpacity
         style={styles.button}
         onPress={handleSubmit(onSubmit)}
-        disabled={isSubmitting}
+        disabled={formDisabled}
       >
-        <Text style={styles.buttonText}>
-          {isSubmitting ? "Signing in..." : "Sign in"}
-        </Text>
+        {formDisabled && (
+          <View style={styles.spinnerContainer}>
+            <ActivityIndicator size="small" color="white" />
+          </View>
+        )}
+        <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
-      <Text style={styles.hint}>
-        Don't have an account? <Text style={styles.link}>Sign up</Text>
-      </Text>
+      {authState.error && (
+        <Text style={styles.errorText}>{authState.error}</Text>
+      )}
     </View>
   );
 }
@@ -113,24 +131,35 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
   },
   inputError: {
-    borderColor: "#e53935",
+    borderColor: errorColor,
   },
   error: {
-    color: "#e53935",
-    fontSize: 13,
-    marginTop: 4,
+    color: errorColor,
+    fontSize: 14,
+    marginTop: 8,
+    justifyContent: "center",
   },
   button: {
     backgroundColor: secondary.dark,
     paddingVertical: 14,
     borderRadius: 2,
-    alignItems: "center",
     marginTop: 8,
+    height: 50,
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
   },
   buttonText: {
     color: "#fff",
     fontWeight: "600",
     fontSize: 16,
+  },
+  spinnerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingRight: 16,
   },
   hint: {
     marginTop: 18,
@@ -138,8 +167,11 @@ const styles = StyleSheet.create({
     color: "#666",
     fontSize: 14,
   },
-  link: {
-    color: "#1e88e5",
-    fontWeight: "500",
+  errorText: {
+    color: errorColor,
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "center",
+    justifyContent: "center",
   },
 });

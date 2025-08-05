@@ -37,3 +37,6 @@ export const secondary = {
   main: "#339966",
   dark: "#006666",
 };
+
+export const errorColor = "#e53935";
+
