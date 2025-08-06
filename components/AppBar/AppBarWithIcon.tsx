@@ -2,7 +2,14 @@ import { secondary } from "@/constants/Colors";
 import { useAuth } from "@/cotnexts/AuthContext";
 import { RelativePathString, useRouter } from "expo-router";
 import * as React from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Appbar } from "react-native-paper";
 
 export interface AppBarWithIconProps {
@@ -48,17 +55,19 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
           />
         ) : authState.isAuthenticated ? (
           <View style={styles.appBarIconWitName}>
-            <Text style={styles.userName}>
-              {authState.userInfo?.user?.name
-                ? (authState?.userInfo?.user?.name ?? "User")
-                : (authState?.userInfo?.user?.email ?? "User")}
-            </Text>
-            <Appbar.Action
-              icon="logout"
-              onPress={handleLoginPress}
-              color={secondary.dark}
-              style={styles.appBarIconAfterNName}
-            />
+            <View style={styles.userNameWithIcon}>
+              <Text style={styles.userName}>
+                {authState.userInfo?.user?.name
+                  ? (authState?.userInfo?.user?.name ?? "User")
+                  : (authState?.userInfo?.user?.email ?? "User")}
+              </Text>
+              <Appbar.Action
+                icon="logout"
+                onPress={handleLoginPress}
+                color={secondary.dark}
+                style={styles.appBarIconAfterNName}
+              />
+            </View>
           </View>
         ) : (
           <Appbar.Action
@@ -105,12 +114,32 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignSelf: "center",
   },
-  userName: {
-    color: secondary.dark,
-    fontSize: 12,
-    fontWeight: "bold",
+  userNameWithIcon: {
+    width: "100%",
+    maxWidth: "100%",
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "flex-end",
   },
+  userName: Platform.select({
+    default: {
+      color: secondary.dark,
+      fontSize: 18,
+      marginRight: 8,
+      fontWeight: "bold",
+      textAlign: "right",
+      alignSelf: "center",
+    },
+    android: {
+      color: secondary.dark,
+      fontSize: 14,
+      fontWeight: "bold",
+      textWrap: "wrap",
+      width: "100%",
+      textAlign: "right",
+      alignSelf: "center",
+    },
+  }),
   activityIndicator: {
     marginRight: 16,
   },
@@ -124,5 +153,6 @@ const styles = StyleSheet.create({
   appBarIconAfterNName: {
     marginLeft: 0,
     padding: 0,
+    width: "auto",
   },
 });
