@@ -26,7 +26,6 @@ async function request(
     },
     credentials: "include",
   };
-  console.log("data: ", data);
 
   if (data) {
     dataToJSON ? (options.body = JSON.stringify(data)) : (options.body = data);

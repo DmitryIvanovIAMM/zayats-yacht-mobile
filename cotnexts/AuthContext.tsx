@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error("Failed to log out");
       }
 
-      // remove this code, under logout; it ony for debugging
+      // remove this code, under logout; it only for debugging
       // const getUserInfoSuccess = await getUserInfo();
       // console.log("User Info after logout: ", getUserInfoSuccess);
 
