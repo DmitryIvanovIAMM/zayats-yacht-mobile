@@ -43,7 +43,6 @@ export default function LoginForm() {
   }, [register]);
 
   const onSubmit = (data: LoginCredentials) => {
-    console.log(data);
     login(data, PATHS.quoteRequest);
   };
 
