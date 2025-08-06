@@ -18,15 +18,15 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    // padding: 20,
     backgroundColor: "white",
+    width: "100%",
+    minHeight: "100%",
+    justifyContent: "space-between",
   },
   formContainer: {
-    ///padding: 20,
+    width: "100%",
   },
   fullWidth: {
     width: "100%",
