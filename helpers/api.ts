@@ -1,7 +1,7 @@
 import { LoginCredentials } from "@/components/Login/LoginForm";
 
-export const API_BASE_URL = "http://localhost:3000/api/";
-//export const API_BASE_URL = "https://zayats-yacht.vercel.app/api/";
+export const API_BASE_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
+console.log("API_BASE_URL: ", API_BASE_URL);
 
 //const AUTH_TOKEN = "your-auth-token"; // Replace with your actual token or import from config
 
@@ -64,7 +64,7 @@ export const createLoginBody = (
   return mapObjectToFormUrlEncoded({
     csrfToken,
     //name: encodeURIComponent("Yacht Admin"),
-    email: encodeURIComponent(credentials.email),
+    email: credentials.email,
     password: encodeURIComponent(credentials.password),
     // email: "yacht.admin@gmail.com",
     // password: "Yacht123",
