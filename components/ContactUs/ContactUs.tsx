@@ -3,6 +3,7 @@ import { formatPhoneNumber } from "@/helpers/formatPhoneNumber";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   Linking,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -121,11 +122,18 @@ const styles = StyleSheet.create({
     margin: 10,
     boxShadow: "0px 2px 20px rgba(51, 101, 167, 0.18)",
   },
-  text: {
-    fontSize: 16,
-    color: secondary.dark,
-    marginLeft: 12,
-  },
+  text: Platform.select({
+    default: {
+      fontSize: 16,
+      color: secondary.dark,
+      marginLeft: 12,
+    },
+    android: {
+      fontSize: 14,
+      color: secondary.dark,
+      marginLeft: 12,
+    },
+  }),
   bold: {
     fontWeight: "bold",
     color: secondary.dark,

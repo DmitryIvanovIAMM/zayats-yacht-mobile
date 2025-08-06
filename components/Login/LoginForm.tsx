@@ -57,6 +57,8 @@ export default function LoginForm() {
         <TextInput
           style={styles.input}
           outlineStyle={[styles.inputBorder, errors.email && styles.inputError]}
+          textColor="black"
+          cursorColor="black"
           autoCapitalize="none"
           keyboardType="email-address"
           placeholder="you@example.com"
@@ -78,6 +80,8 @@ export default function LoginForm() {
             styles.inputBorder,
             errors.password && styles.inputError,
           ]}
+          textColor="black"
+          cursorColor="black"
           secureTextEntry={!showPassword}
           placeholder="••••••••"
           onChangeText={(text) =>
@@ -164,9 +168,10 @@ const styles = StyleSheet.create({
     default: {
       borderWidth: 0,
       borderColor: "#ddd",
-      borderRadius: 1,
+      borderRadius: 0,
       padding: 8,
       fontSize: 16,
+      color: secondary.dark,
       backgroundColor: "#fafafa",
       height: 24,
       width: "100%",
@@ -175,9 +180,10 @@ const styles = StyleSheet.create({
     android: {
       borderWidth: 0,
       borderColor: "#ddd",
-      borderRadius: 1,
+      borderRadius: 0,
       padding: 8,
       fontSize: 14,
+      color: secondary.dark,
       backgroundColor: "#fafafa",
       height: 18,
       width: "100%",
