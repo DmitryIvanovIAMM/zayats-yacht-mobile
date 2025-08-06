@@ -1,6 +1,13 @@
 import { secondary } from "@/constants/Colors"; // Adjust the import path as necessary
 import React from "react";
-import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
+import {
+  Platform,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+} from "react-native";
 
 type SectionTitleProps = {
   children: React.ReactNode;
@@ -14,14 +21,24 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ children, style }) => (
 );
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24, // h2 equivalent
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    color: secondary.dark, // Use the color constant
-    textAlign: "center",
-    marginVertical: 16,
-  },
+  title: Platform.select({
+    default: {
+      fontSize: 24, // h2 equivalent
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      color: secondary.dark, // Use the color constant
+      textAlign: "center",
+      marginVertical: 16,
+    },
+    android: {
+      fontSize: 20, // Adjusted for Android
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      color: secondary.dark,
+      textAlign: "center",
+      marginVertical: 12,
+    },
+  }),
   container: {
     width: "80%",
     alignSelf: "center",
