@@ -21,8 +21,3 @@ export enum PATHS {
  * @returns string such as '/user/1'
  */
 export const toPath = (path: string, params = {}) => compile(path)(params);
-
-export enum API_PATHS {
-  login = "/api/auth/login",
-  logout = "/api/auth/logout",
-}

@@ -1,31 +1,61 @@
-import ContactUs from "@/components/ContactUs/ContactUs";
-import ScheduleSection from "@/components/ScheduleSection/ScheduleSection";
 import { secondary } from "@/constants/Colors";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect } from "react";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useSailings } from "./useSchedule";
 
-export default function HomeScreen() {
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <ScheduleSection />
-        <ContactUs />
-      </View>
+const ScheduleSection = () => {
+  const { scheduleState, getNearestSailings } = useSailings();
+  console.log("getNearestSailings: ", getNearestSailings);
+
+  // Fetch the nearest sailings when the component mounts
+  useEffect(() => {
+    getNearestSailings();
+  }, [getNearestSailings]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getNearestSailings();
+    }, []) // Empty dependency array ensures it runs only on focus/unfocus
+  );
+
+  return scheduleState.isLoading ? (
+    <View style={styles.spinnerContainer}>
+      <ActivityIndicator size="large" color={secondary.dark} />
+    </View>
+  ) : scheduleState.error ? (
+    <Text style={styles.errorText}>{scheduleState.error}</Text>
+  ) : (
+    <ScrollView style={styles.scheduleContainer}>
+      <Text>{`There are ${scheduleState?.schedule?.length ?? 0} sailings available`}</Text>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
+  spinnerContainer: {
     color: secondary.dark,
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-    minHeight: "100%",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 40,
+    fontSize: 16,
+  },
+  scheduleContainer: {
+    padding: 20,
   },
 });
 
+export default ScheduleSection;
 // export default function HomeScreen() {
 //   return (
 //     <ParallaxScrollView
