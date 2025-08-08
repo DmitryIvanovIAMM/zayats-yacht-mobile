@@ -4,6 +4,7 @@ import {
   createLoginBody,
   mapObjectToFormUrlEncoded,
 } from "@/helpers/API/api";
+import { API_PATHS } from "@/helpers/API/apiPaths";
 import { PATHS } from "@/helpers/paths";
 import { RelativePathString, useRouter } from "expo-router";
 import { createContext, ReactNode, useContext, useState } from "react";
@@ -55,13 +56,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error: undefined,
       }));
       // https://github.com/nextauthjs/next-auth/issues/1110
-      const csrfTokenRequest = await (await api.get("auth/csrf")).json();
+      const csrfTokenRequest = await (
+        await api.get(API_PATHS.GET_CSRF_TOKEN)
+      ).json();
       const csrfToken = csrfTokenRequest.csrfToken;
 
       const body = createLoginBody(credentials, csrfToken);
 
       const loginRequest = await api.post(
-        "auth/callback/credentials?",
+        API_PATHS.SIGN_IN_WITH_CREDENTIALS,
         body,
         {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -96,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const getUserInfo = async (): Promise<boolean> => {
     try {
       const userInfo: UserInfo = await api
-        .get("auth/session")
+        .get(API_PATHS.GET_USER_SESSION)
         .then((res) => res.json());
 
       if (!userInfo || !userInfo.user) {
@@ -135,7 +138,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const csrfToken = csrfTokenRequest.csrfToken;
 
       const logoutRequest = await api.post(
-        "auth/signout",
+        API_PATHS.SIGN_OUT,
         mapObjectToFormUrlEncoded({
           csrfToken,
           redirect: false,

@@ -1,5 +1,6 @@
 import { secondary } from "@/constants/Colors";
-import { useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -18,6 +19,12 @@ const ScheduleSection = () => {
     getNearestSailings();
   }, [getNearestSailings]);
 
+  useFocusEffect(
+    useCallback(() => {
+      getNearestSailings();
+    }, []) // Empty dependency array ensures it runs only on focus/unfocus
+  );
+
   return scheduleState.isLoading ? (
     <View style={styles.spinnerContainer}>
       <ActivityIndicator size="large" color={secondary.dark} />
@@ -26,10 +33,11 @@ const ScheduleSection = () => {
     <Text style={styles.errorText}>{scheduleState.error}</Text>
   ) : (
     <ScrollView style={styles.scheduleContainer}>
-      <Text>{JSON.stringify(scheduleState.schedule)}</Text>
+      <Text>{`There are ${scheduleState?.schedule?.length ?? 0} sailings available`}</Text>
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   spinnerContainer: {
     color: secondary.dark,

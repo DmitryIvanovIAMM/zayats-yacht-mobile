@@ -1,4 +1,4 @@
-import GetQuoteForm from "@/components/GetQuote/GetQuoteForm";
+import GetQuoteForm from "@/components/QuoteRequest/QuoteRequestForm";
 import { useAuth } from "@/cotnexts/AuthContext";
 import { Redirect } from "expo-router";
 import { View } from "react-native";
