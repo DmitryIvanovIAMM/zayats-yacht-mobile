@@ -1,13 +1,43 @@
 import ContactUs from "@/components/ContactUs/ContactUs";
 import ScheduleSection from "@/components/ScheduleSection/ScheduleSection";
+import { useSailings } from "@/components/ScheduleSection/useSchedule";
 import { secondary } from "@/constants/Colors";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import {
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 
 export default function HomeScreen() {
+  const { scheduleState, getNearestSailings } = useSailings();
+  console.log("getNearestSailings: ", getNearestSailings);
+
+  useFocusEffect(
+    useCallback(() => {
+      getNearestSailings();
+    }, []) // Empty dependency array ensures it runs only on focus/unfocus
+  );
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    console.log("Refreshing sailings...");
+    setRefreshing(true);
+    getNearestSailings().finally(() => {
+      setRefreshing(false);
+    });
+  }, []);
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.container}>
-        <ScheduleSection />
+        <ScheduleSection scheduleState={scheduleState} />
         <ContactUs />
       </View>
     </ScrollView>
@@ -15,15 +45,23 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    color: secondary.dark,
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-    minHeight: "100%",
-    justifyContent: "space-between",
-  },
+  container: Platform.select({
+    default: {
+      backgroundColor: "#fff",
+      color: secondary.dark,
+      display: "flex",
+      flexDirection: "column",
+      flex: 1,
+      marginBottom: 80,
+    },
+    android: {
+      backgroundColor: "#fff",
+      color: secondary.dark,
+      display: "flex",
+      flexDirection: "column",
+      flex: 1,
+    },
+  }),
 });
 
 // export default function HomeScreen() {

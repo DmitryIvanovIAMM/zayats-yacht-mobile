@@ -1,11 +1,11 @@
 import { api } from "@/helpers/API/api";
 import { API_PATHS } from "@/helpers/API/apiPaths";
 import { ActionData } from "@/helpers/API/apiTypes";
-import { SailingWithShipStopAndPortsFrontend } from "@/models/SailingFrontend";
+import { ShipStopWithSailingAndPortFrontend } from "@/models/ShipStopFrontend";
 import { useCallback, useState } from "react";
 
 export interface SailingsState {
-  schedule: SailingWithShipStopAndPortsFrontend[] | null;
+  schedule: ShipStopWithSailingAndPortFrontend[][] | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -27,7 +27,7 @@ export const useSailings = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch sailings");
       }
-      const data: ActionData<SailingWithShipStopAndPortsFrontend[]> =
+      const data: ActionData<ShipStopWithSailingAndPortFrontend[][]> =
         await response.json();
       if (data.success === false) {
         throw new Error(data.message || "Failed to fetch sailings");
