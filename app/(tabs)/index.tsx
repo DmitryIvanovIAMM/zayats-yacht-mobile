@@ -40,7 +40,19 @@ export default function HomeScreen() {
     ) {
       delete (route.params as HomeScreenRouteParams).section;
     }
-  }
+  useEffect(() => {
+    if (section) {
+      setSectionToScroll(section);
+      if (
+        route &&
+        route.params &&
+        typeof route.params === "object" &&
+        "section" in route.params
+      ) {
+        delete (route.params as HomeScreenRouteParams).section;
+      }
+    }
+  }, [section, route]);
 
   const scrollViewRef = useRef(null);
   const aboutUsRef = useRef<ScrollView>(null);
