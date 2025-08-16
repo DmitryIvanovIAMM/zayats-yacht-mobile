@@ -47,10 +47,6 @@ export default function RootLayout() {
           <LeftNavigation setMenuIsOpen={setMenuIsOpen} visible={menuIsOpen} />
           <Stack>
             <Stack.Screen name="login" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="testimonials"
-              options={{ headerShown: false }}
-            />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>

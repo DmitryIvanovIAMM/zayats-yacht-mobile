@@ -1,4 +1,4 @@
-import { PATHS } from "./paths";
+import { PATHS, SECTIONS } from "./paths";
 
 export interface MenuLink {
   label: string;
@@ -11,7 +11,7 @@ export const menuLinks = [
   {
     label: "Schedule",
     link: PATHS.landing,
-    section: "schedule-section",
+    section: SECTIONS.schedule,
     scrollDuration: 500,
   },
   {
@@ -32,21 +32,20 @@ export const menuLinks = [
   },
   {
     label: "Testimonials",
-    //link: PATHS.landing,
-    link: "/testimonials",
-    section: "testimonials-section",
+    link: PATHS.landing,
+    section: SECTIONS.testimonials,
     scrollDuration: 500,
   },
   {
     label: "About Us",
     link: PATHS.landing,
-    section: "about-us-section",
+    section: SECTIONS.aboutUs,
     scrollDuration: 1000,
   },
   {
     label: "Contact Us",
     link: PATHS.landing,
-    section: "contact-us-section",
+    section: SECTIONS.contactUs,
     scrollDuration: 1500,
   },
 ];

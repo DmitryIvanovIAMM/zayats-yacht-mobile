@@ -4,7 +4,7 @@ import { RelativePathString, useRouter } from "expo-router";
 import { Divider, Menu } from "react-native-paper";
 
 export interface LeftNavigationProps {
-  setMenuIsOpen: (iaOpen: boolean) => void;
+  setMenuIsOpen: (isOpen: boolean) => void;
   visible: boolean;
 }
 
@@ -15,16 +15,16 @@ export const LeftNavigation = ({
   const router = useRouter();
   const menuLinks = getMenuLinks(false);
 
-  const handleMenuItemPress = (link: string = "/") => {
+  const handleMenuItemPress = (link: string = "/", section: string = "") => {
     console.log(`Navigating to ${link}`);
     setMenuIsOpen(false);
     if (!link) return;
 
-    if (link.startsWith("/")) {
-      router.push(link as RelativePathString);
-    } else {
-      router.push(`/${link}` as RelativePathString);
-    }
+    const routeLink = link.startsWith("/") ? link : `/${link}`;
+    const routeSection = section
+      ? routeLink + `?section=${section}`
+      : routeLink;
+    router.push(routeSection as RelativePathString);
   };
 
   return (
@@ -37,11 +37,11 @@ export const LeftNavigation = ({
     >
       <>
         {menuLinks.map((menuLinkItem, index) => {
-          const { label, section } = menuLinkItem;
+          const { label, link, section } = menuLinkItem;
           return (
             <Menu.Item
               key={`menu-item-${index}`}
-              onPress={() => handleMenuItemPress(menuLinkItem?.link)}
+              onPress={() => handleMenuItemPress(link, section)}
               title={label}
               titleStyle={{ color: primary.contrastText }}
             />

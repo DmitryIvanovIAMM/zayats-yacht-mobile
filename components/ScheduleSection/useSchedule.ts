@@ -23,16 +23,16 @@ export const useSailings = () => {
     try {
       setScheduleState({ ...defaultSailingsState, isLoading: true });
       const response = await api.get(API_PATHS.NEAREST_SAILINGS);
-      console.log("getNearestSailings response: ", response.ok);
       if (!response.ok) {
-        throw new Error("Failed to fetch sailings");
+        throw new Error("useSailing(). Failed to fetch sailings");
       }
       const data: ActionData<ShipStopWithSailingAndPortFrontend[][]> =
         await response.json();
       if (data.success === false) {
-        throw new Error(data.message || "Failed to fetch sailings");
+        throw new Error(
+          data.message || "useSailing(). Failed to fetch sailings"
+        );
       }
-      console.log("getNearestSailings data: ", data);
 
       setScheduleState({ ...defaultSailingsState, schedule: data.data });
     } catch (error) {

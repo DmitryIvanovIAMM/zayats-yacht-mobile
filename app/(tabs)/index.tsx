@@ -2,8 +2,11 @@ import ContactUs from "@/components/ContactUs/ContactUs";
 import ScheduleSection from "@/components/ScheduleSection/ScheduleSection";
 import { useSailings } from "@/components/ScheduleSection/useSchedule";
 import { secondary } from "@/constants/Colors";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { SECTIONS } from "@/helpers/paths";
+import AboutUs from "@/Sections/Pages/AboutUs/AboutUs";
+import Testimonials from "@/Sections/Pages/Testimonials/Testimonials";
+import { useRoute } from "@react-navigation/native";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Platform,
   RefreshControl,
@@ -12,33 +15,112 @@ import {
   View,
 } from "react-native";
 
-export default function HomeScreen() {
-  const { scheduleState, getNearestSailings } = useSailings();
-  console.log("getNearestSailings: ", getNearestSailings);
+// Define the expected params type
+type HomeScreenRouteParams = {
+  section?: string;
+};
 
-  useFocusEffect(
-    useCallback(() => {
-      getNearestSailings();
-    }, []) // Empty dependency array ensures it runs only on focus/unfocus
+export default function HomeScreen() {
+  const route = useRoute();
+  // Safely cast params to your type
+  const { section } = (route?.params as HomeScreenRouteParams) || {
+    section: undefined,
+  };
+  const { scheduleState, getNearestSailings } = useSailings();
+  const [sectionToScroll, setSectionToScroll] = useState<string | undefined>(
+    section
   );
-  const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = useCallback(() => {
-    console.log("Refreshing sailings...");
-    setRefreshing(true);
-    getNearestSailings().finally(() => {
-      setRefreshing(false);
-    });
-  }, []);
+  if (section) {
+    setSectionToScroll(section);
+    if (
+      route &&
+      route.params &&
+      typeof route.params === "object" &&
+      "section" in route.params
+    ) {
+      delete (route.params as HomeScreenRouteParams).section;
+    }
+  }
+
+  const scrollViewRef = useRef(null);
+  const aboutUsRef = useRef<ScrollView>(null);
+  const testimonialsRef = useRef<ScrollView>(null);
+  const scheduleRef = useRef<ScrollView>(null);
+  const contactUsRef = useRef<ScrollView>(null);
+
+  const [readyToScroll, setReadyToScroll] = useState(false);
+
+  const scrollToSectionIfAny = (section: string | undefined) => {
+    if (!section) return;
+
+    const scrollToSectionRef = (
+      sectionRef: React.RefObject<ScrollView | null>
+    ) => {
+      if (!sectionRef || !sectionRef.current) {
+        return;
+      }
+
+      sectionRef.current?.measureLayout(
+        scrollViewRef.current,
+        (x, y, width, height) => {
+          scrollViewRef?.current.scrollTo({ y, animated: true });
+        }
+      );
+    };
+
+    switch (section) {
+      case SECTIONS.aboutUs:
+        scrollToSectionRef(aboutUsRef);
+        break;
+      case SECTIONS.schedule:
+        scrollToSectionRef(scheduleRef);
+        break;
+      case SECTIONS.testimonials:
+        scrollToSectionRef(testimonialsRef);
+        break;
+      case SECTIONS.contactUs:
+        scrollToSectionRef(contactUsRef);
+        break;
+      default:
+        break;
+    }
+
+    // trick is here - do not forget to reset the section to be scrolled id
+    setSectionToScroll(undefined);
+  };
+
+  const getNearestSailingsCallback = useCallback(() => {
+    const getNearestCalll = async () => {
+      setReadyToScroll(false);
+      await getNearestSailings();
+      setReadyToScroll(true);
+    };
+    getNearestCalll();
+  }, [getNearestSailings]);
+
+  useEffect(getNearestSailingsCallback, []);
+
+  useEffect(() => {
+    if (readyToScroll) {
+      scrollToSectionIfAny(sectionToScroll);
+    }
+  }, [readyToScroll, sectionToScroll]);
 
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={false}
+          onRefresh={getNearestSailingsCallback}
+        />
       }
+      ref={scrollViewRef}
     >
       <View style={styles.container}>
-        <ScheduleSection scheduleState={scheduleState} />
-        <ContactUs />
+        <ScheduleSection scheduleState={scheduleState} ref={scheduleRef} />
+        <Testimonials ref={testimonialsRef} />
+        <AboutUs ref={aboutUsRef} />
+        <ContactUs ref={contactUsRef} />
       </View>
     </ScrollView>
   );
