@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     color: secondary.dark,
     justifyContent: "center",
     marginTop: 20,
+    minHeight: 400,
   },
   errorText: {
     color: "red",

@@ -40,6 +40,8 @@ export default function HomeScreen() {
     ) {
       delete (route.params as HomeScreenRouteParams).section;
     }
+  }
+
   useEffect(() => {
     if (section) {
       setSectionToScroll(section);
