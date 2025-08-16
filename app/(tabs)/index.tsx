@@ -107,7 +107,12 @@ export default function HomeScreen() {
       await getNearestSailings();
       setReadyToScroll(true);
     };
-    getNearestCalll();
+    const getNearestCall = async () => {
+      setReadyToScroll(false);
+      await getNearestSailings();
+      setReadyToScroll(true);
+    };
+    getNearestCall();
   }, [getNearestSailings]);
 
   useEffect(getNearestSailingsCallback, []);
