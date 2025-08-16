@@ -1,6 +1,6 @@
-import ContactUs from "@/components/ContactUs/ContactUs";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { primary, secondary } from "@/constants/Colors";
+import { SECTIONS } from "@/helpers/paths";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 interface Testimonial {
@@ -35,6 +35,43 @@ const testimonials: Testimonial[] = [
     author: "Nic Arnsby",
   },
 ] as const;
+
+export default function Testimonials({
+  ref,
+}: {
+  ref: React.RefObject<ScrollView | null>;
+}) {
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 24 }}
+      id={SECTIONS.testimonials}
+      ref={ref}
+    >
+      <SectionTitle>Testimonials</SectionTitle>
+      {testimonials.map((testimonial, index) => (
+        <View style={styles.testimonialContainer} key={index}>
+          <Text style={styles.quote}>"{testimonial.quote}"</Text>
+          <View style={styles.authorRow}>
+            <Text style={styles.author}>{testimonial.author}</Text>
+            {testimonial?.position && (
+              <Text style={styles.author}>
+                {"\n"}
+                {testimonial?.position}
+              </Text>
+            )}
+            {testimonial?.company && (
+              <Text style={styles.company}>
+                {"\n"}
+                {testimonial?.company}
+              </Text>
+            )}
+          </View>
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
   testimonialContainer: {
@@ -79,40 +116,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "flex-end",
   },
-  scroll: {
+  container: {
     flex: 1,
-    backgroundColor: "white", // Ensure the background is white
+    backgroundColor: "white",
   },
 });
-
-export default function Testimonials() {
-  return (
-    <ScrollView
-      style={styles.scroll}
-      contentContainerStyle={{ paddingBottom: 24 }}
-    >
-      <SectionTitle>Testimonials</SectionTitle>
-      {testimonials.map((testimonial, index) => (
-        <View style={styles.testimonialContainer} key={index}>
-          <Text style={styles.quote}>"{testimonial.quote}"</Text>
-          <View style={styles.authorRow}>
-            <Text style={styles.author}>{testimonial.author}</Text>
-            {testimonial?.position && (
-              <Text style={styles.author}>
-                {"\n"}
-                {testimonial?.position}
-              </Text>
-            )}
-            {testimonial?.company && (
-              <Text style={styles.company}>
-                {"\n"}
-                {testimonial?.company}
-              </Text>
-            )}
-          </View>
-        </View>
-      ))}
-      <ContactUs />
-    </ScrollView>
-  );
-}

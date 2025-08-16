@@ -15,6 +15,13 @@ export enum PATHS {
   logoutApi = "/api/auth/logout",
 }
 
+export const SECTIONS = {
+  aboutUs: "about-us-section",
+  schedule: "schedule-section",
+  testimonials: "testimonials-section",
+  contactUs: "contact-us-section",
+};
+
 /**
  * @param path such as '/user/:id.
  * @param params such as {id: 1}

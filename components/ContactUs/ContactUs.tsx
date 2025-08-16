@@ -1,9 +1,11 @@
 import { secondary } from "@/constants/Colors";
 import { formatPhoneNumber } from "@/helpers/formatPhoneNumber";
+import { SECTIONS } from "@/helpers/paths";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   Linking,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,7 +16,7 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+13051234567";
 
-const ContactUs = () => {
+const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
   };
@@ -24,7 +26,11 @@ const ContactUs = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      id={SECTIONS.contactUs}
+      ref={ref}
+    >
       <View style={styles.innerContainer}>
         <View style={styles.title}>
           <SectionTitle>Contact Us</SectionTitle>
@@ -79,7 +85,7 @@ const ContactUs = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
