@@ -24,9 +24,7 @@ const ScheduleSection = ({ scheduleState, ref }: ScheduleSectionProps) => {
           <ActivityIndicator size="large" color={secondary.dark} />
         </View>
       ) : scheduleState.error ? (
-        <Text style={styles.errorText}>
-          {scheduleState.error} id="schedule-section"
-        </Text>
+        <Text style={styles.errorText}>{scheduleState.error}</Text>
       ) : (
         <FlatList
           data={scheduleState.schedule}
