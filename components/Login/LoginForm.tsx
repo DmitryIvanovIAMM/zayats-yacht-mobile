@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { TextInput } from "react-native-paper";
+import { FormContainer } from "../FormContainer/FormContainer";
 
 export interface LoginCredentials {
   email: string;
@@ -50,73 +51,78 @@ export default function LoginForm() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign in to your account</Text>
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder, errors.email && styles.inputError]}
-          textColor="black"
-          cursorColor="black"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          placeholder="you@example.com"
-          onChangeText={(text) =>
-            setValue("email", text, { shouldValidate: true })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-        />
-        {errors.email && (
-          <Text style={styles.error}>{errors.email.message}</Text>
+      <FormContainer>
+        <Text style={styles.title}>Sign in to your account</Text>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            outlineStyle={[
+              styles.inputBorder,
+              errors.email && styles.inputError,
+            ]}
+            textColor="black"
+            cursorColor="black"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            placeholder="you@example.com"
+            onChangeText={(text) =>
+              setValue("email", text, { shouldValidate: true })
+            }
+            editable={!formDisabled}
+            mode="outlined"
+          />
+          {errors.email && (
+            <Text style={styles.error}>{errors.email.message}</Text>
+          )}
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            outlineStyle={[
+              styles.inputBorder,
+              errors.password && styles.inputError,
+            ]}
+            textColor="black"
+            cursorColor="black"
+            secureTextEntry={!showPassword}
+            placeholder="••••••••"
+            onChangeText={(text) =>
+              setValue("password", text, { shouldValidate: true })
+            }
+            editable={!formDisabled}
+            mode="outlined"
+            right={
+              <TextInput.Icon
+                icon={showPassword ? "eye-off" : "eye"}
+                size={Platform.select({ default: 28, android: 22 })}
+                color={secondary.dark}
+                onPress={() => setShowPassword(!showPassword)}
+                style={styles.icon}
+              />
+            }
+          />
+          {errors.password && (
+            <Text style={styles.error}>{errors.password.message}</Text>
+          )}
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit(onSubmit)}
+          disabled={formDisabled}
+        >
+          {formDisabled && (
+            <View style={styles.spinnerContainer}>
+              <ActivityIndicator size="small" color="white" />
+            </View>
+          )}
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+        {authState.error && (
+          <Text style={styles.errorText}>{authState.error}</Text>
         )}
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[
-            styles.inputBorder,
-            errors.password && styles.inputError,
-          ]}
-          textColor="black"
-          cursorColor="black"
-          secureTextEntry={!showPassword}
-          placeholder="••••••••"
-          onChangeText={(text) =>
-            setValue("password", text, { shouldValidate: true })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-          right={
-            <TextInput.Icon
-              icon={showPassword ? "eye-off" : "eye"}
-              size={Platform.select({ default: 28, android: 22 })}
-              color={secondary.dark}
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.icon}
-            />
-          }
-        />
-        {errors.password && (
-          <Text style={styles.error}>{errors.password.message}</Text>
-        )}
-      </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleSubmit(onSubmit)}
-        disabled={formDisabled}
-      >
-        {formDisabled && (
-          <View style={styles.spinnerContainer}>
-            <ActivityIndicator size="small" color="white" />
-          </View>
-        )}
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
-      {authState.error && (
-        <Text style={styles.errorText}>{authState.error}</Text>
-      )}
+      </FormContainer>
     </View>
   );
 }
@@ -144,7 +150,7 @@ const styles = StyleSheet.create({
       fontWeight: "600",
       color: secondary.dark,
       marginBottom: 24,
-      paddingTop: 40,
+      // paddingTop: 40,
       textAlign: "center",
     },
   }),
