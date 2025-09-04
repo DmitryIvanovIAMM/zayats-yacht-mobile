@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
       fontWeight: "600",
       color: secondary.dark,
       marginBottom: 24,
-      // paddingTop: 40,
+      paddingTop: 40,
       textAlign: "center",
     },
   }),

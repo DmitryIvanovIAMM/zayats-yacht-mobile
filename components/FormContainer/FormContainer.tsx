@@ -17,7 +17,7 @@ export const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
       Animated.loop(
         Animated.timing(rotateValue, {
           toValue: 1,
-          duration: 3000,
+          duration: 6000,
           useNativeDriver: true,
         })
       ).start();
