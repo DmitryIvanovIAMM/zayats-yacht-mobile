@@ -20,6 +20,7 @@ import {
   PURPOSE_OF_TRANSPORT,
   QuoteRequestForm,
   WEIGHT_METRIC,
+  weightMetricViewConnector,
 } from "./quoteRequestTypes";
 
 export default function QuoteForm() {
@@ -32,6 +33,8 @@ export default function QuoteForm() {
   } = useForm<QuoteRequestForm>({
     defaultValues: defaultQuoteRequest,
   });
+
+  console.log("Form values:", watch());
 
   React.useEffect(() => {
     register("firstName", { required: "First name is required" });
@@ -90,13 +93,11 @@ export default function QuoteForm() {
     <Pressable
       onPress={onPress}
       onKeyDown={onKeyOpen(onPress)}
+      // @ts-ignore — чтобы на web реально добавился tabIndex
+      tabIndex={tabIndex}
+      focusable
       accessible
       accessibilityRole="button"
-      focusable
-      // важно для web
-      // @ts-ignore
-      tabIndex={tabIndex}
-      importantForAccessibility="yes"
       style={[
         styles.dropdownAnchor,
         hasError ? styles.inputError : styles.inputBorder,
@@ -121,7 +122,7 @@ export default function QuoteForm() {
           ]}
           textColor="black"
           cursorColor="black"
-          placeholder="John"
+          placeholder=""
           onChangeText={(text) =>
             setValue("firstName", text, { shouldValidate: true })
           }
@@ -143,7 +144,7 @@ export default function QuoteForm() {
           ]}
           textColor="black"
           cursorColor="black"
-          placeholder="Doe"
+          placeholder=""
           onChangeText={(text) =>
             setValue("lastName", text, { shouldValidate: true })
           }
@@ -166,7 +167,7 @@ export default function QuoteForm() {
           textColor="black"
           cursorColor="black"
           keyboardType="phone-pad"
-          placeholder="+1 555 123 4567"
+          placeholder="+1 111 111 1111"
           onChangeText={(text) =>
             setValue("phoneNumber", text, { shouldValidate: true })
           }
@@ -187,7 +188,7 @@ export default function QuoteForm() {
           cursorColor="black"
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholder="you@example.com"
+          placeholder=""
           onChangeText={(text) =>
             setValue("email", text, { shouldValidate: true })
           }
@@ -206,7 +207,7 @@ export default function QuoteForm() {
           outlineStyle={[styles.inputBorder]}
           textColor="black"
           cursorColor="black"
-          placeholder="Anytime"
+          placeholder="Morning, Evening, etc."
           onChangeText={(text) => setValue("bestTimeToContact", text)}
           editable={!formDisabled}
           mode="outlined"
@@ -253,7 +254,7 @@ export default function QuoteForm() {
           outlineStyle={[styles.inputBorder]}
           textColor="black"
           cursorColor="black"
-          placeholder="My Yacht"
+          placeholder=""
           onChangeText={(text) => setValue("yachtName", text)}
           editable={!formDisabled}
           mode="outlined"
@@ -267,7 +268,7 @@ export default function QuoteForm() {
           outlineStyle={[styles.inputBorder]}
           textColor="black"
           cursorColor="black"
-          placeholder="Model X"
+          placeholder=""
           onChangeText={(text) => setValue("yachtModel", text)}
           editable={!formDisabled}
           mode="outlined"
@@ -285,7 +286,7 @@ export default function QuoteForm() {
           textColor="black"
           cursorColor="black"
           keyboardType="numeric"
-          placeholder="100000"
+          placeholder=""
           onChangeText={(text) =>
             setValue("insuredValue", Number(text) || 0, {
               shouldValidate: true,
@@ -316,7 +317,7 @@ export default function QuoteForm() {
             textColor="black"
             cursorColor="black"
             keyboardType="numeric"
-            placeholder="30"
+            placeholder=""
             onChangeText={(text) => setValue("length", Number(text) || 0)}
             editable={!formDisabled}
             mode="outlined"
@@ -372,7 +373,7 @@ export default function QuoteForm() {
             textColor="black"
             cursorColor="black"
             keyboardType="numeric"
-            placeholder="10"
+            placeholder=""
             onChangeText={(text) => setValue("beam", Number(text) || 0)}
             editable={!formDisabled}
             mode="outlined"
@@ -419,7 +420,13 @@ export default function QuoteForm() {
       <View style={styles.row}>
         <View style={styles.col}>
           <Text style={styles.label}>
-            Weight ({WEIGHT_METRIC[weightUnit as keyof typeof WEIGHT_METRIC]})
+            Weight (
+            {
+              weightMetricViewConnector[
+                weightUnit as keyof typeof WEIGHT_METRIC
+              ]
+            }
+            )
           </Text>
           <TextInput
             style={styles.input}
@@ -427,7 +434,7 @@ export default function QuoteForm() {
             textColor="black"
             cursorColor="black"
             keyboardType="numeric"
-            placeholder="50"
+            placeholder=""
             onChangeText={(text) => setValue("weight", Number(text) || 0)}
             editable={!formDisabled}
             mode="outlined"
@@ -442,11 +449,13 @@ export default function QuoteForm() {
             anchor={
               <DropdownAnchor
                 value={
-                  WEIGHT_METRIC[weightUnit as keyof typeof WEIGHT_METRIC] || ""
+                  weightMetricViewConnector[
+                    weightUnit as keyof typeof WEIGHT_METRIC
+                  ] || ""
                 }
                 onPress={() => setWeightMenuVisible(true)}
                 hasError={false}
-                tabIndex={0}
+                tabIndex={9}
               />
             }
           >
@@ -459,7 +468,9 @@ export default function QuoteForm() {
                   });
                   setWeightMenuVisible(false);
                 }}
-                title={WEIGHT_METRIC[key as keyof typeof WEIGHT_METRIC]}
+                title={
+                  weightMetricViewConnector[key as keyof typeof WEIGHT_METRIC]
+                }
                 titleStyle={{ color: primary.contrastText }}
               />
             ))}
@@ -474,7 +485,7 @@ export default function QuoteForm() {
           outlineStyle={[styles.inputBorder]}
           textColor="black"
           cursorColor="black"
-          placeholder="Miami"
+          placeholder=""
           onChangeText={(text) => setValue("fromWhere", text)}
           editable={!formDisabled}
           mode="outlined"
@@ -488,7 +499,7 @@ export default function QuoteForm() {
           outlineStyle={[styles.inputBorder]}
           textColor="black"
           cursorColor="black"
-          placeholder="Bahamas"
+          placeholder=""
           onChangeText={(text) => setValue("toWhere", text)}
           editable={!formDisabled}
           mode="outlined"
@@ -502,7 +513,7 @@ export default function QuoteForm() {
           outlineStyle={[styles.inputBorder]}
           textColor="black"
           cursorColor="black"
-          placeholder="2025-01-20"
+          placeholder=""
           onChangeText={(text) => setValue("when", text)}
           editable={!formDisabled}
           mode="outlined"
@@ -542,10 +553,11 @@ export default function QuoteForm() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: 16,
     paddingLeft: 40,
     paddingRight: 40,
     backgroundColor: "#fff",
+    paddingBottom: 100,
   },
   title: Platform.select({
     android: {
@@ -560,7 +572,7 @@ const styles = StyleSheet.create({
       fontWeight: "600",
       color: secondary.dark,
       marginBottom: 24,
-      paddingTop: 40,
+      paddingTop: 20,
       textAlign: "center",
     },
   }),

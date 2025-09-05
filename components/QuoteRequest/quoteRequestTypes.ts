@@ -8,15 +8,20 @@ export const lengthMetric = {
   [LENGTH_METRIC.meters]: "m",
   [LENGTH_METRIC.feet]: "ft",
 };
+export const lengthMetricViewConnector = {
+  [LENGTH_METRIC.meters]: "Meters",
+  [LENGTH_METRIC.feet]: "Feet",
+};
 
 export const WEIGHT_METRIC = {
   metricTons: "metric tons",
   lbs: "lbs",
 };
-export const lengthMetricViewConnector = {
-  [LENGTH_METRIC.meters]: "Meters",
-  [LENGTH_METRIC.feet]: "Feet",
+export const weightMetricViewConnector = {
+  ["metricTons"]: "Metric Tons",
+  ["lbs"]: "Lbs",
 };
+console.log("weightMetricViewConnector", weightMetricViewConnector);
 
 export const PURPOSE_OF_TRANSPORT = {
   boatShow: "Boat Show",
@@ -73,7 +78,7 @@ export const defaultQuoteRequest: QuoteRequestForm = {
   beam: 0,
   beamUnit: LENGTH_METRIC.meters,
   weight: 0,
-  weightUnit: WEIGHT_METRIC.metricTons,
+  weightUnit: "metricTons",
   fromWhere: "",
   toWhere: "",
   when: "",
