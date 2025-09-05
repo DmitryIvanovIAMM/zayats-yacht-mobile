@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { MaskedTextInput } from "react-native-mask-text";
 import { Menu, TextInput } from "react-native-paper";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
@@ -163,22 +164,25 @@ export default function QuoteForm() {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Phone *</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[
-            styles.inputBorder,
+        <View
+          style={[
+            styles.paperLikeInput,
             errors.phoneNumber && styles.inputError,
           ]}
-          textColor="black"
-          cursorColor="black"
-          keyboardType="phone-pad"
-          placeholder="+1 111 111 1111"
-          onChangeText={(text) =>
-            setValue("phoneNumber", text, { shouldValidate: true })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-        />
+        >
+          <MaskedTextInput
+            mask="+1 999 999 9999"
+            keyboardType="phone-pad"
+            placeholder="+1 111 111 1111"
+            value={watch("phoneNumber")}
+            onChangeText={(text, rawText) =>
+              setValue("phoneNumber", rawText, { shouldValidate: true })
+            }
+            editable={!formDisabled}
+            style={styles.maskedInputText}
+            placeholderTextColor="#999"
+          />
+        </View>
         {errors.phoneNumber && (
           <Text style={styles.error}>{errors.phoneNumber.message}</Text>
         )}
@@ -622,6 +626,20 @@ const styles = StyleSheet.create({
       paddingHorizontal: 0,
     },
   }),
+  paperLikeInput: {
+    borderWidth: 1,
+    borderColor: secondary.dark,
+    borderRadius: 4,
+    backgroundColor: "#fafafa",
+    height: 40, // match react-native-paper input height
+    paddingHorizontal: 8,
+    justifyContent: "center",
+  },
+  maskedInputText: {
+    fontSize: Platform.select({ default: 16, android: 14 }) as number,
+    color: "black",
+    padding: 0,
+  },
   inputBorder: {
     borderColor: secondary.dark,
   },
