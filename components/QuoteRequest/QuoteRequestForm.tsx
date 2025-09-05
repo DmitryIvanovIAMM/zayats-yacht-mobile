@@ -1,4 +1,5 @@
 import { errorColor, primary, secondary } from "@/constants/Colors";
+import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -19,6 +20,7 @@ import {
   lengthMetricViewConnector,
   PURPOSE_OF_TRANSPORT,
   QuoteRequestForm,
+  quoteRequestSchema,
   WEIGHT_METRIC,
   weightMetricViewConnector,
 } from "./quoteRequestTypes";
@@ -28,13 +30,15 @@ export default function QuoteForm() {
     register,
     setValue,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
     watch,
   } = useForm<QuoteRequestForm>({
     defaultValues: defaultQuoteRequest,
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    resolver: yupResolver(quoteRequestSchema),
   });
-
-  console.log("Form values:", watch());
+  console.log("isFormValid: ", isValid);
 
   React.useEffect(() => {
     register("firstName", { required: "First name is required" });
@@ -73,6 +77,7 @@ export default function QuoteForm() {
   };
 
   const formDisabled = isSubmitting;
+  console.log("formDisabled: ", formDisabled);
 
   const onKeyOpen = (openFn: () => void) => (e: any) => {
     const key = e?.nativeEvent?.key;
@@ -113,7 +118,7 @@ export default function QuoteForm() {
       <Text style={styles.title}>Get Quote</Text>
 
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>First Name</Text>
+        <Text style={styles.label}>First Name *</Text>
         <TextInput
           style={styles.input}
           outlineStyle={[
@@ -135,7 +140,7 @@ export default function QuoteForm() {
       </View>
 
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>Last Name</Text>
+        <Text style={styles.label}>Last Name *</Text>
         <TextInput
           style={styles.input}
           outlineStyle={[
@@ -157,7 +162,7 @@ export default function QuoteForm() {
       </View>
 
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>Phone</Text>
+        <Text style={styles.label}>Phone *</Text>
         <TextInput
           style={styles.input}
           outlineStyle={[
@@ -180,7 +185,7 @@ export default function QuoteForm() {
       </View>
 
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>Email *</Text>
         <TextInput
           style={styles.input}
           outlineStyle={[styles.inputBorder, errors.email && styles.inputError]}
@@ -536,9 +541,9 @@ export default function QuoteForm() {
       </View>
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, (formDisabled || !isValid) && { opacity: 0.6 }]}
         onPress={handleSubmit(onSubmit)}
-        disabled={formDisabled}
+        disabled={formDisabled || !isValid}
       >
         {formDisabled && (
           <View style={styles.spinnerContainer}>
