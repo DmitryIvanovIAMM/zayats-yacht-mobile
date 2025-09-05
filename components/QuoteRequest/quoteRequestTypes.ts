@@ -31,7 +31,6 @@ export const PURPOSE_OF_TRANSPORT = {
   fishingTournament: "Fishing Tournament",
   regatta: "Regatta",
   other: "Other",
-  "": "",
 };
 
 export const quoteRequestSchema = object({

@@ -1,19 +1,21 @@
-import { errorColor, primary, secondary } from "@/constants/Colors";
+import { errorColor, secondary } from "@/constants/Colors";
+import { Messages } from "@/helpers/messages";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { MaskedTextInput } from "react-native-mask-text";
-import { Menu, TextInput } from "react-native-paper";
+import { Snackbar } from "react-native-paper";
+import FormDropdown from "../FormComponents/FormDropdown";
+import FormInput from "../FormComponents/FormInput";
+import FormMaskedInput from "../FormComponents/FormMaskedInput";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
   defaultQuoteRequest,
@@ -27,6 +29,16 @@ import {
 } from "./quoteRequestTypes";
 
 export default function QuoteForm() {
+  const [snackbar, setSnackbar] = React.useState<{
+    visible: boolean;
+    message: string;
+    color: string;
+  }>({ visible: false, message: "", color: "green" });
+
+  const showSnackbar = (message: string, color: string) => {
+    setSnackbar({ visible: true, message, color });
+  };
+
   const {
     register,
     setValue,
@@ -40,6 +52,7 @@ export default function QuoteForm() {
     resolver: yupResolver(quoteRequestSchema),
   });
   console.log("isFormValid: ", isValid);
+  console.log("errors: ", errors);
 
   React.useEffect(() => {
     register("firstName", { required: "First name is required" });
@@ -68,484 +81,253 @@ export default function QuoteForm() {
   const beamUnit = watch("beamUnit");
   const weightUnit = watch("weightUnit");
 
-  const [purposeMenuVisible, setPurposeMenuVisible] = React.useState(false);
-  const [lengthMenuVisible, setLengthMenuVisible] = React.useState(false);
-  const [beamMenuVisible, setBeamMenuVisible] = React.useState(false);
-  const [weightMenuVisible, setWeightMenuVisible] = React.useState(false);
-
   const onSubmit = async (data: QuoteRequestForm) => {
-    await postQuoteRequest(data, "");
+    try {
+      // await postQuoteRequest(data, "");
+      await postQuoteRequest({ ...data, email: "la-la" }, "");
+      showSnackbar(Messages.QuoteRequestSent, "green");
+    } catch (err) {
+      console.error(err);
+      showSnackbar(Messages.QuoteRequestFailed, "red");
+    }
   };
 
   const formDisabled = isSubmitting;
   console.log("formDisabled: ", formDisabled);
 
-  const onKeyOpen = (openFn: () => void) => (e: any) => {
-    const key = e?.nativeEvent?.key;
-    if (key === "Enter" || key === " ") openFn();
-  };
-
-  const DropdownAnchor = ({
-    value,
-    onPress,
-    hasError,
-    tabIndex = 0,
-  }: {
-    value: string;
-    onPress: () => void;
-    hasError?: boolean;
-    tabIndex?: number;
-  }) => (
-    <Pressable
-      onPress={onPress}
-      onKeyDown={onKeyOpen(onPress)}
-      // @ts-ignore — чтобы на web реально добавился tabIndex
-      tabIndex={tabIndex}
-      focusable
-      accessible
-      accessibilityRole="button"
-      style={[
-        styles.dropdownAnchor,
-        hasError ? styles.inputError : styles.inputBorder,
-      ]}
-    >
-      <Text style={styles.dropdownText}>{value || "Select..."}</Text>
-      <Text style={styles.dropdownIcon}>▾</Text>
-    </Pressable>
-  );
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Get Quote</Text>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>First Name *</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[
-            styles.inputBorder,
-            errors.firstName && styles.inputError,
-          ]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) =>
-            setValue("firstName", text, { shouldValidate: true })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-        />
-        {errors.firstName && (
-          <Text style={styles.error}>{errors.firstName.message}</Text>
-        )}
-      </View>
+      <FormInput
+        label="First Name *"
+        value={watch("firstName")}
+        onChangeText={(text) =>
+          setValue("firstName", text, { shouldValidate: true })
+        }
+        error={errors.firstName?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Last Name *</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[
-            styles.inputBorder,
-            errors.lastName && styles.inputError,
-          ]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) =>
-            setValue("lastName", text, { shouldValidate: true })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-        />
-        {errors.lastName && (
-          <Text style={styles.error}>{errors.lastName.message}</Text>
-        )}
-      </View>
+      <FormInput
+        label="Last Name *"
+        value={watch("lastName")}
+        onChangeText={(text) =>
+          setValue("lastName", text, { shouldValidate: true })
+        }
+        error={errors.lastName?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Phone *</Text>
-        <View
-          style={[
-            styles.paperLikeInput,
-            errors.phoneNumber && styles.inputError,
-          ]}
-        >
-          <MaskedTextInput
-            mask="+1 999 999 9999"
-            keyboardType="phone-pad"
-            placeholder="+1 111 111 1111"
-            value={watch("phoneNumber")}
-            onChangeText={(text, rawText) =>
-              setValue("phoneNumber", rawText, { shouldValidate: true })
-            }
-            editable={!formDisabled}
-            style={styles.maskedInputText}
-            placeholderTextColor="#999"
-          />
-        </View>
-        {errors.phoneNumber && (
-          <Text style={styles.error}>{errors.phoneNumber.message}</Text>
-        )}
-      </View>
+      <FormMaskedInput
+        label="Phone *"
+        value={watch("phoneNumber") || undefined}
+        onChangeText={(masked, raw) =>
+          setValue("phoneNumber", raw, { shouldValidate: true })
+        }
+        error={errors.phoneNumber?.message}
+        mask="+1 999 999 9999"
+        keyboardType="phone-pad"
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Email *</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder, errors.email && styles.inputError]}
-          textColor="black"
-          cursorColor="black"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          placeholder=""
-          onChangeText={(text) =>
-            setValue("email", text, { shouldValidate: true })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-        />
-        {errors.email && (
-          <Text style={styles.error}>{errors.email.message}</Text>
-        )}
-      </View>
+      <FormInput
+        label="Email *"
+        value={watch("email")}
+        onChangeText={(text) =>
+          setValue("email", text, { shouldValidate: true })
+        }
+        error={errors.email?.message}
+        keyboardType="email-address"
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Best Time to Contact</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          placeholder="Morning, Evening, etc."
-          onChangeText={(text) => setValue("bestTimeToContact", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
+      <FormInput
+        label="Best Time to Contact"
+        value={watch("bestTimeToContact") || ""}
+        onChangeText={(text) => setValue("bestTimeToContact", text)}
+        error={errors.bestTimeToContact?.message}
+        placeholder="e.g. Weekdays after 5pm"
+      />
+      <FormDropdown
+        label="Purpose of Transport"
+        value={String(purpose || "")}
+        options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
+          label:
+            PURPOSE_OF_TRANSPORT[key as keyof typeof PURPOSE_OF_TRANSPORT] ||
+            "",
+          value: key,
+        }))}
+        onChange={(text) => setValue("purpose", text)}
+        error={errors.purpose?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Purpose of Transport</Text>
-        <Menu
-          visible={purposeMenuVisible}
-          onDismiss={() => setPurposeMenuVisible(false)}
-          contentStyle={{ backgroundColor: secondary.dark }}
-          anchor={
-            <DropdownAnchor
-              value={PURPOSE_OF_TRANSPORT[purpose || ""] || ""}
-              onPress={() => setPurposeMenuVisible(true)}
-              hasError={false}
-              tabIndex={5}
-            />
-          }
-        >
-          {Object.keys(PURPOSE_OF_TRANSPORT)
-            .filter((k) => k !== "")
-            .map((key) => (
-              <Menu.Item
-                key={key}
-                onPress={() => {
-                  setValue("purpose", key as any, { shouldValidate: true });
-                  setPurposeMenuVisible(false);
-                }}
-                title={
-                  PURPOSE_OF_TRANSPORT[key as keyof typeof PURPOSE_OF_TRANSPORT]
-                }
-                titleStyle={{ color: primary.contrastText }}
-              />
-            ))}
-        </Menu>
-      </View>
+      <FormInput
+        label="Yacht Name"
+        value={watch("yachtName") || ""}
+        onChangeText={(text) => setValue("yachtName", text)}
+        error={errors.yachtName?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Yacht Name</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) => setValue("yachtName", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
+      <FormInput
+        label="Yacht Model"
+        value={watch("yachtModel") || ""}
+        onChangeText={(text) => setValue("yachtModel", text)}
+        error={errors.yachtModel?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Yacht Model</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) => setValue("yachtModel", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
-
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Insured Value in USD</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[
-            styles.inputBorder,
-            errors.insuredValue && styles.inputError,
-          ]}
-          textColor="black"
-          cursorColor="black"
-          keyboardType="numeric"
-          placeholder=""
-          onChangeText={(text) =>
-            setValue("insuredValue", Number(text) || 0, {
-              shouldValidate: true,
-            })
-          }
-          editable={!formDisabled}
-          mode="outlined"
-        />
-        {errors.insuredValue && (
-          <Text style={styles.error}>{errors.insuredValue.message}</Text>
-        )}
-      </View>
+      <FormInput
+        label="Insured Value in USD"
+        value={watch("insuredValue") ? String(watch("insuredValue")) : ""}
+        onChangeText={(text) =>
+          setValue("insuredValue", Number(text) || 0, {
+            shouldValidate: true,
+          })
+        }
+        error={errors.insuredValue?.message}
+        keyboardType="numeric"
+      />
 
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text style={styles.label}>
-            Length (
-            {
+          <FormInput
+            label={`Length (${
               lengthMetricViewConnector[
                 lengthUnit as keyof typeof LENGTH_METRIC
               ]
+            })`}
+            value={watch("length") ? String(watch("length")) : ""}
+            onChangeText={(text) =>
+              setValue("length", Number(text) || 0, { shouldValidate: true })
             }
-            )
-          </Text>
-          <TextInput
-            style={styles.input}
-            outlineStyle={[styles.inputBorder]}
-            textColor="black"
-            cursorColor="black"
+            error={errors.length?.message}
             keyboardType="numeric"
-            placeholder=""
-            onChangeText={(text) => setValue("length", Number(text) || 0)}
-            editable={!formDisabled}
-            mode="outlined"
           />
         </View>
         <View style={styles.colUnit}>
-          <Text style={styles.label}>Length Unit</Text>
-          <Menu
-            visible={lengthMenuVisible}
-            onDismiss={() => setLengthMenuVisible(false)}
-            contentStyle={{ backgroundColor: secondary.dark }}
-            anchor={
-              <DropdownAnchor
-                value={
-                  lengthMetricViewConnector[
-                    lengthUnit as keyof typeof LENGTH_METRIC
-                  ] || ""
-                }
-                onPress={() => setLengthMenuVisible(true)}
-                hasError={false}
-                tabIndex={7}
-              />
+          <FormDropdown
+            label="Length Unit"
+            value={String(lengthUnit || "")}
+            options={Object.keys(LENGTH_METRIC).map((key) => ({
+              label:
+                lengthMetricViewConnector[key as keyof typeof LENGTH_METRIC] ||
+                "",
+              value: key,
+            }))}
+            onChange={(text) =>
+              setValue("lengthUnit", text as keyof typeof LENGTH_METRIC, {
+                shouldValidate: true,
+              })
             }
-          >
-            {Object.keys(LENGTH_METRIC).map((key) => (
-              <Menu.Item
-                key={key}
-                onPress={() => {
-                  setValue("lengthUnit", key as keyof typeof LENGTH_METRIC, {
-                    shouldValidate: true,
-                  });
-                  setLengthMenuVisible(false);
-                }}
-                title={
-                  lengthMetricViewConnector[key as keyof typeof LENGTH_METRIC]
-                }
-                titleStyle={{ color: primary.contrastText }}
-              />
-            ))}
-          </Menu>
+            error={errors.lengthUnit?.message}
+          />
         </View>
       </View>
 
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text style={styles.label}>
-            Beam (
-            {lengthMetricViewConnector[beamUnit as keyof typeof LENGTH_METRIC]})
-          </Text>
-          <TextInput
-            style={styles.input}
-            outlineStyle={[styles.inputBorder]}
-            textColor="black"
-            cursorColor="black"
+          <FormInput
+            label={`Beam (${
+              lengthMetricViewConnector[beamUnit as keyof typeof LENGTH_METRIC]
+            })`}
+            value={watch("beam") ? String(watch("beam")) : ""}
+            onChangeText={(text) =>
+              setValue("beam", Number(text) || 0, { shouldValidate: true })
+            }
+            error={errors.beam?.message}
             keyboardType="numeric"
-            placeholder=""
-            onChangeText={(text) => setValue("beam", Number(text) || 0)}
-            editable={!formDisabled}
-            mode="outlined"
           />
         </View>
         <View style={styles.colUnit}>
-          <Text style={styles.label}>Beam Unit</Text>
-          <Menu
-            visible={beamMenuVisible}
-            onDismiss={() => setBeamMenuVisible(false)}
-            contentStyle={{ backgroundColor: secondary.dark }}
-            anchor={
-              <DropdownAnchor
-                value={
-                  lengthMetricViewConnector[
-                    beamUnit as keyof typeof LENGTH_METRIC
-                  ] || ""
-                }
-                onPress={() => setBeamMenuVisible(true)}
-                hasError={false}
-                tabIndex={8}
-              />
+          <FormDropdown
+            label="Beam Unit"
+            value={String(beamUnit || "")}
+            options={Object.keys(LENGTH_METRIC).map((key) => ({
+              label:
+                lengthMetricViewConnector[key as keyof typeof LENGTH_METRIC] ||
+                "",
+              value: key,
+            }))}
+            onChange={(text) =>
+              setValue("beamUnit", text as keyof typeof LENGTH_METRIC, {
+                shouldValidate: true,
+              })
             }
-          >
-            {Object.keys(LENGTH_METRIC).map((key) => (
-              <Menu.Item
-                key={key}
-                onPress={() => {
-                  setValue("beamUnit", key as keyof typeof LENGTH_METRIC, {
-                    shouldValidate: true,
-                  });
-                  setBeamMenuVisible(false);
-                }}
-                title={
-                  lengthMetricViewConnector[key as keyof typeof LENGTH_METRIC]
-                }
-                titleStyle={{ color: primary.contrastText }}
-              />
-            ))}
-          </Menu>
+            error={errors.beamUnit?.message}
+          />
         </View>
       </View>
 
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text style={styles.label}>
-            Weight (
-            {
+          <FormInput
+            label={`Weight (${
               weightMetricViewConnector[
                 weightUnit as keyof typeof WEIGHT_METRIC
               ]
+            })`}
+            value={watch("weight") ? String(watch("weight")) : ""}
+            onChangeText={(text) =>
+              setValue("weight", Number(text) || 0, { shouldValidate: true })
             }
-            )
-          </Text>
-          <TextInput
-            style={styles.input}
-            outlineStyle={[styles.inputBorder]}
-            textColor="black"
-            cursorColor="black"
+            error={errors.weight?.message}
             keyboardType="numeric"
-            placeholder=""
-            onChangeText={(text) => setValue("weight", Number(text) || 0)}
-            editable={!formDisabled}
-            mode="outlined"
           />
         </View>
         <View style={styles.colUnit}>
-          <Text style={styles.label}>Weight Unit</Text>
-          <Menu
-            visible={weightMenuVisible}
-            onDismiss={() => setWeightMenuVisible(false)}
-            contentStyle={{ backgroundColor: secondary.dark }}
-            anchor={
-              <DropdownAnchor
-                value={
-                  weightMetricViewConnector[
-                    weightUnit as keyof typeof WEIGHT_METRIC
-                  ] || ""
-                }
-                onPress={() => setWeightMenuVisible(true)}
-                hasError={false}
-                tabIndex={9}
-              />
+          <FormDropdown
+            label="Weight Unit"
+            value={String(weightUnit || "")}
+            options={Object.keys(WEIGHT_METRIC).map((key) => ({
+              label:
+                weightMetricViewConnector[key as keyof typeof WEIGHT_METRIC] ||
+                "",
+              value: key,
+            }))}
+            onChange={(text) =>
+              setValue("weightUnit", text as keyof typeof WEIGHT_METRIC, {
+                shouldValidate: true,
+              })
             }
-          >
-            {Object.keys(WEIGHT_METRIC).map((key) => (
-              <Menu.Item
-                key={key}
-                onPress={() => {
-                  setValue("weightUnit", key as keyof typeof WEIGHT_METRIC, {
-                    shouldValidate: true,
-                  });
-                  setWeightMenuVisible(false);
-                }}
-                title={
-                  weightMetricViewConnector[key as keyof typeof WEIGHT_METRIC]
-                }
-                titleStyle={{ color: primary.contrastText }}
-              />
-            ))}
-          </Menu>
+            error={errors.weightUnit?.message}
+          />
         </View>
       </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>From Where</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) => setValue("fromWhere", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
+      <FormInput
+        label="From Where"
+        value={watch("fromWhere") || ""}
+        onChangeText={(text) => setValue("fromWhere", text)}
+        error={errors.fromWhere?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>To Where</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) => setValue("toWhere", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
+      <FormInput
+        label="To Where"
+        value={watch("toWhere") ? String(watch("toWhere")) : ""}
+        onChangeText={(text) =>
+          setValue("toWhere", text, { shouldValidate: true })
+        }
+        error={errors.toWhere?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>When</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          placeholder=""
-          onChangeText={(text) => setValue("when", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
+      <FormInput
+        label="When"
+        value={watch("when") ? String(watch("when")) : ""}
+        onChangeText={(text) =>
+          setValue("when", text, { shouldValidate: true })
+        }
+        error={errors.when?.message}
+      />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Notes</Text>
-        <TextInput
-          style={styles.input}
-          outlineStyle={[styles.inputBorder]}
-          textColor="black"
-          cursorColor="black"
-          multiline
-          placeholder="Additional details"
-          onChangeText={(text) => setValue("notes", text)}
-          editable={!formDisabled}
-          mode="outlined"
-        />
-      </View>
+      <FormInput
+        label="Notes"
+        value={watch("notes") || ""}
+        onChangeText={(text) => setValue("notes", text)}
+        error={errors.notes?.message}
+        placeholder="Additional details"
+        multiline
+        numberOfLines={4}
+      />
 
       <TouchableOpacity
         style={[styles.button, (formDisabled || !isValid) && { opacity: 0.6 }]}
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onPress={handleSubmit(onSubmit)}
         disabled={formDisabled || !isValid}
       >
@@ -556,6 +338,20 @@ export default function QuoteForm() {
         )}
         <Text style={styles.buttonText}>Send</Text>
       </TouchableOpacity>
+
+      {/* Snackbar */}
+      <Snackbar
+        visible={snackbar.visible}
+        onDismiss={() => setSnackbar({ ...snackbar, visible: false })}
+        duration={3000}
+        style={{
+          backgroundColor: snackbar.color,
+          height: 50,
+          marginBottom: 80,
+        }}
+      >
+        {snackbar.message}
+      </Snackbar>
     </ScrollView>
   );
 }
@@ -734,7 +530,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: 18,
+    //marginBottom: 18,
   },
   col: {
     flex: 1,
