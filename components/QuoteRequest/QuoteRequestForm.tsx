@@ -1,4 +1,4 @@
-import { errorColor, secondary } from "@/constants/Colors";
+import { secondary } from "@/constants/Colors";
 import { Messages } from "@/helpers/messages";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
@@ -12,9 +12,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Snackbar } from "react-native-paper";
 import FormDropdown from "../FormComponents/FormDropdown";
-import FormInput from "../FormComponents/FormInput";
+import FormInput, { FormInputRef } from "../FormComponents/FormInput";
 import FormMaskedInput from "../FormComponents/FormMaskedInput";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
@@ -29,6 +28,14 @@ import {
 } from "./quoteRequestTypes";
 
 export default function QuoteForm() {
+  const scrollRef = React.useRef<ScrollView>(null);
+  const contentRef = React.useRef<View>(null);
+
+  // capture refs to focus fields programmatically
+  const inputRefs = React.useRef<Record<string, FormInputRef | null>>({});
+  // capture on-screen Y positions to scroll without measureLayout
+  const inputPositions = React.useRef<Record<string, number>>({});
+
   const [snackbar, setSnackbar] = React.useState<{
     visible: boolean;
     message: string;
@@ -45,21 +52,29 @@ export default function QuoteForm() {
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
     watch,
+    setError,
+    control,
   } = useForm<QuoteRequestForm>({
+    //sdefaultValues: defaultNonEmptyQuoteRequest,
     defaultValues: defaultQuoteRequest,
     mode: "onBlur",
     reValidateMode: "onChange",
     resolver: yupResolver(quoteRequestSchema),
   });
-  console.log("isFormValid: ", isValid);
-  console.log("errors: ", errors);
 
+  // dropdown-driven fields
+  const purpose = watch("purpose");
+  const lengthUnit = watch("lengthUnit");
+  const beamUnit = watch("beamUnit");
+  const weightUnit = watch("weightUnit");
+
+  // make sure all fields are registered for RHF
   React.useEffect(() => {
-    register("firstName", { required: "First name is required" });
-    register("lastName", { required: "Last name is required" });
-    register("phoneNumber", { required: "Phone is required" });
-    register("email", { required: "Email is required" });
-    register("insuredValue", { required: "Insured value is required" });
+    register("firstName");
+    register("lastName");
+    register("phoneNumber");
+    register("email");
+    register("insuredValue");
     register("length");
     register("beam");
     register("weight");
@@ -76,16 +91,40 @@ export default function QuoteForm() {
     register("notes");
   }, [register]);
 
-  const purpose = watch("purpose");
-  const lengthUnit = watch("lengthUnit");
-  const beamUnit = watch("beamUnit");
-  const weightUnit = watch("weightUnit");
+  React.useEffect(() => {
+    inputRefs.current.firstName?.focus?.();
+  }, []);
 
   const onSubmit = async (data: QuoteRequestForm) => {
     try {
-      // await postQuoteRequest(data, "");
-      await postQuoteRequest({ ...data, email: "la-la" }, "");
-      showSnackbar(Messages.QuoteRequestSent, "green");
+      const res = await postQuoteRequest({ ...data, email: "la-la" });
+      if (res.success) {
+        showSnackbar(Messages.QuoteRequestSent, "green");
+      } else {
+        if (res.data && typeof res.data === "object") {
+          const fields = Object.keys(res.data) as (keyof QuoteRequestForm)[];
+          fields.forEach((field) => {
+            const message = Array.isArray(res.data[field])
+              ? res.data[field][0]
+              : String(res.data[field]);
+            setError(field, { message });
+          });
+
+          // scroll to first error field
+          const firstErrorField = fields[0];
+          const y = inputPositions.current[String(firstErrorField)];
+          if (typeof y === "number") {
+            scrollRef.current?.scrollTo({
+              y: Math.max(y - 30, 0),
+              animated: true,
+            });
+          }
+          inputRefs.current[firstErrorField as string]?.focus?.();
+
+          return;
+        }
+        showSnackbar(Messages.QuoteRequestFailed, "red");
+      }
     } catch (err) {
       console.error(err);
       showSnackbar(Messages.QuoteRequestFailed, "red");
@@ -93,265 +132,298 @@ export default function QuoteForm() {
   };
 
   const formDisabled = isSubmitting;
-  console.log("formDisabled: ", formDisabled);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Get Quote</Text>
+    <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
+      <View ref={contentRef}>
+        <Text style={styles.title}>Get Quote</Text>
 
-      <FormInput
-        label="First Name *"
-        value={watch("firstName")}
-        onChangeText={(text) =>
-          setValue("firstName", text, { shouldValidate: true })
-        }
-        error={errors.firstName?.message}
-      />
+        {/* Contact */}
+        <FormInput
+          name="firstName"
+          control={control}
+          label="First Name *"
+          placeholder="Enter your first name"
+          rules={{ required: "First name is required" }}
+          error={errors.firstName}
+          ref={(el) => (inputRefs.current.firstName = el)}
+          onLayoutY={(y) => (inputPositions.current.firstName = y)}
+        />
+        <FormInput
+          name="lastName"
+          control={control}
+          label="Last Name *"
+          placeholder="Enter your last name"
+          rules={{ required: "Last name is required" }}
+          error={errors.lastName}
+          ref={(el) => (inputRefs.current.lastName = el)}
+          onLayoutY={(y) => (inputPositions.current.lastName = y)}
+        />
+        <FormMaskedInput
+          name="phoneNumber"
+          control={control}
+          label="Phone Number *"
+          placeholder="+1 111 111 1111"
+          keyboardType="phone-pad"
+          mask="+1 (999) 999 9999"
+          rules={{ required: "Phone number is required" }}
+          error={errors.phoneNumber?.message}
+          ref={(el) => (inputRefs.current.phoneNumber = el)}
+          onLayoutY={(y) => (inputPositions.current.phoneNumber = y)}
+        />
+        <FormInput
+          name="email"
+          control={control}
+          label="Email *"
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          rules={{ required: "Email is required" }}
+          error={errors.email}
+          ref={(el) => (inputRefs.current.email = el)}
+          onLayoutY={(y) => (inputPositions.current.email = y)}
+        />
+        <FormInput
+          name="bestTimeToContact"
+          control={control}
+          label="Best Time to Contact"
+          placeholder="e.g. Weekdays after 5pm"
+          error={errors.bestTimeToContact}
+          ref={(el) => (inputRefs.current.bestTimeToContact = el)}
+          onLayoutY={(y) => (inputPositions.current.bestTimeToContact = y)}
+        />
 
-      <FormInput
-        label="Last Name *"
-        value={watch("lastName")}
-        onChangeText={(text) =>
-          setValue("lastName", text, { shouldValidate: true })
-        }
-        error={errors.lastName?.message}
-      />
+        {/* Yacht */}
+        <FormInput
+          name="yachtName"
+          control={control}
+          label="Yacht Name"
+          placeholder="Enter yacht name"
+          error={errors.yachtName}
+          ref={(el) => (inputRefs.current.yachtName = el)}
+          onLayoutY={(y) => (inputPositions.current.yachtName = y)}
+        />
+        <FormInput
+          name="yachtModel"
+          control={control}
+          label="Yacht Model"
+          placeholder="Enter yacht model"
+          error={errors.yachtModel}
+          ref={(el) => (inputRefs.current.yachtModel = el)}
+          onLayoutY={(y) => (inputPositions.current.yachtModel = y)}
+        />
 
-      <FormMaskedInput
-        label="Phone *"
-        value={watch("phoneNumber") || undefined}
-        onChangeText={(masked, raw) =>
-          setValue("phoneNumber", raw, { shouldValidate: true })
-        }
-        error={errors.phoneNumber?.message}
-        mask="+1 999 999 9999"
-        keyboardType="phone-pad"
-      />
+        {/* Purpose */}
+        <FormDropdown
+          ref={(el) => (inputRefs.current.purpose = el)}
+          label="Purpose of Transport"
+          value={String(purpose || "")}
+          options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
+            label:
+              PURPOSE_OF_TRANSPORT[key as keyof typeof PURPOSE_OF_TRANSPORT] ||
+              "",
+            value: key,
+          }))}
+          onChange={(val) =>
+            setValue("purpose", val as QuoteRequestForm["purpose"], {
+              shouldValidate: true,
+            })
+          }
+          error={errors.purpose?.message}
+          onLayoutY={(y) => (inputPositions.current.purpose = y)}
+          placeholder="Select..."
+          disabled={formDisabled}
+        />
 
-      <FormInput
-        label="Email *"
-        value={watch("email")}
-        onChangeText={(text) =>
-          setValue("email", text, { shouldValidate: true })
-        }
-        error={errors.email?.message}
-        keyboardType="email-address"
-      />
-
-      <FormInput
-        label="Best Time to Contact"
-        value={watch("bestTimeToContact") || ""}
-        onChangeText={(text) => setValue("bestTimeToContact", text)}
-        error={errors.bestTimeToContact?.message}
-        placeholder="e.g. Weekdays after 5pm"
-      />
-      <FormDropdown
-        label="Purpose of Transport"
-        value={String(purpose || "")}
-        options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
-          label:
-            PURPOSE_OF_TRANSPORT[key as keyof typeof PURPOSE_OF_TRANSPORT] ||
-            "",
-          value: key,
-        }))}
-        onChange={(text) => setValue("purpose", text)}
-        error={errors.purpose?.message}
-      />
-
-      <FormInput
-        label="Yacht Name"
-        value={watch("yachtName") || ""}
-        onChangeText={(text) => setValue("yachtName", text)}
-        error={errors.yachtName?.message}
-      />
-
-      <FormInput
-        label="Yacht Model"
-        value={watch("yachtModel") || ""}
-        onChangeText={(text) => setValue("yachtModel", text)}
-        error={errors.yachtModel?.message}
-      />
-
-      <FormInput
-        label="Insured Value in USD"
-        value={watch("insuredValue") ? String(watch("insuredValue")) : ""}
-        onChangeText={(text) =>
-          setValue("insuredValue", Number(text) || 0, {
-            shouldValidate: true,
-          })
-        }
-        error={errors.insuredValue?.message}
-        keyboardType="numeric"
-      />
-
-      <View style={styles.row}>
-        <View style={styles.col}>
-          <FormInput
-            label={`Length (${
-              lengthMetricViewConnector[
-                lengthUnit as keyof typeof LENGTH_METRIC
-              ]
-            })`}
-            value={watch("length") ? String(watch("length")) : ""}
-            onChangeText={(text) =>
-              setValue("length", Number(text) || 0, { shouldValidate: true })
-            }
-            error={errors.length?.message}
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={styles.colUnit}>
-          <FormDropdown
-            label="Length Unit"
-            value={String(lengthUnit || "")}
-            options={Object.keys(LENGTH_METRIC).map((key) => ({
-              label:
-                lengthMetricViewConnector[key as keyof typeof LENGTH_METRIC] ||
-                "",
-              value: key,
-            }))}
-            onChange={(text) =>
-              setValue("lengthUnit", text as keyof typeof LENGTH_METRIC, {
-                shouldValidate: true,
-              })
-            }
-            error={errors.lengthUnit?.message}
-          />
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.col}>
-          <FormInput
-            label={`Beam (${
-              lengthMetricViewConnector[beamUnit as keyof typeof LENGTH_METRIC]
-            })`}
-            value={watch("beam") ? String(watch("beam")) : ""}
-            onChangeText={(text) =>
-              setValue("beam", Number(text) || 0, { shouldValidate: true })
-            }
-            error={errors.beam?.message}
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={styles.colUnit}>
-          <FormDropdown
-            label="Beam Unit"
-            value={String(beamUnit || "")}
-            options={Object.keys(LENGTH_METRIC).map((key) => ({
-              label:
-                lengthMetricViewConnector[key as keyof typeof LENGTH_METRIC] ||
-                "",
-              value: key,
-            }))}
-            onChange={(text) =>
-              setValue("beamUnit", text as keyof typeof LENGTH_METRIC, {
-                shouldValidate: true,
-              })
-            }
-            error={errors.beamUnit?.message}
-          />
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.col}>
-          <FormInput
-            label={`Weight (${
-              weightMetricViewConnector[
-                weightUnit as keyof typeof WEIGHT_METRIC
-              ]
-            })`}
-            value={watch("weight") ? String(watch("weight")) : ""}
-            onChangeText={(text) =>
-              setValue("weight", Number(text) || 0, { shouldValidate: true })
-            }
-            error={errors.weight?.message}
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={styles.colUnit}>
-          <FormDropdown
-            label="Weight Unit"
-            value={String(weightUnit || "")}
-            options={Object.keys(WEIGHT_METRIC).map((key) => ({
-              label:
-                weightMetricViewConnector[key as keyof typeof WEIGHT_METRIC] ||
-                "",
-              value: key,
-            }))}
-            onChange={(text) =>
-              setValue("weightUnit", text as keyof typeof WEIGHT_METRIC, {
-                shouldValidate: true,
-              })
-            }
-            error={errors.weightUnit?.message}
-          />
-        </View>
-      </View>
-
-      <FormInput
-        label="From Where"
-        value={watch("fromWhere") || ""}
-        onChangeText={(text) => setValue("fromWhere", text)}
-        error={errors.fromWhere?.message}
-      />
-
-      <FormInput
-        label="To Where"
-        value={watch("toWhere") ? String(watch("toWhere")) : ""}
-        onChangeText={(text) =>
-          setValue("toWhere", text, { shouldValidate: true })
-        }
-        error={errors.toWhere?.message}
-      />
-
-      <FormInput
-        label="When"
-        value={watch("when") ? String(watch("when")) : ""}
-        onChangeText={(text) =>
-          setValue("when", text, { shouldValidate: true })
-        }
-        error={errors.when?.message}
-      />
-
-      <FormInput
-        label="Notes"
-        value={watch("notes") || ""}
-        onChangeText={(text) => setValue("notes", text)}
-        error={errors.notes?.message}
-        placeholder="Additional details"
-        multiline
-        numberOfLines={4}
-      />
-
-      <TouchableOpacity
-        style={[styles.button, (formDisabled || !isValid) && { opacity: 0.6 }]}
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        onPress={handleSubmit(onSubmit)}
-        disabled={formDisabled || !isValid}
-      >
-        {formDisabled && (
-          <View style={styles.spinnerContainer}>
-            <ActivityIndicator size="small" color="white" />
+        {/* Measurements */}
+        <View style={styles.row}>
+          <View style={styles.col}>
+            <FormInput
+              name="length"
+              control={control}
+              label={`Length (${lengthUnit || "unit"})`}
+              placeholder="Enter length"
+              keyboardType="numeric"
+              error={errors.length}
+              ref={(el) => (inputRefs.current.length = el)}
+              onLayoutY={(y) => (inputPositions.current.length = y)}
+              onChangeText={(text: string) =>
+                setValue("length", Number(text) || 0, { shouldValidate: true })
+              }
+            />
           </View>
-        )}
-        <Text style={styles.buttonText}>Send</Text>
-      </TouchableOpacity>
+          <View style={styles.colUnit}>
+            <FormDropdown
+              ref={(el) => (inputRefs.current.lengthUnit = el)}
+              label="Length Unit"
+              value={String(lengthUnit || "")}
+              options={Object.keys(LENGTH_METRIC).map((key) => ({
+                label:
+                  lengthMetricViewConnector[
+                    key as keyof typeof LENGTH_METRIC
+                  ] || "",
+                value: key,
+              }))}
+              onChange={(val) =>
+                setValue("lengthUnit", val as any, { shouldValidate: true })
+              }
+              error={errors.lengthUnit?.message}
+              onLayoutY={(y) => (inputPositions.current.lengthUnit = y)}
+              disabled={formDisabled}
+            />
+          </View>
+        </View>
 
-      {/* Snackbar */}
-      <Snackbar
-        visible={snackbar.visible}
-        onDismiss={() => setSnackbar({ ...snackbar, visible: false })}
-        duration={3000}
-        style={{
-          backgroundColor: snackbar.color,
-          height: 50,
-          marginBottom: 80,
-        }}
-      >
-        {snackbar.message}
-      </Snackbar>
+        <View style={styles.row}>
+          <View style={styles.col}>
+            <FormInput
+              name="beam"
+              control={control}
+              label={`Beam (${beamUnit || "unit"})`}
+              placeholder="Enter beam"
+              keyboardType="numeric"
+              error={errors.beam}
+              ref={(el) => (inputRefs.current.beam = el)}
+              onLayoutY={(y) => (inputPositions.current.beam = y)}
+              onChangeText={(text: string) =>
+                setValue("beam", Number(text) || 0, { shouldValidate: true })
+              }
+            />
+          </View>
+          <View style={styles.colUnit}>
+            <FormDropdown
+              ref={(el) => (inputRefs.current.beamUnit = el)}
+              label="Beam Unit"
+              value={String(beamUnit || "")}
+              options={Object.keys(LENGTH_METRIC).map((key) => ({
+                label:
+                  lengthMetricViewConnector[
+                    key as keyof typeof LENGTH_METRIC
+                  ] || "",
+                value: key,
+              }))}
+              onChange={(val) =>
+                setValue("beamUnit", val as any, { shouldValidate: true })
+              }
+              error={errors.beamUnit?.message}
+              onLayoutY={(y) => (inputPositions.current.beamUnit = y)}
+              disabled={formDisabled}
+            />
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.col}>
+            <FormInput
+              name="weight"
+              control={control}
+              label={`Weight (${weightUnit || "unit"})`}
+              placeholder="Enter weight"
+              keyboardType="numeric"
+              error={errors.weight}
+              ref={(el) => (inputRefs.current.weight = el)}
+              onLayoutY={(y) => (inputPositions.current.weight = y)}
+              onChangeText={(text: string) =>
+                setValue("weight", Number(text) || 0, { shouldValidate: true })
+              }
+            />
+          </View>
+          <View style={styles.colUnit}>
+            <FormDropdown
+              ref={(el) => (inputRefs.current.weightUnit = el)}
+              label="Weight Unit"
+              value={String(weightUnit || "")}
+              options={Object.keys(WEIGHT_METRIC).map((key) => ({
+                label:
+                  weightMetricViewConnector[
+                    key as keyof typeof WEIGHT_METRIC
+                  ] || "",
+                value: key,
+              }))}
+              onChange={(val) =>
+                setValue("weightUnit", val as any, { shouldValidate: true })
+              }
+              error={errors.weightUnit?.message}
+              onLayoutY={(y) => (inputPositions.current.weightUnit = y)}
+              disabled={formDisabled}
+            />
+          </View>
+        </View>
+
+        <FormInput
+          name="insuredValue"
+          control={control}
+          label="Insured Value (USD)"
+          placeholder="Enter insured value"
+          keyboardType="numeric"
+          error={errors.insuredValue}
+          ref={(el) => (inputRefs.current.insuredValue = el)}
+          onLayoutY={(y) => (inputPositions.current.insuredValue = y)}
+          onChangeText={(text: string) =>
+            setValue("insuredValue", Number(text) || 0, {
+              shouldValidate: true,
+            })
+          }
+        />
+
+        {/* Routing */}
+        <FormInput
+          name="fromWhere"
+          control={control}
+          label="From Where"
+          placeholder="Enter departure location"
+          error={errors.fromWhere}
+          ref={(el) => (inputRefs.current.fromWhere = el)}
+          onLayoutY={(y) => (inputPositions.current.fromWhere = y)}
+        />
+        <FormInput
+          name="toWhere"
+          control={control}
+          label="To Where"
+          placeholder="Enter destination location"
+          error={errors.toWhere}
+          ref={(el) => (inputRefs.current.toWhere = el)}
+          onLayoutY={(y) => (inputPositions.current.toWhere = y)}
+        />
+        <FormInput
+          name="when"
+          control={control}
+          label="When"
+          placeholder="Enter preferred transport date"
+          error={errors.when}
+          ref={(el) => (inputRefs.current.when = el)}
+          onLayoutY={(y) => (inputPositions.current.when = y)}
+        />
+
+        {/* Notes */}
+        <FormInput
+          name="notes"
+          control={control}
+          label="Notes"
+          placeholder="Additional details"
+          multiline
+          numberOfLines={4}
+          style={{ height: 100, textAlignVertical: "top" }}
+          error={errors.notes}
+          ref={(el) => (inputRefs.current.notes = el)}
+          onLayoutY={(y) => (inputPositions.current.notes = y)}
+        />
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            (formDisabled || !isValid) && { opacity: 0.6 },
+          ]}
+          onPress={handleSubmit(onSubmit)}
+          disabled={formDisabled || !isValid}
+        >
+          {formDisabled && (
+            <View style={styles.spinnerContainer}>
+              <ActivityIndicator size="small" color="white" />
+            </View>
+          )}
+          <Text style={styles.buttonText}>Send</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -359,8 +431,8 @@ export default function QuoteForm() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 30,
+    paddingRight: 30,
     backgroundColor: "#fff",
     paddingBottom: 100,
   },
@@ -381,72 +453,16 @@ const styles = StyleSheet.create({
       textAlign: "center",
     },
   }),
-  inputGroup: {
-    marginBottom: 18,
+  row: {
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
-  label: Platform.select({
-    default: {
-      fontSize: 15,
-      marginBottom: 6,
-      color: "#222",
-    },
-    android: {
-      fontSize: 13,
-      marginBottom: 4,
-      color: "#222",
-    },
-  }),
-  input: Platform.select({
-    default: {
-      borderWidth: 0,
-      borderColor: "#ddd",
-      borderRadius: 0,
-      padding: 8,
-      fontSize: 16,
-      color: secondary.dark,
-      backgroundColor: "#fafafa",
-      height: 24,
-      width: "100%",
-      paddingHorizontal: 0,
-    },
-    android: {
-      borderWidth: 0,
-      borderColor: "#ddd",
-      borderRadius: 0,
-      padding: 8,
-      fontSize: 14,
-      color: secondary.dark,
-      backgroundColor: "#fafafa",
-      height: 18,
-      width: "100%",
-      paddingHorizontal: 0,
-    },
-  }),
-  paperLikeInput: {
-    borderWidth: 1,
-    borderColor: secondary.dark,
-    borderRadius: 4,
-    backgroundColor: "#fafafa",
-    height: 40, // match react-native-paper input height
-    paddingHorizontal: 8,
-    justifyContent: "center",
+  col: {
+    flex: 1,
   },
-  maskedInputText: {
-    fontSize: Platform.select({ default: 16, android: 14 }) as number,
-    color: "black",
-    padding: 0,
-  },
-  inputBorder: {
-    borderColor: secondary.dark,
-  },
-  inputError: {
-    borderColor: errorColor,
-  },
-  error: {
-    color: errorColor,
-    fontSize: 14,
-    marginTop: 8,
-    justifyContent: "center",
+  colUnit: {
+    width: 160,
+    marginLeft: 12,
   },
   button: Platform.select({
     default: {
@@ -489,54 +505,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingRight: 16,
-  },
-  dropdownAnchor: Platform.select({
-    default: {
-      backgroundColor: "#fafafa",
-      borderWidth: 1,
-      borderRadius: 0,
-      padding: 8,
-      height: 40,
-      width: "100%",
-      borderColor: secondary.dark,
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
-    android: {
-      backgroundColor: "#fafafa",
-      borderWidth: 1,
-      borderRadius: 0,
-      padding: 8,
-      height: 36,
-      width: "100%",
-      borderColor: secondary.dark,
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
-  }),
-  dropdownText: {
-    color: "black",
-    fontSize: Platform.select({ default: 16, android: 14 }) as number,
-  },
-  dropdownIcon: {
-    color: secondary.dark,
-    fontSize: Platform.select({ default: 16, android: 14 }) as number,
-    paddingLeft: 8,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    //marginBottom: 18,
-  },
-  col: {
-    flex: 1,
-  },
-  colUnit: {
-    width: 160,
-    marginLeft: 12,
   },
 });

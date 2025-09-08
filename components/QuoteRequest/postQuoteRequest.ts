@@ -12,13 +12,9 @@ export const postQuoteRequest = async (
     console.log("Response status:", response.status);
     const data: ActionResult = await response.json();
     console.log("Response body:", data);
-    if (!data.success) {
-      throw new Error(`Error posting quote request`);
-    }
-    console.log("Quote request posted successfully:", data);
     return data;
   } catch (error) {
     console.error("Error posting quote request: ", error);
-    throw error;
+    return { success: false, message: "Network error" };
   }
 };

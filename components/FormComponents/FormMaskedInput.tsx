@@ -1,50 +1,65 @@
 import { errorColor, secondary } from "@/constants/Colors";
-import React from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
-import { MaskedTextInput } from "react-native-mask-text";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { Control, Controller } from "react-hook-form";
+import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import { MaskedTextInput, MaskedTextInputProps } from "react-native-mask-text";
+import { FormInputRef } from "./FormInput";
 
-type Props = {
+interface FormMaskedInputProps extends MaskedTextInputProps {
+  name: string;
+  control: Control<any>;
   label: string;
-  value?: string;
-  onChangeText?: (masked: string, raw: string) => void;
   error?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  mask: string;
-  keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-};
+  onLayoutY?: (y: number) => void; // report Y position like FormInput
+}
 
-export const FormMaskedInput: React.FC<Props> = ({
-  label,
-  value,
-  onChangeText,
-  error,
-  placeholder,
-  disabled,
-  mask,
-  keyboardType = "default",
-}) => {
-  return (
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>{label}</Text>
+const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
+  ({ name, label, control, error, style, onLayoutY, ...props }, ref) => {
+    const inputRef = useRef<TextInput | null>(null);
+    const containerRef = useRef<View | null>(null);
 
-      <View style={[styles.paperLikeInput, error && styles.inputError]}>
-        <MaskedTextInput
-          mask={mask}
-          keyboardType={keyboardType}
-          placeholder={placeholder}
-          placeholderTextColor="#999"
-          value={value}
-          editable={!disabled}
-          onChangeText={onChangeText || (() => {})}
-          style={styles.maskedInputText}
-        />
+    useImperativeHandle(ref, () => ({
+      focus: () => {
+        inputRef.current?.focus();
+      },
+    }));
+
+    return (
+      <View
+        style={styles.inputGroup}
+        ref={containerRef}
+        onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
+      >
+        <Text style={styles.label}>{label}</Text>
+        <View
+          style={[
+            styles.paperLikeInput,
+            error ? styles.inputError : styles.inputBorder,
+          ]}
+        >
+          <Controller
+            control={control}
+            name={name}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <MaskedTextInput
+                ref={inputRef as any}
+                style={[styles.input, style]}
+                placeholderTextColor={secondary.dark}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value as any}
+                {...props}
+              />
+            )}
+          />
+        </View>
+        {error && <Text style={styles.error}>{error}</Text>}
       </View>
+    );
+  }
+);
 
-      {error && <Text style={styles.error}>{error}</Text>}
-    </View>
-  );
-};
+export default FormMaskedInput;
 
 const styles = StyleSheet.create({
   inputGroup: {
@@ -63,11 +78,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     justifyContent: "center",
   },
-  maskedInputText: {
+  input: {
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
-    color: "black",
+    color: secondary.dark,
     padding: 0,
-    height: 40,
+    margin: 0,
+  },
+  inputBorder: {
+    borderColor: secondary.dark,
   },
   inputError: {
     borderColor: errorColor,
@@ -75,8 +93,6 @@ const styles = StyleSheet.create({
   error: {
     color: errorColor,
     fontSize: 14,
-    marginTop: 6,
+    marginTop: 8,
   },
 });
-
-export default FormMaskedInput;
