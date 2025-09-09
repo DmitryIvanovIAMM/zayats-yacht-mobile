@@ -15,6 +15,7 @@ import {
 import FormDropdown from "../FormComponents/FormDropdown";
 import FormInput, { FormInputRef } from "../FormComponents/FormInput";
 import FormMaskedInput from "../FormComponents/FormMaskedInput";
+import { handleServerValidationErrors } from "../FormUtils/handleServerValidationErrors";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
   defaultNonEmptyQuoteRequest,
@@ -105,30 +106,27 @@ export default function QuoteForm() {
   const onSubmit = async (data: QuoteRequestForm) => {
     try {
       const res = await postQuoteRequest({ ...data, email: "la-la" });
+
       if (res.success) {
         showSnackbar(Messages.QuoteRequestSent, "green");
       } else {
-        if (res.data && typeof res.data === "object") {
-          const fields = Object.keys(res.data) as (keyof QuoteRequestForm)[];
-          fields.forEach((field) => {
-            const message = Array.isArray(res.data[field])
-              ? res.data[field][0]
-              : String(res.data[field]);
-            setError(field, { message });
+        const { handled, firstErrorField } =
+          handleServerValidationErrors<QuoteRequestForm>({
+            data: res.data,
+            message: res.message,
+            expectedMessage: Messages.ValidationError,
+            setError,
+            scrollRef: scrollRef as React.RefObject<ScrollView>,
+            inputPositions: inputPositions.current,
+            scrollOffset: 30,
           });
 
-          const firstErrorField = fields[0];
-          const y = inputPositions.current[String(firstErrorField)];
-          if (typeof y === "number") {
-            scrollRef.current?.scrollTo({
-              y: Math.max(y - 30, 0),
-              animated: true,
-            });
-          }
-          // do not focus now (still disabled). queue it
+        if (handled && firstErrorField) {
+          // queue focus until submit finishes (inputs are disabled while submitting)
           pendingFocusRef.current = firstErrorField;
           return;
         }
+
         showSnackbar(Messages.QuoteRequestFailed, "red");
       }
     } catch (err) {
