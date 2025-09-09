@@ -12,6 +12,8 @@ type Props = {
   label: string;
   placeholder?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  secureTextEntry?: boolean; // add
+  autoCapitalize?: "none" | "sentences" | "words" | "characters"; // add
   multiline?: boolean;
   numberOfLines?: number;
   onLayoutY?: (y: number) => void;
@@ -29,6 +31,8 @@ const FormInput = forwardRef<FormInputRef, Props>(
       multiline,
       numberOfLines,
       disabled, // NEW
+      secureTextEntry, // add
+      autoCapitalize, // add
     },
     ref
   ) => {
@@ -73,12 +77,25 @@ const FormInput = forwardRef<FormInputRef, Props>(
                   onChangeText={onChange}
                   onBlur={onBlur}
                   keyboardType={keyboardType}
+                  secureTextEntry={secureTextEntry}
+                  autoCapitalize={autoCapitalize}
                   editable={!disabled}
                   multiline={multiline}
                   numberOfLines={numberOfLines}
                 />
               </View>
-              {error && <Text style={styles.error}>{error.message}</Text>}
+
+              <View style={styles.errorContainer}>
+                {error ? (
+                  <Text
+                    style={styles.error}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {error.message}
+                  </Text>
+                ) : null}
+              </View>
             </>
           )}
         />
@@ -89,7 +106,7 @@ const FormInput = forwardRef<FormInputRef, Props>(
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 18,
+    marginBottom: 8,
   },
   label: {
     fontSize: Platform.select({ default: 15, android: 13 }) as number,
@@ -124,10 +141,16 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: errorColor,
   },
+  errorContainer: {
+    minHeight: 18, // reserve space for one line of error
+    marginTop: 2,
+    justifyContent: "center",
+  },
   error: {
     color: errorColor,
     fontSize: 14,
-    marginTop: 6,
+    // lineHeight optional to match minHeight:
+    // lineHeight: 18,
   },
 });
 

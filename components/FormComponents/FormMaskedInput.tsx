@@ -61,17 +61,24 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
                   style={[styles.input, style]}
                   placeholderTextColor={secondary.dark}
                   onBlur={onBlur}
-                  // store raw (unmasked) value in the form state
-                  onChangeText={(text, rawText) => {
-                    userOnChangeText?.(text, rawText);
-                    onChange(rawText);
-                  }}
+                  onChangeText={(text, rawText) => onChange(rawText)}
                   value={(value as any) ?? ""}
-                  editable={!disabled} // NEW
+                  editable={!disabled}
                   {...props}
                 />
               </View>
-              {error && <Text style={styles.error}>{error.message}</Text>}
+
+              <View style={styles.errorContainer}>
+                {error ? (
+                  <Text
+                    style={styles.error}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {error.message}
+                  </Text>
+                ) : null}
+              </View>
             </>
           )}
         />
@@ -84,7 +91,7 @@ export default FormMaskedInput;
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 18,
+    marginBottom: 8, // как в FormInput
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: "#222" },
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
     borderColor: secondary.dark,
     borderRadius: 4,
     backgroundColor: "#fafafa",
-    height: 40,
+    minHeight: 40, // вместо фиксированного height
     paddingHorizontal: 8,
     justifyContent: "center",
   },
@@ -111,9 +118,13 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: errorColor,
   },
+  errorContainer: {
+    minHeight: 18,
+    marginTop: 2,
+    justifyContent: "center",
+  },
   error: {
     color: errorColor,
     fontSize: 14,
-    marginTop: 8,
   },
 });

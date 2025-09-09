@@ -67,7 +67,18 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
                 onChange={(item) => onChange(item.value)}
                 disable={disabled}
               />
-              {error && <Text style={styles.error}>{error.message}</Text>}
+
+              <View style={styles.errorContainer}>
+                {error ? (
+                  <Text
+                    style={styles.error}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {error.message}
+                  </Text>
+                ) : null}
+              </View>
             </>
           )}
         />
@@ -78,7 +89,7 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 18,
+    marginBottom: 8, // как в FormInput
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
@@ -155,10 +166,15 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: errorColor,
   },
+  errorContainer: {
+    minHeight: 18,
+    marginTop: 2,
+    justifyContent: "center",
+  },
   error: {
     color: errorColor,
     fontSize: 14,
-    marginTop: 6,
+    marginTop: 0, // зарезервировано errorContainer, поэтому без дополнительного отступа
   },
 });
 
