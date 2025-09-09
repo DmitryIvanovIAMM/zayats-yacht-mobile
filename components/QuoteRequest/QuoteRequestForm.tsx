@@ -2,7 +2,7 @@ import { secondary } from "@/constants/Colors";
 import { Messages } from "@/helpers/messages";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Platform,
@@ -17,7 +17,7 @@ import FormInput, { FormInputRef } from "../FormComponents/FormInput";
 import FormMaskedInput from "../FormComponents/FormMaskedInput";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
-  defaultQuoteRequest,
+  defaultNonEmptyQuoteRequest,
   LENGTH_METRIC,
   lengthMetricViewConnector,
   PURPOSE_OF_TRANSPORT,
@@ -35,6 +35,11 @@ export default function QuoteForm() {
   const inputRefs = React.useRef<Record<string, FormInputRef | null>>({});
   // capture on-screen Y positions to scroll without measureLayout
   const inputPositions = React.useRef<Record<string, number>>({});
+  // when submission returns errors, we want to focus the first errored field
+  // but it is still disabled, so we queue it here
+  // and focus it when submission state is cleared
+  // we use a ref to avoid triggering useEffect on every render with state
+  const pendingFocusRef = React.useRef<keyof QuoteRequestForm | null>(null);
 
   const [snackbar, setSnackbar] = React.useState<{
     visible: boolean;
@@ -46,6 +51,14 @@ export default function QuoteForm() {
     setSnackbar({ visible: true, message, color });
   };
 
+  const methods = useForm<QuoteRequestForm>({
+    // defaultValues: defaultQuoteRequest,
+    defaultValues: defaultNonEmptyQuoteRequest,
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    resolver: yupResolver(quoteRequestSchema),
+  });
+
   const {
     register,
     setValue,
@@ -54,13 +67,7 @@ export default function QuoteForm() {
     watch,
     setError,
     control,
-  } = useForm<QuoteRequestForm>({
-    //sdefaultValues: defaultNonEmptyQuoteRequest,
-    defaultValues: defaultQuoteRequest,
-    mode: "onBlur",
-    reValidateMode: "onChange",
-    resolver: yupResolver(quoteRequestSchema),
-  });
+  } = methods;
 
   // dropdown-driven fields
   const purpose = watch("purpose");
@@ -110,7 +117,6 @@ export default function QuoteForm() {
             setError(field, { message });
           });
 
-          // scroll to first error field
           const firstErrorField = fields[0];
           const y = inputPositions.current[String(firstErrorField)];
           if (typeof y === "number") {
@@ -119,8 +125,8 @@ export default function QuoteForm() {
               animated: true,
             });
           }
-          inputRefs.current[firstErrorField as string]?.focus?.();
-
+          // do not focus now (still disabled). queue it
+          pendingFocusRef.current = firstErrorField;
           return;
         }
         showSnackbar(Messages.QuoteRequestFailed, "red");
@@ -131,300 +137,344 @@ export default function QuoteForm() {
     }
   };
 
+  React.useEffect(() => {
+    if (!isSubmitting && pendingFocusRef.current) {
+      const field = pendingFocusRef.current;
+      pendingFocusRef.current = null;
+      // next frame to ensure editable is applied
+      requestAnimationFrame(() => {
+        inputRefs.current[field as string]?.focus?.();
+      });
+    }
+  }, [isSubmitting]);
+
   const formDisabled = isSubmitting;
 
   return (
-    <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
-      <View ref={contentRef}>
-        <Text style={styles.title}>Get Quote</Text>
+    <FormProvider {...methods}>
+      <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
+        <View ref={contentRef}>
+          <Text style={styles.title}>Get Quote</Text>
 
-        {/* Contact */}
-        <FormInput
-          name="firstName"
-          control={control}
-          label="First Name *"
-          placeholder="Enter your first name"
-          rules={{ required: "First name is required" }}
-          error={errors.firstName}
-          ref={(el) => (inputRefs.current.firstName = el)}
-          onLayoutY={(y) => (inputPositions.current.firstName = y)}
-        />
-        <FormInput
-          name="lastName"
-          control={control}
-          label="Last Name *"
-          placeholder="Enter your last name"
-          rules={{ required: "Last name is required" }}
-          error={errors.lastName}
-          ref={(el) => (inputRefs.current.lastName = el)}
-          onLayoutY={(y) => (inputPositions.current.lastName = y)}
-        />
-        <FormMaskedInput
-          name="phoneNumber"
-          control={control}
-          label="Phone Number *"
-          placeholder="+1 111 111 1111"
-          keyboardType="phone-pad"
-          mask="+1 (999) 999 9999"
-          rules={{ required: "Phone number is required" }}
-          error={errors.phoneNumber?.message}
-          ref={(el) => (inputRefs.current.phoneNumber = el)}
-          onLayoutY={(y) => (inputPositions.current.phoneNumber = y)}
-        />
-        <FormInput
-          name="email"
-          control={control}
-          label="Email *"
-          placeholder="Enter your email"
-          keyboardType="email-address"
-          rules={{ required: "Email is required" }}
-          error={errors.email}
-          ref={(el) => (inputRefs.current.email = el)}
-          onLayoutY={(y) => (inputPositions.current.email = y)}
-        />
-        <FormInput
-          name="bestTimeToContact"
-          control={control}
-          label="Best Time to Contact"
-          placeholder="e.g. Weekdays after 5pm"
-          error={errors.bestTimeToContact}
-          ref={(el) => (inputRefs.current.bestTimeToContact = el)}
-          onLayoutY={(y) => (inputPositions.current.bestTimeToContact = y)}
-        />
+          {/* Contact */}
+          <FormInput
+            name="firstName"
+            label="First Name *"
+            placeholder="Enter your first name"
+            ref={(el) => {
+              inputRefs.current.firstName = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.firstName = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormInput
+            name="lastName"
+            label="Last Name *"
+            placeholder="Enter your last name"
+            ref={(el) => {
+              inputRefs.current.lastName = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.lastName = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormMaskedInput
+            name="phoneNumber"
+            label="Phone Number *"
+            placeholder="+1 111 111 1111"
+            keyboardType="phone-pad"
+            mask="+1 999 999 9999"
+            onChangeText={(text, rawText) => {
+              setValue("phoneNumber", text, {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
+            }}
+            ref={(el) => {
+              inputRefs.current.phoneNumber = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.phoneNumber = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormInput
+            name="email"
+            label="Email *"
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            ref={(el) => {
+              inputRefs.current.email = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.email = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormInput
+            name="bestTimeToContact"
+            label="Best Time to Contact"
+            placeholder="e.g. Weekdays after 5pm"
+            ref={(el) => {
+              inputRefs.current.bestTimeToContact = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.bestTimeToContact = y;
+            }}
+            disabled={formDisabled}
+          />
 
-        {/* Yacht */}
-        <FormInput
-          name="yachtName"
-          control={control}
-          label="Yacht Name"
-          placeholder="Enter yacht name"
-          error={errors.yachtName}
-          ref={(el) => (inputRefs.current.yachtName = el)}
-          onLayoutY={(y) => (inputPositions.current.yachtName = y)}
-        />
-        <FormInput
-          name="yachtModel"
-          control={control}
-          label="Yacht Model"
-          placeholder="Enter yacht model"
-          error={errors.yachtModel}
-          ref={(el) => (inputRefs.current.yachtModel = el)}
-          onLayoutY={(y) => (inputPositions.current.yachtModel = y)}
-        />
+          {/* Yacht */}
+          <FormInput
+            name="yachtName"
+            label="Yacht Name"
+            placeholder="Enter yacht name"
+            ref={(el) => {
+              inputRefs.current.yachtName = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.yachtName = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormInput
+            name="yachtModel"
+            label="Yacht Model"
+            placeholder="Enter yacht model"
+            ref={(el) => {
+              inputRefs.current.yachtModel = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.yachtModel = y;
+            }}
+            disabled={formDisabled}
+          />
 
-        {/* Purpose */}
-        <FormDropdown
-          ref={(el) => (inputRefs.current.purpose = el)}
-          label="Purpose of Transport"
-          value={String(purpose || "")}
-          options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
-            label:
-              PURPOSE_OF_TRANSPORT[key as keyof typeof PURPOSE_OF_TRANSPORT] ||
-              "",
-            value: key,
-          }))}
-          onChange={(val) =>
-            setValue("purpose", val as QuoteRequestForm["purpose"], {
-              shouldValidate: true,
-            })
-          }
-          error={errors.purpose?.message}
-          onLayoutY={(y) => (inputPositions.current.purpose = y)}
-          placeholder="Select..."
-          disabled={formDisabled}
-        />
+          {/* Purpose */}
+          <FormDropdown
+            ref={(el) => {
+              inputRefs.current.purpose = el;
+            }}
+            name="purpose"
+            label="Purpose of Transport"
+            options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
+              label:
+                PURPOSE_OF_TRANSPORT[
+                  key as keyof typeof PURPOSE_OF_TRANSPORT
+                ] || "",
+              value: key,
+            }))}
+            onLayoutY={(y) => {
+              inputPositions.current.purpose = y;
+            }}
+            placeholder="Select..."
+            disabled={formDisabled}
+          />
 
-        {/* Measurements */}
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <FormInput
-              name="length"
-              control={control}
-              label={`Length (${lengthUnit || "unit"})`}
-              placeholder="Enter length"
-              keyboardType="numeric"
-              error={errors.length}
-              ref={(el) => (inputRefs.current.length = el)}
-              onLayoutY={(y) => (inputPositions.current.length = y)}
-              onChangeText={(text: string) =>
-                setValue("length", Number(text) || 0, { shouldValidate: true })
-              }
-            />
-          </View>
-          <View style={styles.colUnit}>
-            <FormDropdown
-              ref={(el) => (inputRefs.current.lengthUnit = el)}
-              label="Length Unit"
-              value={String(lengthUnit || "")}
-              options={Object.keys(LENGTH_METRIC).map((key) => ({
-                label:
-                  lengthMetricViewConnector[
-                    key as keyof typeof LENGTH_METRIC
-                  ] || "",
-                value: key,
-              }))}
-              onChange={(val) =>
-                setValue("lengthUnit", val as any, { shouldValidate: true })
-              }
-              error={errors.lengthUnit?.message}
-              onLayoutY={(y) => (inputPositions.current.lengthUnit = y)}
-              disabled={formDisabled}
-            />
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <FormInput
-              name="beam"
-              control={control}
-              label={`Beam (${beamUnit || "unit"})`}
-              placeholder="Enter beam"
-              keyboardType="numeric"
-              error={errors.beam}
-              ref={(el) => (inputRefs.current.beam = el)}
-              onLayoutY={(y) => (inputPositions.current.beam = y)}
-              onChangeText={(text: string) =>
-                setValue("beam", Number(text) || 0, { shouldValidate: true })
-              }
-            />
-          </View>
-          <View style={styles.colUnit}>
-            <FormDropdown
-              ref={(el) => (inputRefs.current.beamUnit = el)}
-              label="Beam Unit"
-              value={String(beamUnit || "")}
-              options={Object.keys(LENGTH_METRIC).map((key) => ({
-                label:
-                  lengthMetricViewConnector[
-                    key as keyof typeof LENGTH_METRIC
-                  ] || "",
-                value: key,
-              }))}
-              onChange={(val) =>
-                setValue("beamUnit", val as any, { shouldValidate: true })
-              }
-              error={errors.beamUnit?.message}
-              onLayoutY={(y) => (inputPositions.current.beamUnit = y)}
-              disabled={formDisabled}
-            />
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <FormInput
-              name="weight"
-              control={control}
-              label={`Weight (${weightUnit || "unit"})`}
-              placeholder="Enter weight"
-              keyboardType="numeric"
-              error={errors.weight}
-              ref={(el) => (inputRefs.current.weight = el)}
-              onLayoutY={(y) => (inputPositions.current.weight = y)}
-              onChangeText={(text: string) =>
-                setValue("weight", Number(text) || 0, { shouldValidate: true })
-              }
-            />
-          </View>
-          <View style={styles.colUnit}>
-            <FormDropdown
-              ref={(el) => (inputRefs.current.weightUnit = el)}
-              label="Weight Unit"
-              value={String(weightUnit || "")}
-              options={Object.keys(WEIGHT_METRIC).map((key) => ({
-                label:
-                  weightMetricViewConnector[
-                    key as keyof typeof WEIGHT_METRIC
-                  ] || "",
-                value: key,
-              }))}
-              onChange={(val) =>
-                setValue("weightUnit", val as any, { shouldValidate: true })
-              }
-              error={errors.weightUnit?.message}
-              onLayoutY={(y) => (inputPositions.current.weightUnit = y)}
-              disabled={formDisabled}
-            />
-          </View>
-        </View>
-
-        <FormInput
-          name="insuredValue"
-          control={control}
-          label="Insured Value (USD)"
-          placeholder="Enter insured value"
-          keyboardType="numeric"
-          error={errors.insuredValue}
-          ref={(el) => (inputRefs.current.insuredValue = el)}
-          onLayoutY={(y) => (inputPositions.current.insuredValue = y)}
-          onChangeText={(text: string) =>
-            setValue("insuredValue", Number(text) || 0, {
-              shouldValidate: true,
-            })
-          }
-        />
-
-        {/* Routing */}
-        <FormInput
-          name="fromWhere"
-          control={control}
-          label="From Where"
-          placeholder="Enter departure location"
-          error={errors.fromWhere}
-          ref={(el) => (inputRefs.current.fromWhere = el)}
-          onLayoutY={(y) => (inputPositions.current.fromWhere = y)}
-        />
-        <FormInput
-          name="toWhere"
-          control={control}
-          label="To Where"
-          placeholder="Enter destination location"
-          error={errors.toWhere}
-          ref={(el) => (inputRefs.current.toWhere = el)}
-          onLayoutY={(y) => (inputPositions.current.toWhere = y)}
-        />
-        <FormInput
-          name="when"
-          control={control}
-          label="When"
-          placeholder="Enter preferred transport date"
-          error={errors.when}
-          ref={(el) => (inputRefs.current.when = el)}
-          onLayoutY={(y) => (inputPositions.current.when = y)}
-        />
-
-        {/* Notes */}
-        <FormInput
-          name="notes"
-          control={control}
-          label="Notes"
-          placeholder="Additional details"
-          multiline
-          numberOfLines={4}
-          style={{ height: 100, textAlignVertical: "top" }}
-          error={errors.notes}
-          ref={(el) => (inputRefs.current.notes = el)}
-          onLayoutY={(y) => (inputPositions.current.notes = y)}
-        />
-
-        <TouchableOpacity
-          style={[
-            styles.button,
-            (formDisabled || !isValid) && { opacity: 0.6 },
-          ]}
-          onPress={handleSubmit(onSubmit)}
-          disabled={formDisabled || !isValid}
-        >
-          {formDisabled && (
-            <View style={styles.spinnerContainer}>
-              <ActivityIndicator size="small" color="white" />
+          {/* Measurements */}
+          <View style={styles.row}>
+            <View style={styles.col}>
+              <FormInput
+                name="length"
+                label={`Length (${lengthUnit || "unit"})`}
+                placeholder="Enter length"
+                keyboardType="numeric"
+                ref={(el) => {
+                  inputRefs.current.length = el;
+                }}
+                onLayoutY={(y) => {
+                  inputPositions.current.length = y;
+                }}
+                disabled={formDisabled}
+              />
             </View>
-          )}
-          <Text style={styles.buttonText}>Send</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+            <View style={styles.colUnit}>
+              <FormDropdown
+                ref={(el) => {
+                  inputRefs.current.lengthUnit = el;
+                }}
+                name="lengthUnit"
+                label="Length Unit"
+                options={Object.keys(LENGTH_METRIC).map((key) => ({
+                  label:
+                    lengthMetricViewConnector[
+                      key as keyof typeof lengthMetricViewConnector
+                    ] || String(key),
+                  value: key,
+                }))}
+                onLayoutY={(y) => {
+                  inputPositions.current.lengthUnit = y;
+                }}
+                disabled={formDisabled}
+              />
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.col}>
+              <FormInput
+                name="beam"
+                label={`Beam (${beamUnit || "unit"})`}
+                placeholder="Enter beam"
+                keyboardType="numeric"
+                ref={(el) => {
+                  inputRefs.current.beam = el;
+                }}
+                onLayoutY={(y) => {
+                  inputPositions.current.beam = y;
+                }}
+                disabled={formDisabled}
+              />
+            </View>
+            <View style={styles.colUnit}>
+              <FormDropdown
+                ref={(el) => {
+                  inputRefs.current.beamUnit = el;
+                }}
+                name="beamUnit"
+                label="Beam Unit"
+                options={Object.keys(LENGTH_METRIC).map((key) => ({
+                  label:
+                    lengthMetricViewConnector[
+                      key as keyof typeof lengthMetricViewConnector
+                    ] || String(key),
+                  value: key,
+                }))}
+                onLayoutY={(y) => {
+                  inputPositions.current.beamUnit = y;
+                }}
+                disabled={formDisabled}
+              />
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.col}>
+              <FormInput
+                name="weight"
+                label={`Weight (${weightUnit || "unit"})`}
+                placeholder="Enter weight"
+                keyboardType="numeric"
+                ref={(el) => {
+                  inputRefs.current.weight = el;
+                }}
+                onLayoutY={(y) => {
+                  inputPositions.current.weight = y;
+                }}
+                disabled={formDisabled}
+              />
+            </View>
+            <View style={styles.colUnit}>
+              <FormDropdown
+                ref={(el) => {
+                  inputRefs.current.weightUnit = el;
+                }}
+                name="weightUnit"
+                label="Weight Unit"
+                options={Object.keys(WEIGHT_METRIC).map((key) => ({
+                  label:
+                    weightMetricViewConnector[
+                      key as keyof typeof weightMetricViewConnector
+                    ] || String(key),
+                  value: key,
+                }))}
+                onLayoutY={(y) => {
+                  inputPositions.current.weightUnit = y;
+                }}
+                disabled={formDisabled}
+              />
+            </View>
+          </View>
+
+          <FormInput
+            name="insuredValue"
+            label="Insured Value (USD)"
+            placeholder="Enter insured value"
+            keyboardType="numeric"
+            ref={(el) => {
+              inputRefs.current.insuredValue = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.insuredValue = y;
+            }}
+            disabled={formDisabled}
+          />
+
+          {/* Routing */}
+          <FormInput
+            name="fromWhere"
+            label="From Where"
+            placeholder="Enter departure location"
+            ref={(el) => {
+              inputRefs.current.fromWhere = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.fromWhere = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormInput
+            name="toWhere"
+            label="To Where"
+            placeholder="Enter destination location"
+            ref={(el) => {
+              inputRefs.current.toWhere = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.toWhere = y;
+            }}
+            disabled={formDisabled}
+          />
+          <FormInput
+            name="when"
+            label="When"
+            placeholder="Enter preferred transport date"
+            ref={(el) => {
+              inputRefs.current.when = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.when = y;
+            }}
+            disabled={formDisabled}
+          />
+
+          {/* Notes */}
+          <FormInput
+            name="notes"
+            label="Notes"
+            placeholder="Additional details"
+            multiline
+            numberOfLines={4}
+            ref={(el) => {
+              inputRefs.current.notes = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.notes = y;
+            }}
+            disabled={formDisabled}
+          />
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              (formDisabled || !isValid) && { opacity: 0.6 },
+            ]}
+            onPress={handleSubmit(onSubmit)}
+            disabled={formDisabled || !isValid}
+          >
+            {formDisabled && (
+              <View style={styles.spinnerContainer}>
+                <ActivityIndicator size="small" color="white" />
+              </View>
+            )}
+            <Text style={styles.buttonText}>Send</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </FormProvider>
   );
 }
 

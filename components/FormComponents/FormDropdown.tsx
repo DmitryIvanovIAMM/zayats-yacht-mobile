@@ -1,5 +1,6 @@
 import { errorColor, secondary } from "@/constants/Colors";
 import React, { useImperativeHandle, useRef } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import type { FormInputRef } from "./FormInput";
@@ -10,31 +11,21 @@ type Option = {
 };
 
 type Props = {
+  name: string;
   label: string;
-  value?: string;
   options: Option[];
-  onChange: (value: string) => void;
-  error?: string;
   placeholder?: string;
   disabled?: boolean;
-  onLayoutY?: (y: number) => void; // report Y like other inputs
+  onLayoutY?: (y: number) => void; // keep Y reporting consistent
 };
 
 const FormDropdown = React.forwardRef<FormInputRef, Props>(
   (
-    {
-      label,
-      value,
-      options,
-      onChange,
-      error,
-      placeholder = "Select...",
-      disabled,
-      onLayoutY,
-    },
+    { name, label, options, placeholder = "Select...", disabled, onLayoutY },
     ref
   ) => {
     const dropdownRef = useRef<any>(null);
+    const { control } = useFormContext();
 
     useImperativeHandle(ref, () => ({
       focus: () => {
@@ -49,28 +40,37 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
         onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
       >
         <Text style={styles.label}>{label}</Text>
-        <Dropdown
-          ref={dropdownRef as any}
-          style={[
-            styles.dropdown,
-            error ? styles.inputError : styles.inputBorder,
-          ]}
-          placeholderStyle={styles.placeholderText}
-          selectedTextStyle={styles.selectedText}
-          itemTextStyle={styles.dropdownText}
-          iconStyle={styles.dropdownIcon}
-          containerStyle={styles.dropdownMenu}
-          itemContainerStyle={styles.itemContainer}
-          activeColor={secondary.dark}
-          data={options}
-          labelField="label"
-          valueField="value"
-          placeholder={placeholder}
-          value={value}
-          onChange={(item) => onChange(item.value)}
-          disable={disabled}
+
+        <Controller
+          control={control}
+          name={name}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <>
+              <Dropdown
+                ref={dropdownRef as any}
+                style={[
+                  styles.dropdown,
+                  error ? styles.inputError : styles.inputBorder,
+                ]}
+                placeholderStyle={styles.placeholderText}
+                selectedTextStyle={styles.selectedText}
+                itemTextStyle={styles.dropdownText}
+                iconStyle={styles.dropdownIcon}
+                containerStyle={styles.dropdownMenu}
+                itemContainerStyle={styles.itemContainer}
+                activeColor={secondary.dark}
+                data={options}
+                labelField="label"
+                valueField="value"
+                placeholder={placeholder}
+                value={value as any}
+                onChange={(item) => onChange(item.value)}
+                disable={disabled}
+              />
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
         />
-        {error && <Text style={styles.error}>{error}</Text>}
       </View>
     );
   }

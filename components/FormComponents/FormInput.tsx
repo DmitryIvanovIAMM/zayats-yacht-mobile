@@ -1,6 +1,6 @@
 import { errorColor, secondary } from "@/constants/Colors";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { Control, Controller, FieldError } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 
 export type FormInputRef = {
@@ -9,15 +9,13 @@ export type FormInputRef = {
 
 type Props = {
   name: string;
-  control: Control<any>;
   label: string;
   placeholder?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-  rules?: object;
-  error?: FieldError;
   multiline?: boolean;
   numberOfLines?: number;
-  onLayoutY?: (y: number) => void; // NEW
+  onLayoutY?: (y: number) => void;
+  disabled?: boolean; // NEW
 };
 
 const FormInput = forwardRef<FormInputRef, Props>(
@@ -25,18 +23,17 @@ const FormInput = forwardRef<FormInputRef, Props>(
     {
       onLayoutY,
       name,
-      control,
       label,
       placeholder,
       keyboardType,
-      rules,
-      error,
       multiline,
       numberOfLines,
+      disabled, // NEW
     },
     ref
   ) => {
     const inputRef = useRef<TextInput | null>(null);
+    const { control } = useFormContext();
 
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
@@ -45,32 +42,46 @@ const FormInput = forwardRef<FormInputRef, Props>(
     return (
       <View
         style={styles.inputGroup}
-        onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)} // report Y
+        onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
       >
         <Text style={styles.label}>{label}</Text>
-        <View style={[styles.paperLikeInput, error && styles.inputError]}>
-          <Controller
-            control={control}
-            name={name}
-            rules={rules}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                ref={inputRef}
-                style={styles.input}
-                placeholder={placeholder}
-                placeholderTextColor={secondary.dark}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                keyboardType={keyboardType}
-                editable
-                multiline={multiline}
-                numberOfLines={numberOfLines}
-              />
-            )}
-          />
-        </View>
-        {error && <Text style={styles.error}>{error.message}</Text>}
+        <Controller
+          control={control}
+          name={name}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <>
+              <View
+                style={[
+                  styles.paperLikeInput,
+                  error && styles.inputError,
+                  multiline && styles.paperLikeMultiline,
+                  // optional: size by numberOfLines
+                  multiline && numberOfLines
+                    ? { minHeight: numberOfLines * 24 + 16 }
+                    : undefined,
+                ]}
+              >
+                <TextInput
+                  ref={inputRef}
+                  style={[styles.input, multiline && styles.inputMultiline]}
+                  placeholder={placeholder}
+                  placeholderTextColor={secondary.dark}
+                  value={value as any}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  keyboardType={keyboardType}
+                  editable={!disabled}
+                  multiline={multiline}
+                  numberOfLines={numberOfLines}
+                />
+              </View>
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
       </View>
     );
   }
@@ -90,14 +101,25 @@ const styles = StyleSheet.create({
     borderColor: secondary.dark,
     borderRadius: 4,
     backgroundColor: "white",
-    height: 40,
+    // height: 40,           // remove fixed height
+    minHeight: 40, // allow multiline to grow
     paddingHorizontal: 8,
     justifyContent: "center",
+  },
+  paperLikeMultiline: {
+    justifyContent: "flex-start",
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   input: {
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
     color: secondary.dark,
     padding: 0,
+  },
+  inputMultiline: {
+    textAlignVertical: "top",
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   inputError: {
     borderColor: errorColor,

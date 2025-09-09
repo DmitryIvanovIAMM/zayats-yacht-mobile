@@ -1,22 +1,33 @@
 import { errorColor, secondary } from "@/constants/Colors";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { Control, Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { MaskedTextInput, MaskedTextInputProps } from "react-native-mask-text";
 import { FormInputRef } from "./FormInput";
 
 interface FormMaskedInputProps extends MaskedTextInputProps {
   name: string;
-  control: Control<any>;
   label: string;
-  error?: string;
   onLayoutY?: (y: number) => void; // report Y position like FormInput
+  disabled?: boolean; // NEW
 }
 
 const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
-  ({ name, label, control, error, style, onLayoutY, ...props }, ref) => {
+  (
+    {
+      name,
+      label,
+      style,
+      onLayoutY,
+      disabled,
+      onChangeText: userOnChangeText,
+      ...props
+    },
+    ref
+  ) => {
     const inputRef = useRef<TextInput | null>(null);
     const containerRef = useRef<View | null>(null);
+    const { control } = useFormContext();
 
     useImperativeHandle(ref, () => ({
       focus: () => {
@@ -31,29 +42,39 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
         onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
       >
         <Text style={styles.label}>{label}</Text>
-        <View
-          style={[
-            styles.paperLikeInput,
-            error ? styles.inputError : styles.inputBorder,
-          ]}
-        >
-          <Controller
-            control={control}
-            name={name}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <MaskedTextInput
-                ref={inputRef as any}
-                style={[styles.input, style]}
-                placeholderTextColor={secondary.dark}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value as any}
-                {...props}
-              />
-            )}
-          />
-        </View>
-        {error && <Text style={styles.error}>{error}</Text>}
+        <Controller
+          control={control}
+          name={name}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <>
+              <View
+                style={[
+                  styles.paperLikeInput,
+                  error ? styles.inputError : styles.inputBorder,
+                ]}
+              >
+                <MaskedTextInput
+                  ref={inputRef as any}
+                  style={[styles.input, style]}
+                  placeholderTextColor={secondary.dark}
+                  onBlur={onBlur}
+                  // store raw (unmasked) value in the form state
+                  onChangeText={(text, rawText) => {
+                    userOnChangeText?.(text, rawText);
+                    onChange(rawText);
+                  }}
+                  value={(value as any) ?? ""}
+                  editable={!disabled} // NEW
+                  {...props}
+                />
+              </View>
+              {error && <Text style={styles.error}>{error.message}</Text>}
+            </>
+          )}
+        />
       </View>
     );
   }
