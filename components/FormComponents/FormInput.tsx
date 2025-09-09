@@ -149,8 +149,7 @@ const styles = StyleSheet.create({
   error: {
     color: errorColor,
     fontSize: 14,
-    // lineHeight optional to match minHeight:
-    // lineHeight: 18,
+    // The error text is sized to fit within the reserved minHeight of errorContainer.
   },
 });
 

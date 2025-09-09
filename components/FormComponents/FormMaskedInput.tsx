@@ -91,7 +91,7 @@ export default FormMaskedInput;
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8, // как в FormInput
+    marginBottom: 8, // same as in FormInput
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: "#222" },
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderColor: secondary.dark,
     borderRadius: 4,
     backgroundColor: "#fafafa",
-    minHeight: 40, // вместо фиксированного height
+    minHeight: 40, // use minHeight instead of fixed height
     paddingHorizontal: 8,
     justifyContent: "center",
   },

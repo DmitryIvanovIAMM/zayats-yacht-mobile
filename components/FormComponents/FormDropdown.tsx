@@ -89,7 +89,7 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8, // как в FormInput
+    marginBottom: 8, // same as in FormInput
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   error: {
     color: errorColor,
     fontSize: 14,
-    marginTop: 0, // зарезервировано errorContainer, поэтому без дополнительного отступа
+    marginTop: 0, // reserved by errorContainer, so no additional margin
   },
 });
 

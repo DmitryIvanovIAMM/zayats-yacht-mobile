@@ -73,7 +73,7 @@ export default function LoginForm() {
             placeholder="you@example.com"
             keyboardType="email-address"
             disabled={formDisabled}
-            // optional: auto-cap behavior for emails
+            // autoCapitalize is set to "none" to prevent automatic capitalization in email input
           />
 
           <View style={{ position: "relative" }}>
@@ -85,13 +85,13 @@ export default function LoginForm() {
               secureTextEntry={!showPassword}
               autoCapitalize="none"
             />
-            {/* Simple toggle below the input (kept minimal; remove if not needed) */}
+            {/* Toggle password visibility */}
             <TouchableOpacity
               onPress={() => setShowPassword((v) => !v)}
               style={{
                 position: "absolute",
                 right: 8,
-                top: Platform.select({ default: 34, android: 26 }),
+                top: Platform.select({ default: 3, android: 26 }),
               }}
               disabled={formDisabled}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
