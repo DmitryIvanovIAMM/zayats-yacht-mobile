@@ -1,16 +1,19 @@
 import ContactUs from "@/components/ContactUs/ContactUs";
 import LoginForm from "@/components/Login/LoginForm";
 import { ThemedView } from "@/components/ThemedView";
+import { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function LoginScreen() {
+  const fakeContactUsRef = useRef(null);
+
   return (
     <ThemedView style={styles.container}>
       <View style={styles.formContainer}>
         <LoginForm />
       </View>
       <View style={styles.fullWidth}>
-        <ContactUs />
+        <ContactUs ref={fakeContactUsRef} />
       </View>
     </ThemedView>
   );
