@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   paperLikeInput: {
     borderWidth: 1,
     borderColor: secondary.dark,
-    borderRadius: 4,
+    borderRadius: 0,
     backgroundColor: "white",
     // height: 40,           // remove fixed height
     minHeight: 40, // allow multiline to grow

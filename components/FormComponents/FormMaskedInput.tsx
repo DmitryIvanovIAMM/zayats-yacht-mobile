@@ -94,13 +94,13 @@ const styles = StyleSheet.create({
     marginBottom: 8, // same as in FormInput
   },
   label: Platform.select({
-    default: { fontSize: 15, marginBottom: 6, color: "#222" },
-    android: { fontSize: 13, marginBottom: 4, color: "#222" },
+    default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
+    android: { fontSize: 13, marginBottom: 4, color: secondary.dark },
   }),
   paperLikeInput: {
     borderWidth: 1,
     borderColor: secondary.dark,
-    borderRadius: 4,
+    borderRadius: 0,
     backgroundColor: "#fafafa",
     minHeight: 40, // use minHeight instead of fixed height
     paddingHorizontal: 8,

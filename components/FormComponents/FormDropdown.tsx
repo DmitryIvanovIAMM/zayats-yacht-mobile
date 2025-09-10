@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 0,
       padding: 8,
-      height: 36,
+      height: 40,
       width: "100%",
       borderColor: secondary.dark,
       display: "flex",

@@ -91,7 +91,7 @@ export default function LoginForm() {
               style={{
                 position: "absolute",
                 right: 8,
-                top: Platform.select({ default: 3, android: 26 }),
+                top: Platform.select({ default: 34, android: 34 }),
               }}
               disabled={formDisabled}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
