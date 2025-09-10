@@ -1,4 +1,4 @@
-import { useAuth } from "@/cotnexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import AppBarWithIcon from "./AppBarWithIcon";
@@ -32,7 +32,7 @@ jest.mock("expo-router", () => {
 });
 
 // Mock AuthContext with switchable return
-jest.mock("@/cotnexts/AuthContext", () => ({
+jest.mock("@/contexts/AuthContext", () => ({
   useAuth: jest.fn(),
 }));
 

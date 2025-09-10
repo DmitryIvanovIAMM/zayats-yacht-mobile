@@ -1,5 +1,5 @@
 import { secondary } from "@/constants/Colors";
-import { useAuth } from "@/cotnexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { RelativePathString, useRouter } from "expo-router";
 import * as React from "react";
 import {
