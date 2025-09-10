@@ -1,5 +1,5 @@
 import { errorColor, secondary } from "@/constants/Colors";
-import { useAuth } from "@/cotnexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { PATHS } from "@/helpers/paths";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
