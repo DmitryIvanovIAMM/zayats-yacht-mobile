@@ -16,10 +16,10 @@ export default function AboutUs({
       ref={ref}
     >
       <SectionTitle>About Us</SectionTitle>
-      <Text style={styles.header}>Allied Yacht Transport</Text>
+      <Text style={styles.header}>Zayats Yacht Transport</Text>
       <Text style={styles.body}>
-        Welcome to Allied Yacht Transport, your trusted partner in global yacht
-        logistics and transportation services. At Allied Yacht Transport, we
+        Welcome to Zayats Yacht Transport, your trusted partner in global yacht
+        logistics and transportation services. At Zayats Yacht Transport, we
         specialize in providing safe, reliable, and efficient transport
         solutions for yachts of all sizes. Our mission is to deliver
         unparalleled service that ensures your vessel reaches its destination
@@ -28,7 +28,7 @@ export default function AboutUs({
       <Text style={styles.header}>Our Heritage</Text>
       <Text style={styles.body}>
         Founded on a passion for the sea and a deep understanding of the
-        complexities involved in yacht transportation, Allied Yacht Transport
+        complexities involved in yacht transportation, Zayats Yacht Transport
         has grown to become a leading name in the industry. Under the leadership
         of Vadim Yegudkin, our president who has been a prominent figure in the
         yacht transport field for over 14 years, our team combines expertise
@@ -38,7 +38,7 @@ export default function AboutUs({
       </Text>
       <Text style={styles.header}>Our Services</Text>
       <Text style={styles.body}>
-        Allied Yacht Transport offers a comprehensive range of services tailored
+        Zayats Yacht Transport offers a comprehensive range of services tailored
         to meet the unique needs of each client. Our services include.{"\n"}
         <Text style={styles.emphasizedTextStyle}>
           • International Yacht Shipping:
@@ -67,7 +67,7 @@ export default function AboutUs({
       </Text>
       <Text style={styles.header}>Our Commitment</Text>
       <Text style={styles.body}>
-        At Allied Yacht Transport, we are committed to excellence. Our dedicated
+        At Zayats Yacht Transport, we are committed to excellence. Our dedicated
         team works closely with each client, providing personalized service and
         attention to detail that ensures every transport is executed flawlessly.
         We use the latest technology and equipment to monitor each shipment,
@@ -77,14 +77,14 @@ export default function AboutUs({
       <Text style={styles.header}>Join Us</Text>
       <Text style={styles.body}>
         Whether you&#39;re relocating, attending international regattas, or
-        exploring new waters, Allied Yacht Transport is here to make your yacht
+        exploring new waters, Zayats Yacht Transport is here to make your yacht
         transportation experience seamless and stress-free. Connect with us
         today to learn more about how we can assist with your yacht transport
         needs. Together, let&#39;s set the course for your next maritime
         adventure.
       </Text>
       <Text style={styles.header}>
-        Explore. Transport. Discover. With Allied Yacht Transport.
+        Explore. Transport. Discover. With Zayats Yacht Transport.
       </Text>
       <Image
         style={{
