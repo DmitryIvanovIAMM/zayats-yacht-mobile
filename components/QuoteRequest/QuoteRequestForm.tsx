@@ -18,7 +18,7 @@ import FormMaskedInput from "../FormComponents/FormMaskedInput";
 import { handleServerValidationErrors } from "../FormComponents/handleServerValidationErrors";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
-  defaultNonEmptyQuoteRequest,
+  defaultQuoteRequest,
   LENGTH_METRIC,
   lengthMetricViewConnector,
   PURPOSE_OF_TRANSPORT,
@@ -53,8 +53,8 @@ export default function QuoteForm() {
   };
 
   const methods = useForm<QuoteRequestForm>({
-    // defaultValues: defaultQuoteRequest,
-    defaultValues: defaultNonEmptyQuoteRequest,
+    defaultValues: defaultQuoteRequest,
+    // defaultValues: defaultNonEmptyQuoteRequest,
     mode: "onBlur",
     reValidateMode: "onChange",
     resolver: yupResolver(quoteRequestSchema),
