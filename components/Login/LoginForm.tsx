@@ -22,12 +22,15 @@ export interface LoginCredentials {
   password: string;
 }
 
+const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/; // min 8 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
+
 const loginSchema = yup.object({
   email: yup
     .string()
     .email("Enter a valid email")
     .required("Email is required"),
   password: yup.string().required("Password is required"),
+  // .matches(passwordRules, { message: "Please create a stronger password" }),
 });
 
 export default function LoginForm() {
