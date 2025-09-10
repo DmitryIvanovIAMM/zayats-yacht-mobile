@@ -1,5 +1,5 @@
 import React from "react";
-import type { UseFormSetError } from "react-hook-form";
+import type { Path, UseFormSetError } from "react-hook-form";
 import { ScrollView } from "react-native";
 
 type AnyObject = Record<string, any>;
@@ -32,7 +32,7 @@ export function handleServerValidationErrors<T extends AnyObject>(args: {
   fields.forEach((field) => {
     const raw = (errorObj as Record<string, unknown>)[field];
     const msg = Array.isArray(raw) ? String(raw[0]) : String(raw);
-    setError(field as keyof T, { message: msg });
+    setError(field as Path<T>, { message: msg });
   });
 
   const firstErrorField = fields[0] as keyof T | undefined;
