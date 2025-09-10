@@ -14,7 +14,7 @@ import {
 import SectionTitle from "../SectionTitle/SectionTitle";
 import { ThemedText } from "../ThemedText";
 
-const PHONE_NUMBER = "+13051234567";
+const PHONE_NUMBER = "+15555555555";
 
 const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
   const handleEmailPress = () => {
@@ -46,9 +46,9 @@ const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
           <Text style={styles.text}>
             <ThemedText style={styles.bold}>Address</ThemedText>
             {"\n"}
-            Allied Yacht Transport, LLC
+            Zayats Yacht Transport, LLC
             {"\n"}
-            12555 Orange Drive, Suite 107
+            55555 Orange Drive, Suite 555
             {"\n"}Fort Lauderdale, FL, 33330, USA
           </Text>
         </View>
@@ -78,7 +78,7 @@ const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
             <TouchableOpacity
               onPress={handlePhonePress}
               accessibilityRole="button"
-              accessibilityLabel="Call phone number +1 (305) 123-4567"
+              accessibilityLabel="Call phone number +1 (555) 555-5555"
             >
               <Text style={styles.link}>{formatPhoneNumber(PHONE_NUMBER)}</Text>
             </TouchableOpacity>
