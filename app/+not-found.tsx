@@ -3,9 +3,12 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Link, Stack } from "expo-router";
+import { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function NotFoundScreen() {
+  const fakeContactUsRef = useRef(null);
+
   return (
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
@@ -17,7 +20,7 @@ export default function NotFoundScreen() {
           </ThemedText>
         </Link>
         <View style={styles.fullWidth}>
-          <ContactUs />
+          <ContactUs ref={fakeContactUsRef} />
         </View>
       </ThemedView>
     </>

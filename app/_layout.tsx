@@ -1,6 +1,6 @@
 import AppBarWithIcon from "@/components/AppBar/AppBarWithIcon";
 import { LeftNavigation } from "@/components/LeftNavigation/LeftNavigation";
-import { AuthProvider } from "@/cotnexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,

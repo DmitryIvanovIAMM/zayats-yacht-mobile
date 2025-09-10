@@ -3,9 +3,12 @@ import ContactUs from "@/components/ContactUs/ContactUs";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { ThemedText } from "@/components/ThemedText";
 import { secondary } from "@/constants/Colors";
+import { useRef } from "react";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Instructions() {
+  const fakeContactUsRef = useRef(null);
+
   return (
     <ScrollView style={styles.scroll}>
       <SectionTitle>Yacht Transport Instructions</SectionTitle>
@@ -276,7 +279,7 @@ export default function Instructions() {
           </ThemedText>
         </Collapsible>
       </View>
-      <ContactUs />
+      <ContactUs ref={fakeContactUsRef} />
       <Text style={styles.bottom}></Text>
     </ScrollView>
   );

@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SectionTitle matches snapshot 1`] = `
+<View
+  style={
+    {
+      "alignSelf": "center",
+      "width": "80%",
+    }
+  }
+>
+  <Text
+    style={
+      [
+        {
+          "color": "#006666",
+          "fontSize": 24,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+          "textAlign": "center",
+          "textTransform": "uppercase",
+        },
+        undefined,
+      ]
+    }
+  >
+    Snapshot Title
+  </Text>
+</View>
+`;

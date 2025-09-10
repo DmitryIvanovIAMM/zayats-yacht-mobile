@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AboutUs matches snapshot 1`] = `
+<RCTScrollView
+  contentContainerStyle={
+    {
+      "backgroundColor": "white",
+      "flex": 1,
+      "padding": 12,
+    }
+  }
+  id="about-us-section"
+>
+  <View>
+    <Text>
+      About Us
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+        }
+      }
+    >
+      Zayats Yacht Transport
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 18,
+          "lineHeight": 28,
+          "marginBottom": 20,
+        }
+      }
+    >
+      Welcome to Zayats Yacht Transport, your trusted partner in global yacht logistics and transportation services. At Zayats Yacht Transport, we specialize in providing safe, reliable, and efficient transport solutions for yachts of all sizes. Our mission is to deliver unparalleled service that ensures your vessel reaches its destination securely and on schedule.
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+        }
+      }
+    >
+      Our Heritage
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 18,
+          "lineHeight": 28,
+          "marginBottom": 20,
+        }
+      }
+    >
+      Founded on a passion for the sea and a deep understanding of the complexities involved in yacht transportation, Zayats Yacht Transport has grown to become a leading name in the industry. Under the leadership of Vadim Yegudkin, our president who has been a prominent figure in the yacht transport field for over 14 years, our team combines expertise with personal service to manage every aspect of your yacht's journey. From the bustling ports of North America to the serene waters of the Mediterranean, we cover all major routes across the globe.
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+        }
+      }
+    >
+      Our Services
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 18,
+          "lineHeight": 28,
+          "marginBottom": 20,
+        }
+      }
+    >
+      Zayats Yacht Transport offers a comprehensive range of services tailored to meet the unique needs of each client. Our services include.
+      
+
+      <Text
+        style={
+          {
+            "color": "#006666",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        • International Yacht Shipping:
+      </Text>
+        We handle all logistics, from inland transportation to international shipping, ensuring your yacht is transported safely across oceans.
+      
+
+      <Text
+        style={
+          {
+            "color": "#006666",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        • Customs Clearance:
+      </Text>
+        Our team takes care of all necessary customs documentation and clearance procedures, making international transfers as smooth as possible.
+      
+
+      <Text
+        style={
+          {
+            "color": "#006666",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        • Cradling and Shrink Wrapping:
+      </Text>
+        To guarantee the utmost safety during transport, we provide custom cradling and professional shrink wrapping.
+      
+
+      <Text
+        style={
+          {
+            "color": "#006666",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        • Load Master Supervision:
+      </Text>
+        Our experienced load masters oversee every step of the loading and unloading process, ensuring that each yacht is handled with care.
+      
+
+      <Text
+        style={
+          {
+            "color": "#006666",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        • Insurance:
+      </Text>
+        We offer comprehensive marine insurance for peace of mind throughout the transport process.
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+        }
+      }
+    >
+      Our Commitment
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 18,
+          "lineHeight": 28,
+          "marginBottom": 20,
+        }
+      }
+    >
+      At Zayats Yacht Transport, we are committed to excellence. Our dedicated team works closely with each client, providing personalized service and attention to detail that ensures every transport is executed flawlessly. We use the latest technology and equipment to monitor each shipment, giving our clients peace of mind knowing their valuable assets are in safe hands.
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+        }
+      }
+    >
+      Join Us
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 18,
+          "lineHeight": 28,
+          "marginBottom": 20,
+        }
+      }
+    >
+      Whether you're relocating, attending international regattas, or exploring new waters, Zayats Yacht Transport is here to make your yacht transportation experience seamless and stress-free. Connect with us today to learn more about how we can assist with your yacht transport needs. Together, let's set the course for your next maritime adventure.
+    </Text>
+    <Text
+      style={
+        {
+          "color": "#006666",
+          "fontSize": 16,
+          "fontWeight": "bold",
+          "marginVertical": 16,
+        }
+      }
+    >
+      Explore. Transport. Discover. With Zayats Yacht Transport.
+    </Text>
+    <Image
+      source={
+        {
+          "testUri": "../../../assets/images/aboutus.jpeg",
+        }
+      }
+      style={
+        {
+          "height": 200,
+          "marginBottom": 40,
+          "resizeMode": "cover",
+          "width": "100%",
+        }
+      }
+    />
+  </View>
+</RCTScrollView>
+`;
