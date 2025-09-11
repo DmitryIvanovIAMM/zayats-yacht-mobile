@@ -40,7 +40,6 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
         onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
       >
         <Text style={styles.label}>{label}</Text>
-
         <Controller
           control={control}
           name={name}
@@ -67,7 +66,6 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
                 onChange={(item) => onChange(item.value)}
                 disable={disabled}
               />
-
               <View style={styles.errorContainer}>
                 {error ? (
                   <Text
@@ -86,6 +84,9 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
     );
   }
 );
+
+// ADD display name for eslint react/display-name rule
+FormDropdown.displayName = "FormDropdown";
 
 const styles = StyleSheet.create({
   inputGroup: {
