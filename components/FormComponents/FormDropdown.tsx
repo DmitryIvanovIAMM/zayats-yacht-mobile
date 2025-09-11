@@ -31,7 +31,7 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
       focus: () => {
         if (dropdownRef.current?.focus) dropdownRef.current.focus();
         else if (dropdownRef.current?.open) dropdownRef.current.open();
-      },
+      }
     }));
 
     return (
@@ -50,7 +50,7 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
                 ref={dropdownRef as any}
                 style={[
                   styles.dropdown,
-                  error ? styles.inputError : styles.inputBorder,
+                  error ? styles.inputError : styles.inputBorder
                 ]}
                 placeholderStyle={styles.placeholderText}
                 selectedTextStyle={styles.selectedText}
@@ -89,11 +89,11 @@ const FormDropdown = React.forwardRef<FormInputRef, Props>(
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8, // same as in FormInput
+    marginBottom: 8 // same as in FormInput
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
-    android: { fontSize: 13, marginBottom: 4, color: secondary.dark },
+    android: { fontSize: 13, marginBottom: 4, color: secondary.dark }
   }),
   dropdown: Platform.select({
     default: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-between",
+      justifyContent: "space-between"
     },
     android: {
       backgroundColor: "white",
@@ -120,24 +120,24 @@ const styles = StyleSheet.create({
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-between",
-    },
+      justifyContent: "space-between"
+    }
   }),
   placeholderText: {
     color: secondary.dark,
-    fontSize: Platform.select({ default: 16, android: 14 }) as number,
+    fontSize: Platform.select({ default: 16, android: 14 }) as number
   },
   selectedText: {
     color: secondary.dark,
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   dropdownText: {
     color: "white",
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
     backgroundColor: secondary.dark,
     borderWidth: 0,
-    padding: 0,
+    padding: 0
   },
   itemContainer: {
     backgroundColor: secondary.dark,
@@ -146,36 +146,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#444",
     color: "white",
-    opacity: 1,
+    opacity: 1
   },
   dropdownIcon: {
     color: secondary.dark,
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
     paddingLeft: 8,
-    borderWidth: 0,
+    borderWidth: 0
   },
   dropdownMenu: {
     borderWidth: 1,
     borderColor: secondary.dark,
     borderRadius: 0,
-    backgroundColor: secondary.dark,
+    backgroundColor: secondary.dark
   },
   inputBorder: {
-    borderColor: secondary.dark,
+    borderColor: secondary.dark
   },
   inputError: {
-    borderColor: errorColor,
+    borderColor: errorColor
   },
   errorContainer: {
     minHeight: 18,
     marginTop: 2,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   error: {
     color: errorColor,
     fontSize: 14,
-    marginTop: 0, // reserved by errorContainer, so no additional margin
-  },
+    marginTop: 0 // reserved by errorContainer, so no additional margin
+  }
 });
 
 export default FormDropdown;

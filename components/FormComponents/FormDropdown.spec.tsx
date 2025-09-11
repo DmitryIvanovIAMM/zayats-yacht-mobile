@@ -29,14 +29,14 @@ type FormValues = { purpose: string };
 function TestFormProvider({
   children,
   defaultValues,
-  onReady,
+  onReady
 }: {
   children: React.ReactNode;
   defaultValues?: Partial<FormValues>;
   onReady?: (methods: any) => void;
 }) {
   const methods = useForm<FormValues>({
-    defaultValues: { purpose: "", ...(defaultValues || {}) },
+    defaultValues: { purpose: "", ...(defaultValues || {}) }
   });
   React.useEffect(() => {
     onReady?.(methods);
@@ -64,7 +64,7 @@ function renderWithForm(
 describe("FormDropdown", () => {
   const options = [
     { label: "One", value: "one" },
-    { label: "Two", value: "two" },
+    { label: "Two", value: "two" }
   ];
 
   it("matches snapshot", () => {

@@ -6,7 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 import { SailingCard } from "./SailingCard";
 import { SailingsState } from "./useSchedule";
@@ -42,17 +42,17 @@ const styles = StyleSheet.create({
     color: secondary.dark,
     justifyContent: "center",
     marginTop: 20,
-    minHeight: 400,
+    minHeight: 400
   },
   errorText: {
     color: "red",
     textAlign: "center",
     marginTop: 40,
-    fontSize: 16,
+    fontSize: 16
   },
   scheduleContainer: {
-    padding: 20,
-  },
+    padding: 20
+  }
 });
 
 export default ScheduleSection;

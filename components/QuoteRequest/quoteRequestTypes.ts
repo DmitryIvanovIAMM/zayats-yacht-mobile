@@ -2,26 +2,25 @@ import { InferType, mixed, number, object, string } from "yup";
 
 export const LENGTH_METRIC = {
   meters: "meters",
-  feet: "feet",
+  feet: "feet"
 };
 export const lengthMetric = {
   [LENGTH_METRIC.meters]: "m",
-  [LENGTH_METRIC.feet]: "ft",
+  [LENGTH_METRIC.feet]: "ft"
 };
 export const lengthMetricViewConnector = {
   [LENGTH_METRIC.meters]: "Meters",
-  [LENGTH_METRIC.feet]: "Feet",
+  [LENGTH_METRIC.feet]: "Feet"
 };
 
 export const WEIGHT_METRIC = {
   metricTons: "metric tons",
-  lbs: "lbs",
+  lbs: "lbs"
 };
 export const weightMetricViewConnector = {
   ["metricTons"]: "Metric Tons",
-  ["lbs"]: "Lbs",
+  ["lbs"]: "Lbs"
 };
-console.log("weightMetricViewConnector", weightMetricViewConnector);
 
 export const PURPOSE_OF_TRANSPORT = {
   boatShow: "Boat Show",
@@ -30,7 +29,7 @@ export const PURPOSE_OF_TRANSPORT = {
   yardWork: "Yard Work",
   fishingTournament: "Fishing Tournament",
   regatta: "Regatta",
-  other: "Other",
+  other: "Other"
 };
 
 export const quoteRequestSchema = object({
@@ -73,7 +72,7 @@ export const quoteRequestSchema = object({
   fromWhere: string().optional().nullable(),
   toWhere: string().optional().nullable(),
   when: string().optional().nullable(),
-  notes: string().optional().nullable(),
+  notes: string().optional().nullable()
 });
 
 export type QuoteRequestForm = InferType<typeof quoteRequestSchema>;
@@ -96,7 +95,7 @@ export const defaultQuoteRequest: QuoteRequestForm = {
   fromWhere: "",
   toWhere: "",
   when: "",
-  notes: "",
+  notes: ""
 };
 
 export const defaultNonEmptyQuoteRequest: QuoteRequestForm = {
@@ -118,5 +117,5 @@ export const defaultNonEmptyQuoteRequest: QuoteRequestForm = {
   fromWhere: "Miami",
   toWhere: "Bahamas",
   when: "2023-12-01",
-  notes: "Looking for a reliable transport service.",
+  notes: "Looking for a reliable transport service."
 };

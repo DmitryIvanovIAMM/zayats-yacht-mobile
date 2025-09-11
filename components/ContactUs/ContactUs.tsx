@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import SectionTitle from "../SectionTitle/SectionTitle";
 import { ThemedText } from "../ThemedText";
@@ -93,16 +93,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F7F8F9",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "center"
   },
   innerContainer: {
     width: "90%",
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: 20
   },
   title: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   item: {
     width: "80%",
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F8F9",
     justifyContent: "flex-start",
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 8
   },
   iconWrapper: {
     width: 40,
@@ -126,28 +126,28 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     margin: 10,
-    boxShadow: "0px 2px 20px rgba(51, 101, 167, 0.18)",
+    boxShadow: "0px 2px 20px rgba(51, 101, 167, 0.18)"
   },
   text: Platform.select({
     default: {
       fontSize: 16,
       color: secondary.dark,
-      marginLeft: 12,
+      marginLeft: 12
     },
     android: {
       fontSize: 14,
       color: secondary.dark,
-      marginLeft: 12,
-    },
+      marginLeft: 12
+    }
   }),
   bold: {
     fontWeight: "bold",
-    color: secondary.dark,
+    color: secondary.dark
   },
   link: {
     textDecorationLine: "none",
-    color: secondary.dark,
-  },
+    color: secondary.dark
+  }
 });
 
 export default ContactUs;

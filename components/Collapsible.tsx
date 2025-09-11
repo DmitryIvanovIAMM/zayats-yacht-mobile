@@ -8,7 +8,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export function Collapsible({
   children,
-  title,
+  title
 }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? "light";
@@ -41,18 +41,18 @@ const styles = StyleSheet.create({
   heading: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 6
   },
   content: {
     marginTop: 6,
     marginLeft: 24,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   title: {
     color: secondary.dark,
     fontWeight: "bold",
     fontSize: 16,
-    textTransform: "uppercase",
+    textTransform: "uppercase"
   },
   container: {
     backgroundColor: "white",
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 16,
-    elevation: 2,
-  },
+    elevation: 2
+  }
 });

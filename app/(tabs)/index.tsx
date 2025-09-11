@@ -12,7 +12,7 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 
 // Define the expected params type
@@ -24,7 +24,7 @@ export default function HomeScreen() {
   const route = useRoute();
   // Safely cast params to your type
   const { section } = (route?.params as HomeScreenRouteParams) || {
-    section: undefined,
+    section: undefined
   };
   const { scheduleState, getNearestSailings } = useSailings();
   const [sectionToScroll, setSectionToScroll] = useState<string | undefined>(
@@ -104,11 +104,6 @@ export default function HomeScreen() {
   };
 
   const getNearestSailingsCallback = useCallback(() => {
-    const getNearestCalll = async () => {
-      setReadyToScroll(false);
-      await getNearestSailings();
-      setReadyToScroll(true);
-    };
     const getNearestCall = async () => {
       setReadyToScroll(false);
       await getNearestSailings();
@@ -117,7 +112,7 @@ export default function HomeScreen() {
     getNearestCall();
   }, [getNearestSailings]);
 
-  useEffect(getNearestSailingsCallback, []);
+  useEffect(getNearestSailingsCallback, [getNearestSailingsCallback]);
 
   useEffect(() => {
     if (readyToScroll) {
@@ -153,16 +148,16 @@ const styles = StyleSheet.create({
       display: "flex",
       flexDirection: "column",
       flex: 1,
-      marginBottom: 80,
+      marginBottom: 80
     },
     android: {
       backgroundColor: "#fff",
       color: secondary.dark,
       display: "flex",
       flexDirection: "column",
-      flex: 1,
-    },
-  }),
+      flex: 1
+    }
+  })
 });
 
 // export default function HomeScreen() {

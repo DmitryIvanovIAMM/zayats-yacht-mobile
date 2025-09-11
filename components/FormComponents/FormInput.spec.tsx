@@ -15,7 +15,7 @@ const TestWrapper: React.FC<{
 describe("FormInput", () => {
   const defaultProps = {
     name: "testField",
-    label: "Test Label",
+    label: "Test Label"
   };
 
   beforeEach(() => {
@@ -307,7 +307,7 @@ describe("FormInput", () => {
       "default",
       "email-address",
       "numeric",
-      "phone-pad",
+      "phone-pad"
     ] as const;
 
     keyboardTypes.forEach((keyboardType) => {
@@ -327,7 +327,7 @@ describe("FormInput", () => {
       "none",
       "sentences",
       "words",
-      "characters",
+      "characters"
     ] as const;
 
     autoCapitalizeOptions.forEach((autoCapitalize) => {

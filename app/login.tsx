@@ -26,12 +26,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: "100%",
     minHeight: "100%",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   formContainer: {
-    width: "100%",
+    width: "100%"
   },
   fullWidth: {
-    width: "100%",
-  },
+    width: "100%"
+  }
 });

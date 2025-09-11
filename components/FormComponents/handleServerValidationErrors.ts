@@ -20,7 +20,7 @@ export function handleServerValidationErrors<T extends AnyObject>(args: {
     setError,
     scrollRef,
     inputPositions,
-    scrollOffset = 30,
+    scrollOffset = 30
   } = args;
 
   if (!data || typeof data !== "object") return { handled: false };
@@ -41,7 +41,7 @@ export function handleServerValidationErrors<T extends AnyObject>(args: {
     if (typeof y === "number") {
       scrollRef.current.scrollTo({
         y: Math.max(y - scrollOffset, 0),
-        animated: true,
+        animated: true
       });
     }
   }

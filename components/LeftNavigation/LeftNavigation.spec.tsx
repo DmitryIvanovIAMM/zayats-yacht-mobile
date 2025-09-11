@@ -8,7 +8,7 @@ jest.mock("expo-router", () => {
   return {
     __esModule: true,
     useRouter: () => ({ push: mockPush }),
-    mockPush,
+    mockPush
   };
 });
 
@@ -22,7 +22,7 @@ jest.mock("react-native-paper", () => {
     visible,
     onDismiss,
     contentStyle,
-    anchor,
+    anchor
   }: any) => {
     if (!visible) return null;
 
@@ -31,7 +31,7 @@ jest.mock("react-native-paper", () => {
       {
         testID: "menu",
         style: contentStyle,
-        onPress: onDismiss,
+        onPress: onDismiss
       },
       children
     );
@@ -43,7 +43,7 @@ jest.mock("react-native-paper", () => {
       {
         testID: `menu-item-${title.toLowerCase().replace(/\s+/g, "-")}`,
         onPress,
-        ...props,
+        ...props
       },
       React.createElement(Text, { style: titleStyle }, title)
     );
@@ -59,47 +59,47 @@ jest.mock("@/helpers/menuLinks", () => ({
     {
       label: "Schedule",
       link: "/",
-      section: "schedule",
+      section: "schedule"
     },
     {
       label: "Get a Quote",
-      link: "/quote-request",
+      link: "/quote-request"
     },
     {
       label: "Gallery",
-      link: "/gallery",
+      link: "/gallery"
     },
     {
       label: "Services",
-      link: "/services",
+      link: "/services"
     },
     {
       label: "Instructions",
-      link: "/instructions",
+      link: "/instructions"
     },
     {
       label: "Testimonials",
       link: "/",
-      section: "testimonials",
+      section: "testimonials"
     },
     {
       label: "About Us",
       link: "/",
-      section: "about-us",
+      section: "about-us"
     },
     {
       label: "Contact Us",
       link: "/",
-      section: "contact-us",
-    },
-  ]),
+      section: "contact-us"
+    }
+  ])
 }));
 
 describe("LeftNavigation", () => {
   const mockSetMenuIsOpen = jest.fn();
   const defaultProps: LeftNavigationProps = {
     setMenuIsOpen: mockSetMenuIsOpen,
-    visible: true,
+    visible: true
   };
 
   beforeEach(() => {
@@ -181,7 +181,7 @@ describe("LeftNavigation", () => {
     // Mock a menu item with empty link
     const { getMenuLinks } = require("@/helpers/menuLinks");
     getMenuLinks.mockReturnValueOnce([
-      { label: "Empty Link", link: "", section: "" },
+      { label: "Empty Link", link: "", section: "" }
     ]);
 
     const { getByTestId: getByTestIdEmpty } = render(
@@ -200,7 +200,7 @@ describe("LeftNavigation", () => {
     // Mock a menu item without leading slash
     const { getMenuLinks } = require("@/helpers/menuLinks");
     getMenuLinks.mockReturnValueOnce([
-      { label: "No Slash", link: "test-route", section: "" },
+      { label: "No Slash", link: "test-route", section: "" }
     ]);
 
     const { getByTestId: getByTestIdNoSlash } = render(
@@ -236,7 +236,7 @@ describe("LeftNavigation", () => {
     const menu = getByTestId("menu");
 
     expect(menu.props.style).toEqual({
-      backgroundColor: "#006666", // secondary.dark
+      backgroundColor: "#006666" // secondary.dark
     });
   });
 
@@ -246,7 +246,7 @@ describe("LeftNavigation", () => {
     const textElement = menuItem.children[0] as any;
 
     expect(textElement.props.style).toEqual({
-      color: "#fff", // primary.contrastText
+      color: "#fff" // primary.contrastText
     });
   });
 });

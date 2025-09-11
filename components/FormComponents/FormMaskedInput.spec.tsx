@@ -37,14 +37,14 @@ type FormValues = { phone: string };
 function TestFormProvider({
   children,
   defaultValues,
-  onReady,
+  onReady
 }: {
   children: React.ReactNode;
   defaultValues?: Partial<FormValues>;
   onReady?: (methods: any) => void;
 }) {
   const methods = useForm<FormValues>({
-    defaultValues: { phone: "", ...(defaultValues || {}) },
+    defaultValues: { phone: "", ...(defaultValues || {}) }
   });
   React.useEffect(() => {
     onReady?.(methods);

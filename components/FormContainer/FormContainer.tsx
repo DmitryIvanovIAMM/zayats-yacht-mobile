@@ -8,7 +8,7 @@ interface FormContainerProps {
 
 export const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
   children,
-  borderWidth = 2,
+  borderWidth = 2
 }) => {
   const rotateValue = useRef(new Animated.Value(0)).current;
 
@@ -18,7 +18,7 @@ export const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
         Animated.timing(rotateValue, {
           toValue: 1,
           duration: 6000,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       ).start();
     };
@@ -27,7 +27,7 @@ export const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
 
   const rotate = rotateValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
+    outputRange: ["0deg", "360deg"]
   });
 
   return (
@@ -50,23 +50,23 @@ export const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
 const styles = StyleSheet.create({
   wrapper: {
     position: "relative",
-    overflow: "hidden",
+    overflow: "hidden"
   },
   gradientWrapper: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
   container: {
     padding: 20,
     backgroundColor: "#fff",
     borderRadius: 1,
-    zIndex: 1,
+    zIndex: 1
   },
   gradientBorder: {
     flex: 1,
-    borderRadius: 1,
-  },
+    borderRadius: 1
+  }
 });

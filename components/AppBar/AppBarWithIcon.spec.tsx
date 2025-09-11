@@ -14,7 +14,7 @@ jest.mock("react-native-paper", () => {
     React.createElement(TouchableOpacity, {
       accessibilityLabel: String(icon),
       onPress,
-      ...p,
+      ...p
     });
   Appbar.Content = ({ title, ...p }: any) =>
     React.createElement(View, p, title);
@@ -27,13 +27,13 @@ jest.mock("expo-router", () => {
   return {
     __esModule: true,
     useRouter: () => ({ push: mockPush }),
-    mockPush,
+    mockPush
   };
 });
 
 // Mock AuthContext with switchable return
 jest.mock("@/contexts/AuthContext", () => ({
-  useAuth: jest.fn(),
+  useAuth: jest.fn()
 }));
 
 describe("AppBarWithIcon", () => {
@@ -47,8 +47,8 @@ describe("AppBarWithIcon", () => {
       authState: {
         isAuthenticated: false,
         isValidating: false,
-        userInfo: undefined,
-      },
+        userInfo: undefined
+      }
     });
   });
 
@@ -80,8 +80,8 @@ describe("AppBarWithIcon", () => {
       authState: {
         isAuthenticated: false,
         isValidating: true,
-        userInfo: undefined,
-      },
+        userInfo: undefined
+      }
     });
     const { queryByLabelText, toJSON } = render(
       <AppBarWithIcon toggleMenu={toggleMenu} />
@@ -98,8 +98,8 @@ describe("AppBarWithIcon", () => {
       authState: {
         isAuthenticated: true,
         isValidating: false,
-        userInfo: { user: { name: "John Doe", email: "john@example.com" } },
-      },
+        userInfo: { user: { name: "John Doe", email: "john@example.com" } }
+      }
     });
 
     const { getByText, getByLabelText } = render(
@@ -117,8 +117,8 @@ describe("AppBarWithIcon", () => {
       authState: {
         isAuthenticated: true,
         isValidating: false,
-        userInfo: { user: { email: "john@example.com" } },
-      },
+        userInfo: { user: { email: "john@example.com" } }
+      }
     });
 
     const { getByText } = render(<AppBarWithIcon toggleMenu={toggleMenu} />);

@@ -17,7 +17,7 @@ jest.mock("expo-linear-gradient", () => {
       >
         {children}
       </View>
-    ),
+    )
   };
 });
 
@@ -110,7 +110,7 @@ describe("FormContainer", () => {
       expect.objectContaining({
         toValue: 1,
         duration: 6000,
-        useNativeDriver: true,
+        useNativeDriver: true
       })
     );
 
@@ -154,7 +154,7 @@ describe("FormContainer", () => {
     const gradient = getByTestId("linear-gradient");
     expect(gradient.props.style).toEqual({
       flex: 1,
-      borderRadius: 1,
+      borderRadius: 1
     });
   });
 

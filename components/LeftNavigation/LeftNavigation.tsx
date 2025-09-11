@@ -10,7 +10,7 @@ export interface LeftNavigationProps {
 
 export const LeftNavigation = ({
   setMenuIsOpen,
-  visible,
+  visible
 }: LeftNavigationProps) => {
   const router = useRouter();
   const menuLinks = getMenuLinks(false);

@@ -12,7 +12,7 @@ export interface SailingsState {
 export const defaultSailingsState: SailingsState = {
   schedule: null,
   isLoading: false,
-  error: null,
+  error: null
 };
 
 export const useSailings = () => {
@@ -36,14 +36,16 @@ export const useSailings = () => {
 
       setScheduleState({ ...defaultSailingsState, schedule: data.data });
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("useSailing(). Error fetching sailings:", error);
       setScheduleState({
         ...defaultSailingsState,
-        error: "Failed to get sailings",
+        error: "Failed to get sailings"
       });
     } finally {
       setScheduleState((prev: SailingsState) => ({
         ...prev,
-        isLoading: false,
+        isLoading: false
       }));
     }
   }, []);

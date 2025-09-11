@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import {
   MaskedTextInput,
-  type MaskedTextInputProps,
+  type MaskedTextInputProps
 } from "react-native-mask-text";
 import { FormInputRef } from "./FormInput";
 
@@ -25,7 +25,7 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
     useImperativeHandle(ref, () => ({
       focus: () => {
         inputRef.current?.focus();
-      },
+      }
     }));
 
     return (
@@ -40,13 +40,13 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
           name={name}
           render={({
             field: { onChange, onBlur, value },
-            fieldState: { error },
+            fieldState: { error }
           }) => (
             <>
               <View
                 style={[
                   styles.paperLikeInput,
-                  error ? styles.inputError : styles.inputBorder,
+                  error ? styles.inputError : styles.inputBorder
                 ]}
               >
                 <MaskedTextInput
@@ -85,11 +85,11 @@ export default FormMaskedInput;
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8, // same as in FormInput
+    marginBottom: 8 // same as in FormInput
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
-    android: { fontSize: 13, marginBottom: 4, color: secondary.dark },
+    android: { fontSize: 13, marginBottom: 4, color: secondary.dark }
   }),
   paperLikeInput: {
     borderWidth: 1,
@@ -98,27 +98,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
     minHeight: 40, // use minHeight instead of fixed height
     paddingHorizontal: 8,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   input: {
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
     color: secondary.dark,
     padding: 0,
-    margin: 0,
+    margin: 0
   },
   inputBorder: {
-    borderColor: secondary.dark,
+    borderColor: secondary.dark
   },
   inputError: {
-    borderColor: errorColor,
+    borderColor: errorColor
   },
   errorContainer: {
     minHeight: 18,
     marginTop: 2,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   error: {
     color: errorColor,
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 });

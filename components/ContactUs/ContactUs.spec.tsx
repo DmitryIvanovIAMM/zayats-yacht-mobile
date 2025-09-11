@@ -9,7 +9,7 @@ jest.mock("@/components/SectionTitle/SectionTitle", () => {
   const { Text } = require("react-native");
   return {
     __esModule: true,
-    default: ({ children }: any) => <Text>{children}</Text>,
+    default: ({ children }: any) => <Text>{children}</Text>
   };
 });
 
@@ -20,7 +20,7 @@ jest.mock("../ThemedText", () => {
     __esModule: true,
     ThemedText: ({ children, style }: any) => (
       <Text style={style}>{children}</Text>
-    ),
+    )
   };
 });
 
@@ -28,9 +28,7 @@ jest.mock("@expo/vector-icons", () => {
   const React = require("react");
   const { View } = require("react-native");
   return {
-    MaterialIcons: (props: any) => (
-      <View accessibilityRole="image" {...props} />
-    ),
+    MaterialIcons: (props: any) => <View accessibilityRole="image" {...props} />
   };
 });
 

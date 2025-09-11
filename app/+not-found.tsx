@@ -37,15 +37,15 @@ const styles = StyleSheet.create({
     minHeight: "100%",
     paddingTop: 40,
     flexGrow: 1,
-    flexDirection: "column",
+    flexDirection: "column"
   },
   link: {
     fontSize: 20,
     marginBottom: 20,
     paddingVertical: 20,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   fullWidth: {
-    width: "100%",
-  },
+    width: "100%"
+  }
 });

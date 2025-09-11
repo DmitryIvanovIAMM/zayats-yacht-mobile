@@ -2,7 +2,7 @@ import { primary, secondary } from "@/constants/Colors";
 import { getInternationalDateFormat } from "@/helpers/dateTime";
 import {
   calculateDaysInTransit,
-  calculateMilesForRoute,
+  calculateMilesForRoute
 } from "@/helpers/routesCalculators";
 import { PortFrontend } from "@/models/PortFrontend";
 import { ShipStopWithSailingAndPortFrontend } from "@/models/ShipStopFrontend";
@@ -15,14 +15,14 @@ interface SailingCardProps {
 }
 
 export const SailingCard: React.FC<SailingCardProps> = ({
-  route,
+  route
 }: SailingCardProps) => {
   return (
     <Card style={styles.card}>
       <Card.Cover
         source={{
           //https://zayats-yacht.vercel.app/_next/image?url=%2Fimages%2FGolfito.jpg&w=3840&q=75
-          uri: `https://zayats-yacht.vercel.app/_next/image?url=%2Fimages%2F${(route[route.length - 1].departurePort as PortFrontend).imageFileName}&w=3840&q=75`,
+          uri: `https://zayats-yacht.vercel.app/_next/image?url=%2Fimages%2F${(route[route.length - 1].departurePort as PortFrontend).imageFileName}&w=3840&q=75`
         }}
         style={{ height: 200, width: "100%", borderRadius: 0 }}
       />
@@ -103,95 +103,95 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowRadius: 6,
-    elevation: 3,
+    elevation: 3
   },
   title: Platform.select({
     default: {
       fontSize: 20,
       fontWeight: "bold",
-      marginBottom: 4,
+      marginBottom: 4
     },
     android: {
       fontSize: 16,
       color: "black",
       fontWeight: "bold",
-      marginBottom: 4,
-    },
+      marginBottom: 4
+    }
   }),
   descriptionContainer: Platform.select({
     default: {
       marginTop: 10,
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-between",
+      justifyContent: "space-between"
     },
     android: {
       marginTop: 0,
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-between",
-    },
+      justifyContent: "space-between"
+    }
   }),
   descriptionContainerColumn: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   columnHeader: Platform.select({
     default: {
       fontSize: 16,
-      color: secondary.dark,
+      color: secondary.dark
     },
     android: {
       fontSize: 14,
-      color: secondary.dark,
-    },
+      color: secondary.dark
+    }
   }),
   columnContent: Platform.select({
     default: {
       fontSize: 16,
       fontWeight: "bold",
-      color: primary.dark,
+      color: primary.dark
     },
     android: {
       fontSize: 14,
       fontWeight: "bold",
-      color: primary.dark,
-    },
+      color: primary.dark
+    }
   }),
   divider: {
-    marginVertical: 10,
+    marginVertical: 10
   },
   integrationContainer: {
     marginTop: 0,
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
   integrationHeader: Platform.select({
     default: {
       fontSize: 16,
       color: secondary.dark,
       marginRight: 10,
-      textTransform: "uppercase",
+      textTransform: "uppercase"
     },
     android: {
       fontSize: 14,
       color: secondary.dark,
       marginRight: 10,
-      textTransform: "uppercase",
-    },
+      textTransform: "uppercase"
+    }
   }),
   integrationText: Platform.select({
     default: {
       fontSize: 16,
       fontWeight: "bold",
-      color: secondary.dark,
+      color: secondary.dark
     },
     android: {
       fontSize: 14,
       fontWeight: "bold",
-      color: secondary.dark,
-    },
+      color: secondary.dark
+    }
   }),
   button: {
     marginTop: 0,
@@ -201,13 +201,13 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: secondary.main,
     borderRadius: 0,
-    width: "100%",
+    width: "100%"
   },
   buttonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "uppercase",
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 });

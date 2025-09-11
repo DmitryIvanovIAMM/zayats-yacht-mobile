@@ -5,54 +5,63 @@ import { SailingCard } from "./SailingCard";
 // Mock helpers used inside the component
 jest.mock("@/helpers/dateTime", () => {
   return {
-    getInternationalDateFormat: (date: any) => `DATE:${String(date)}`,
+    getInternationalDateFormat: (date: any) => `DATE:${String(date)}`
   };
 });
 
 jest.mock("@/helpers/routesCalculators", () => {
   return {
     calculateMilesForRoute: () => 1234,
-    calculateDaysInTransit: () => 7,
+    calculateDaysInTransit: () => 7
   };
 });
 
 // Mock react-native-paper to simple primitives (avoid Provider/native deps)
 jest.mock("react-native-paper", () => {
-  const React = require("react");
-  const { View, Text, Image } = require("react-native");
+  const React = jest.requireActual<typeof import("react")>("react");
+  const RN = jest.requireActual<typeof import("react-native")>("react-native");
 
-  const Card: any = ({ children, ...props }: any) => (
-    <View {...props}>{children}</View>
-  );
+  const Card: any = ({ children, ...props }: any) =>
+    React.createElement(RN.View, props, children);
+  Card.displayName = "MockCard";
+
   Card.Cover = ({ source, ...props }: any) =>
-    React.createElement(Image, { source, ...props });
+    React.createElement(RN.Image, { source, ...props });
+  Card.Cover.displayName = "MockCard.Cover";
+
   Card.Content = ({ children, ...props }: any) =>
-    React.createElement(View, { ...props }, children);
+    React.createElement(RN.View, { ...props }, children);
+  Card.Content.displayName = "MockCard.Content";
+
   Card.Actions = ({ children, ...props }: any) =>
-    React.createElement(View, { ...props }, children);
+    React.createElement(RN.View, { ...props }, children);
+  Card.Actions.displayName = "MockCard.Actions";
 
   const Button = ({ children, ...props }: any) =>
     React.createElement(
-      View,
+      RN.View,
       { accessibilityRole: "button", ...props },
       children
     );
-  const Divider = (props: any) => React.createElement(View, props);
+  Button.displayName = "MockButton";
 
-  return { Card, Button, Divider, Text };
+  const Divider = (props: any) => React.createElement(RN.View, props);
+  Divider.displayName = "MockDivider";
+
+  return { Card, Button, Divider, Text: RN.Text };
 });
 
 describe("SailingCard", () => {
   const route = [
     {
       arrivalOn: "2025-01-01",
-      departurePort: { portName: "Port A" },
+      departurePort: { portName: "Port A" }
     },
     {
       arrivalOn: "2025-02-02",
       departurePort: { portName: "Port B", imageFileName: "Golfito.jpg" },
-      sailing: { name: "Trans-Atlantic" },
-    },
+      sailing: { name: "Trans-Atlantic" }
+    }
   ] as any;
 
   it("matches snapshot", () => {
