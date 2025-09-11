@@ -14,13 +14,12 @@ jest.mock("expo-router", () => {
   };
 });
 
-// Improved react-native-paper Menu mock (handle anchor coords object)
+// Improved react-native-paper Menu mock (handle anchor coords object) with display names
 jest.mock("react-native-paper", () => {
   const React = jest.requireActual<typeof import("react")>("react");
   const RN = jest.requireActual<typeof import("react-native")>("react-native");
 
   const Menu: any = ({ anchor, visible, children, contentStyle }: any) => {
-    // real RNP Menu allows anchor to be a ReactNode OR a coords object { x, y }
     let anchorNode: React.ReactNode = null;
     const isCoords =
       anchor &&
@@ -44,6 +43,7 @@ jest.mock("react-native-paper", () => {
       </RN.View>
     );
   };
+  Menu.displayName = "MockMenu";
 
   Menu.Item = ({ onPress, title, titleStyle }: any) => (
     <RN.TouchableOpacity
@@ -53,8 +53,10 @@ jest.mock("react-native-paper", () => {
       <RN.Text style={titleStyle}>{title}</RN.Text>
     </RN.TouchableOpacity>
   );
+  Menu.Item.displayName = "MockMenuItem";
 
   const Divider = () => <RN.View testID="menu-divider" />;
+  Divider.displayName = "MockDivider";
 
   return { Menu, Divider };
 });
