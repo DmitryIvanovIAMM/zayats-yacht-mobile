@@ -155,8 +155,6 @@ describe("FormInput", () => {
       </TestWrapper>
     );
 
-    const input = getByDisplayValue("");
-
     // Test that ref.current exists and has focus method
     expect(ref.current).toBeTruthy();
     expect(typeof ref.current?.focus).toBe("function");

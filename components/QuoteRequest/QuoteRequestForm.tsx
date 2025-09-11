@@ -63,16 +63,13 @@ export default function QuoteForm() {
 
   const {
     register,
-    setValue,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { isSubmitting, isValid },
     watch,
-    setError,
-    control
+    setError
   } = methods;
 
   // dropdown-driven fields
-  const purpose = watch("purpose");
   const lengthUnit = watch("lengthUnit");
   const beamUnit = watch("beamUnit");
   const weightUnit = watch("weightUnit");
@@ -254,7 +251,7 @@ export default function QuoteForm() {
               inputRefs.current.purpose = el;
             }}
             name="purpose"
-            label="Purpose of Transport"
+            label="Purpose of Transport *"
             options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
               label:
                 PURPOSE_OF_TRANSPORT[

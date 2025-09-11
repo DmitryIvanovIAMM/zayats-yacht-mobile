@@ -175,7 +175,6 @@ describe("LeftNavigation", () => {
   });
 
   it("handles empty link gracefully", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
     const { mockPush } = require("expo-router");
 
     // Mock a menu item with empty link
@@ -194,7 +193,6 @@ describe("LeftNavigation", () => {
   });
 
   it("adds leading slash to link if not present", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
     const { mockPush } = require("expo-router");
 
     // Mock a menu item without leading slash
@@ -218,17 +216,6 @@ describe("LeftNavigation", () => {
     fireEvent.press(getByTestId("menu"));
 
     expect(mockSetMenuIsOpen).toHaveBeenCalledWith(false);
-  });
-
-  it("logs navigation message to console", () => {
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation();
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-
-    fireEvent.press(getByTestId("menu-item-schedule"));
-
-    expect(consoleSpy).toHaveBeenCalledWith("Navigating to /");
-
-    consoleSpy.mockRestore();
   });
 
   it("applies correct styling to menu", () => {

@@ -16,7 +16,6 @@ export const LeftNavigation = ({
   const menuLinks = getMenuLinks(false);
 
   const handleMenuItemPress = (link: string = "/", section: string = "") => {
-    console.log(`Navigating to ${link}`);
     setMenuIsOpen(false);
     if (!link) return;
 
