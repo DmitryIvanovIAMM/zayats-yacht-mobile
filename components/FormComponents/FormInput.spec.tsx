@@ -149,7 +149,7 @@ describe("FormInput", () => {
   // Ref functionality tests
   it("exposes focus method through ref", () => {
     const ref = React.createRef<FormInputRef>();
-    const { getByDisplayValue } = render(
+    render(
       <TestWrapper>
         <FormInput {...defaultProps} ref={ref} />
       </TestWrapper>
