@@ -47,6 +47,7 @@ const FormInput = forwardRef<FormInputRef, Props>(
       <View
         style={styles.inputGroup}
         onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
+        testID="form-input-group"
       >
         <Text style={styles.label}>{label}</Text>
         <Controller
