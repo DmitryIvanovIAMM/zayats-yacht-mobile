@@ -3,31 +3,33 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import FormMaskedInput from "./FormMaskedInput";
 
-// Mock react-native-mask-text to a simple stub component
+// Mock react-native-mask-text to a simple stub component (lint-safe)
 jest.mock("react-native-mask-text", () => {
-  const React = require("react");
-  const { View, Text, TouchableOpacity } = require("react-native");
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { View, Text, TouchableOpacity } =
+    jest.requireActual<typeof import("react-native")>("react-native");
 
-  const MaskedTextInput = React.forwardRef((props: any, ref: any) => {
-    // provide a focus method on the ref target
-    React.useEffect(() => {
-      const target = { focus: () => {} };
-      if (typeof ref === "function") ref(target);
-      else if (ref) ref.current = target;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  const MaskedTextInput = React.forwardRef<any, any>(
+    function MockMaskedTextInput(props, ref) {
+      React.useEffect(() => {
+        const target = { focus: () => {} };
+        if (typeof ref === "function") ref(target);
+        else if (ref) (ref as any).current = target;
+      }, [ref]);
 
-    return (
-      <View accessibilityLabel="mock-masked-input" {...props}>
-        {props.placeholder ? <Text>{props.placeholder}</Text> : null}
-        {props.editable === false ? <Text>DISABLED</Text> : null}
-        <TouchableOpacity
-          accessibilityLabel="enter-masked"
-          onPress={() => props.onChangeText?.("12-34", "1234")}
-        />
-      </View>
-    );
-  });
+      return (
+        <View accessibilityLabel="mock-masked-input" {...props}>
+          {props.placeholder ? <Text>{props.placeholder}</Text> : null}
+          {props.editable === false ? <Text>DISABLED</Text> : null}
+          <TouchableOpacity
+            accessibilityLabel="enter-masked"
+            onPress={() => props.onChangeText?.("12-34", "1234")}
+          />
+        </View>
+      );
+    }
+  );
+  MaskedTextInput.displayName = "MockMaskedTextInput";
 
   return { __esModule: true, MaskedTextInput };
 });
