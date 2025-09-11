@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormDropdown matches snapshot 1`] = `
+<View
+  onLayout={[Function]}
+  style={
+    {
+      "marginBottom": 8,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#006666",
+        "fontSize": 15,
+        "marginBottom": 6,
+      }
+    }
+  >
+    Purpose
+  </Text>
+  <View
+    accessibilityLabel="mock-dropdown"
+    activeColor="#006666"
+    containerStyle={
+      {
+        "backgroundColor": "#006666",
+        "borderColor": "#006666",
+        "borderRadius": 0,
+        "borderWidth": 1,
+      }
+    }
+    data={
+      [
+        {
+          "label": "One",
+          "value": "one",
+        },
+        {
+          "label": "Two",
+          "value": "two",
+        },
+      ]
+    }
+    iconStyle={
+      {
+        "borderWidth": 0,
+        "color": "#006666",
+        "fontSize": 16,
+        "paddingLeft": 8,
+      }
+    }
+    itemContainerStyle={
+      {
+        "backgroundColor": "#006666",
+        "borderBottomColor": "#444",
+        "borderBottomWidth": 1,
+        "borderWidth": 0,
+        "color": "white",
+        "opacity": 1,
+        "padding": 0,
+      }
+    }
+    itemTextStyle={
+      {
+        "backgroundColor": "#006666",
+        "borderWidth": 0,
+        "color": "white",
+        "fontSize": 16,
+        "padding": 0,
+      }
+    }
+    labelField="label"
+    onChange={[Function]}
+    placeholder="Select..."
+    placeholderStyle={
+      {
+        "color": "#006666",
+        "fontSize": 16,
+      }
+    }
+    selectedTextStyle={
+      {
+        "backgroundColor": "white",
+        "color": "#006666",
+        "fontSize": 16,
+      }
+    }
+    style={
+      [
+        {
+          "alignItems": "center",
+          "backgroundColor": "white",
+          "borderColor": "#006666",
+          "borderRadius": 0,
+          "borderWidth": 1,
+          "display": "flex",
+          "flexDirection": "row",
+          "height": 40,
+          "justifyContent": "space-between",
+          "padding": 8,
+          "width": "100%",
+        },
+        {
+          "borderColor": "#006666",
+        },
+      ]
+    }
+    value=""
+    valueField="value"
+  >
+    <Text>
+      Select...
+    </Text>
+    <View
+      accessibilityLabel="select-first"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
+      }
+    />
+    <View
+      accessibilityLabel="select-second"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      {
+        "justifyContent": "center",
+        "marginTop": 2,
+        "minHeight": 18,
+      }
+    }
+  />
+</View>
+`;
