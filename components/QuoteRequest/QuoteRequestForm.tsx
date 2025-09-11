@@ -18,7 +18,7 @@ import FormMaskedInput from "../FormComponents/FormMaskedInput";
 import { handleServerValidationErrors } from "../FormComponents/handleServerValidationErrors";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
-  defaultQuoteRequest,
+  defaultNonEmptyQuoteRequest,
   LENGTH_METRIC,
   lengthMetricViewConnector,
   PURPOSE_OF_TRANSPORT,
@@ -53,8 +53,8 @@ export default function QuoteForm() {
   };
 
   const methods = useForm<QuoteRequestForm>({
-    defaultValues: defaultQuoteRequest,
-    // defaultValues: defaultNonEmptyQuoteRequest,
+    // defaultValues: defaultQuoteRequest,
+    defaultValues: defaultNonEmptyQuoteRequest,
     mode: "onBlur",
     reValidateMode: "onChange",
     resolver: yupResolver(quoteRequestSchema) as any,
@@ -105,7 +105,7 @@ export default function QuoteForm() {
 
   const onSubmit = async (data: QuoteRequestForm) => {
     try {
-      const res = await postQuoteRequest({ ...data, email: "la-la" });
+      const res = await postQuoteRequest({ ...data, phoneNumber: "" });
 
       if (res.success) {
         showSnackbar(Messages.QuoteRequestSent, "green");
@@ -185,12 +185,6 @@ export default function QuoteForm() {
             placeholder="+1 111 111 1111"
             keyboardType="phone-pad"
             mask="+1 999 999 9999"
-            onChangeText={(text, rawText) => {
-              setValue("phoneNumber", text, {
-                shouldValidate: true,
-                shouldDirty: true,
-              });
-            }}
             ref={(el) => {
               inputRefs.current.phoneNumber = el;
             }}
