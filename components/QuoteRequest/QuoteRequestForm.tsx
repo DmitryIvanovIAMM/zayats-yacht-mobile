@@ -57,7 +57,7 @@ export default function QuoteForm() {
     // defaultValues: defaultNonEmptyQuoteRequest,
     mode: "onBlur",
     reValidateMode: "onChange",
-    resolver: yupResolver(quoteRequestSchema),
+    resolver: yupResolver(quoteRequestSchema) as any,
   });
 
   const {
