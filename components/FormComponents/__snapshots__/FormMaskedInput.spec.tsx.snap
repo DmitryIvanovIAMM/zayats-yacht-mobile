@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormMaskedInput matches snapshot 1`] = `
+<View
+  onLayout={[Function]}
+  style={
+    {
+      "marginBottom": 8,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#006666",
+        "fontSize": 15,
+        "marginBottom": 6,
+      }
+    }
+  >
+    Phone
+  </Text>
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "#fafafa",
+          "borderColor": "#006666",
+          "borderRadius": 0,
+          "borderWidth": 1,
+          "justifyContent": "center",
+          "minHeight": 40,
+          "paddingHorizontal": 8,
+        },
+        {
+          "borderColor": "#006666",
+        },
+      ]
+    }
+  >
+    <View
+      accessibilityLabel="mock-masked-input"
+      editable={true}
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      placeholder="(123) 456-7890"
+      placeholderTextColor="#006666"
+      style={
+        [
+          {
+            "color": "#006666",
+            "fontSize": 16,
+            "margin": 0,
+            "padding": 0,
+          },
+          undefined,
+        ]
+      }
+      value=""
+    >
+      <Text>
+        (123) 456-7890
+      </Text>
+      <View
+        accessibilityLabel="enter-masked"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "opacity": 1,
+          }
+        }
+      />
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "justifyContent": "center",
+        "marginTop": 2,
+        "minHeight": 18,
+      }
+    }
+  />
+</View>
+`;
