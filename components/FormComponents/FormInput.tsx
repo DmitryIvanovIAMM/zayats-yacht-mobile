@@ -30,9 +30,9 @@ const FormInput = forwardRef<FormInputRef, Props>(
       keyboardType,
       multiline,
       numberOfLines,
-      disabled, // NEW
-      secureTextEntry, // add
-      autoCapitalize // add
+      disabled,
+      secureTextEntry,
+      autoCapitalize
     },
     ref
   ) => {
@@ -104,6 +104,9 @@ const FormInput = forwardRef<FormInputRef, Props>(
     );
   }
 );
+
+// ADD display name to satisfy react/display-name
+FormInput.displayName = "FormInput";
 
 const styles = StyleSheet.create({
   inputGroup: {
