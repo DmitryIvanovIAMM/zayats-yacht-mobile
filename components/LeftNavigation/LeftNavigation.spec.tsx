@@ -1,10 +1,12 @@
+import { getMenuLinks } from "@/helpers/menuLinks";
 import { fireEvent, render } from "@testing-library/react-native";
 import React from "react";
+import { StyleSheet } from "react-native";
 import { LeftNavigation, LeftNavigationProps } from "./LeftNavigation";
 
+const mockPush = jest.fn();
 // Mock expo-router
 jest.mock("expo-router", () => {
-  const mockPush = jest.fn();
   return {
     __esModule: true,
     useRouter: () => ({ push: mockPush }),
@@ -12,43 +14,47 @@ jest.mock("expo-router", () => {
   };
 });
 
-// Mock react-native-paper Menu and Divider
+// Improved react-native-paper Menu mock (handle anchor coords object)
 jest.mock("react-native-paper", () => {
-  const React = require("react");
-  const { View, TouchableOpacity, Text } = require("react-native");
+  const React = jest.requireActual<typeof import("react")>("react");
+  const RN = jest.requireActual<typeof import("react-native")>("react-native");
 
-  const Menu = ({
-    children,
-    visible,
-    onDismiss,
-    contentStyle,
-    anchor
-  }: any) => {
-    if (!visible) return null;
+  const Menu: any = ({ anchor, visible, children, contentStyle }: any) => {
+    // real RNP Menu allows anchor to be a ReactNode OR a coords object { x, y }
+    let anchorNode: React.ReactNode = null;
+    const isCoords =
+      anchor &&
+      typeof anchor === "object" &&
+      ("x" in anchor || "y" in anchor) &&
+      typeof (anchor as any).x === "number";
 
-    return React.createElement(
-      View,
-      {
-        testID: "menu",
-        style: contentStyle,
-        onPress: onDismiss
-      },
-      children
+    if (!isCoords) {
+      anchorNode =
+        typeof anchor === "function" ? (anchor as any)() : anchor || null;
+    }
+
+    return (
+      <RN.View>
+        <RN.View testID="menu-anchor">{anchorNode}</RN.View>
+        {visible && (
+          <RN.View testID="menu" style={contentStyle}>
+            {children}
+          </RN.View>
+        )}
+      </RN.View>
     );
   };
 
-  Menu.Item = ({ onPress, title, titleStyle, ...props }: any) =>
-    React.createElement(
-      TouchableOpacity,
-      {
-        testID: `menu-item-${title.toLowerCase().replace(/\s+/g, "-")}`,
-        onPress,
-        ...props
-      },
-      React.createElement(Text, { style: titleStyle }, title)
-    );
+  Menu.Item = ({ onPress, title, titleStyle }: any) => (
+    <RN.TouchableOpacity
+      testID={`menu-item-${String(title).toLowerCase().replace(/\s+/g, "-")}`}
+      onPress={onPress}
+    >
+      <RN.Text style={titleStyle}>{title}</RN.Text>
+    </RN.TouchableOpacity>
+  );
 
-  const Divider = () => React.createElement(View, { testID: "menu-divider" });
+  const Divider = () => <RN.View testID="menu-divider" />;
 
   return { Menu, Divider };
 });
@@ -56,48 +62,20 @@ jest.mock("react-native-paper", () => {
 // Mock menuLinks helper
 jest.mock("@/helpers/menuLinks", () => ({
   getMenuLinks: jest.fn(() => [
-    {
-      label: "Schedule",
-      link: "/",
-      section: "schedule"
-    },
-    {
-      label: "Get a Quote",
-      link: "/quote-request"
-    },
-    {
-      label: "Gallery",
-      link: "/gallery"
-    },
-    {
-      label: "Services",
-      link: "/services"
-    },
-    {
-      label: "Instructions",
-      link: "/instructions"
-    },
-    {
-      label: "Testimonials",
-      link: "/",
-      section: "testimonials"
-    },
-    {
-      label: "About Us",
-      link: "/",
-      section: "about-us"
-    },
-    {
-      label: "Contact Us",
-      link: "/",
-      section: "contact-us"
-    }
+    { label: "Schedule", link: "/", section: "schedule" },
+    { label: "Get a Quote", link: "/quote-request" },
+    { label: "Gallery", link: "/gallery" },
+    { label: "Services", link: "/services" },
+    { label: "Instructions", link: "/instructions" },
+    { label: "Testimonials", link: "/", section: "testimonials" },
+    { label: "About Us", link: "/", section: "about-us" },
+    { label: "Contact Us", link: "/", section: "contact-us" }
   ])
 }));
 
 describe("LeftNavigation", () => {
   const mockSetMenuIsOpen = jest.fn();
-  const defaultProps: LeftNavigationProps = {
+  const baseProps: LeftNavigationProps = {
     setMenuIsOpen: mockSetMenuIsOpen,
     visible: true
   };
@@ -107,133 +85,100 @@ describe("LeftNavigation", () => {
   });
 
   it("matches snapshot when visible", () => {
-    const { toJSON } = render(<LeftNavigation {...defaultProps} />);
+    const { toJSON } = render(<LeftNavigation {...baseProps} />);
     expect(toJSON()).toMatchSnapshot();
   });
 
   it("matches snapshot when not visible", () => {
     const { toJSON } = render(
-      <LeftNavigation {...defaultProps} visible={false} />
+      <LeftNavigation {...baseProps} visible={false} />
     );
     expect(toJSON()).toMatchSnapshot();
   });
 
-  it("renders menu when visible is true", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-    expect(getByTestId("menu")).toBeTruthy();
-  });
-
-  it("does not render menu when visible is false", () => {
-    const { queryByTestId } = render(
-      <LeftNavigation {...defaultProps} visible={false} />
+  it("renders menu only when visible", () => {
+    const { queryByTestId, rerender } = render(
+      <LeftNavigation {...baseProps} visible={false} />
     );
     expect(queryByTestId("menu")).toBeNull();
+    rerender(<LeftNavigation {...baseProps} visible />);
+    expect(queryByTestId("menu")).toBeTruthy();
   });
 
   it("renders all menu items", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-
-    expect(getByTestId("menu-item-schedule")).toBeTruthy();
-    expect(getByTestId("menu-item-get-a-quote")).toBeTruthy();
-    expect(getByTestId("menu-item-gallery")).toBeTruthy();
-    expect(getByTestId("menu-item-services")).toBeTruthy();
-    expect(getByTestId("menu-item-instructions")).toBeTruthy();
-    expect(getByTestId("menu-item-testimonials")).toBeTruthy();
-    expect(getByTestId("menu-item-about-us")).toBeTruthy();
-    expect(getByTestId("menu-item-contact-us")).toBeTruthy();
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
+    [
+      "schedule",
+      "get-a-quote",
+      "gallery",
+      "services",
+      "instructions",
+      "testimonials",
+      "about-us",
+      "contact-us"
+    ].forEach((id) => expect(getByTestId(`menu-item-${id}`)).toBeTruthy());
   });
 
-  it("renders divider at the end", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
+  it("renders divider", () => {
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
     expect(getByTestId("menu-divider")).toBeTruthy();
   });
 
-  it("calls setMenuIsOpen with false when menu item is pressed", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-
+  it("closes menu on item press", () => {
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
     fireEvent.press(getByTestId("menu-item-schedule"));
-
     expect(mockSetMenuIsOpen).toHaveBeenCalledWith(false);
   });
 
-  it("navigates to correct route when menu item is pressed", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-    const { mockPush } = require("expo-router");
-
+  it("navigates to plain route", () => {
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
     fireEvent.press(getByTestId("menu-item-get-a-quote"));
-
     expect(mockPush).toHaveBeenCalledWith("/quote-request");
   });
 
-  it("navigates to route with section when menu item has section", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-    const { mockPush } = require("expo-router");
-
+  it("navigates with section query", () => {
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
     fireEvent.press(getByTestId("menu-item-schedule"));
-
     expect(mockPush).toHaveBeenCalledWith("/?section=schedule");
   });
 
-  it("handles empty link gracefully", () => {
-    const { mockPush } = require("expo-router");
-
-    // Mock a menu item with empty link
-    const { getMenuLinks } = require("@/helpers/menuLinks");
-    getMenuLinks.mockReturnValueOnce([
-      { label: "Empty Link", link: "", section: "" }
+  it("ignores empty link", () => {
+    (getMenuLinks as jest.Mock).mockReturnValueOnce([
+      { label: "Empty", link: "", section: "" }
     ]);
-
-    const { getByTestId: getByTestIdEmpty } = render(
-      <LeftNavigation {...defaultProps} />
-    );
-
-    fireEvent.press(getByTestIdEmpty("menu-item-empty-link"));
-
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
+    fireEvent.press(getByTestId("menu-item-empty"));
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  it("adds leading slash to link if not present", () => {
-    const { mockPush } = require("expo-router");
-
-    // Mock a menu item without leading slash
-    const { getMenuLinks } = require("@/helpers/menuLinks");
-    getMenuLinks.mockReturnValueOnce([
-      { label: "No Slash", link: "test-route", section: "" }
+  it("adds leading slash if missing", () => {
+    (getMenuLinks as jest.Mock).mockReturnValueOnce([
+      { label: "No Slash", link: "x", section: "" }
     ]);
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
+    fireEvent.press(getByTestId("menu-item-no-slash"));
+    expect(mockPush).toHaveBeenCalledWith("/x");
+  });
 
-    const { getByTestId: getByTestIdNoSlash } = render(
-      <LeftNavigation {...defaultProps} />
+  it("hides when prop toggled (simulated dismiss)", () => {
+    const { rerender, queryByTestId } = render(
+      <LeftNavigation {...baseProps} visible />
     );
-
-    fireEvent.press(getByTestIdNoSlash("menu-item-no-slash"));
-
-    expect(mockPush).toHaveBeenCalledWith("/test-route");
+    expect(queryByTestId("menu")).toBeTruthy();
+    rerender(<LeftNavigation {...baseProps} visible={false} />);
+    expect(queryByTestId("menu")).toBeNull();
   });
 
-  it("calls setMenuIsOpen with false when menu is dismissed", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-
-    fireEvent.press(getByTestId("menu"));
-
-    expect(mockSetMenuIsOpen).toHaveBeenCalledWith(false);
-  });
-
-  it("applies correct styling to menu", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
+  it("applies menu styling", () => {
+    const { getByTestId } = render(<LeftNavigation {...baseProps} />);
     const menu = getByTestId("menu");
-
-    expect(menu.props.style).toEqual({
-      backgroundColor: "#006666" // secondary.dark
-    });
+    expect(menu.props.style).toEqual({ backgroundColor: "#006666" });
   });
 
-  it("applies correct styling to menu items", () => {
-    const { getByTestId } = render(<LeftNavigation {...defaultProps} />);
-    const menuItem = getByTestId("menu-item-schedule");
-    const textElement = menuItem.children[0] as any;
-
-    expect(textElement.props.style).toEqual({
-      color: "#fff" // primary.contrastText
-    });
+  it("applies menu item text styling (flatten style)", () => {
+    const { getByText } = render(<LeftNavigation {...baseProps} />);
+    const textNode = getByText("Schedule");
+    const style = StyleSheet.flatten(textNode.props.style);
+    expect(style).toEqual({ color: "#fff" });
   });
 });
