@@ -27,20 +27,14 @@ exports[`FormContainer matches snapshot 1`] = `
     }
   >
     <View
-      colors={
-        [
-          "#006666",
-          "white",
-          "#006666",
-          "white",
-        ]
-      }
+      data-colors="["#006666","white","#006666","white"]"
       style={
         {
           "borderRadius": 1,
           "flex": 1,
         }
       }
+      testID="linear-gradient"
     />
   </View>
   <View
