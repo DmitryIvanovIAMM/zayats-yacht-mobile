@@ -107,6 +107,7 @@ exports[`FormDropdown matches snapshot 1`] = `
         },
       ]
     }
+    testID="mock-dropdown"
     value=""
     valueField="value"
   >

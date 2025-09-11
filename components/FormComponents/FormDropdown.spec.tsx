@@ -3,12 +3,14 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import FormDropdown from "./FormDropdown";
 
-// Mock element dropdown to a simple selectable stub
+// Mock element dropdown to a simple selectable stub (no require(), use jest.requireActual)
 jest.mock("react-native-element-dropdown", () => {
-  const React = require("react");
-  const { View, Text, TouchableOpacity } = require("react-native");
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { View, Text, TouchableOpacity } =
+    jest.requireActual<typeof import("react-native")>("react-native");
+
   const Dropdown = (props: any) => (
-    <View accessibilityLabel="mock-dropdown" {...props}>
+    <View testID="mock-dropdown" accessibilityLabel="mock-dropdown" {...props}>
       <Text>{props.placeholder}</Text>
       {props.disable ? <Text>DISABLED</Text> : null}
       <TouchableOpacity
@@ -21,6 +23,8 @@ jest.mock("react-native-element-dropdown", () => {
       />
     </View>
   );
+  Dropdown.displayName = "MockDropdown";
+
   return { __esModule: true, Dropdown };
 });
 
