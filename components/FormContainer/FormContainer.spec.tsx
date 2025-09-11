@@ -3,22 +3,25 @@ import React from "react";
 import { Animated, Text, ViewStyle } from "react-native";
 import { FormContainer } from "./FormContainer";
 
-// Mock expo-linear-gradient to a simple View to avoid native deps in tests
+// UPDATED MOCK: add testID + data-colors so tests can find / assert
 jest.mock("expo-linear-gradient", () => {
-  const React = require("react");
-  const { View } = require("react-native");
-  return {
-    LinearGradient: ({ children, colors, style, ...rest }: any) => (
-      <View
-        {...rest}
-        style={style}
-        testID="linear-gradient"
-        data-colors={JSON.stringify(colors)}
-      >
-        {children}
-      </View>
-    )
-  };
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { View } =
+    jest.requireActual<typeof import("react-native")>("react-native");
+  const LinearGradient = ({ children, colors, style, ...rest }: any) => (
+    <View
+      testID="linear-gradient"
+      // preserve style passed by component
+      style={style}
+      // expose colors for the test
+      data-colors={JSON.stringify(colors)}
+      {...rest}
+    >
+      {children}
+    </View>
+  );
+  LinearGradient.displayName = "MockLinearGradient";
+  return { LinearGradient };
 });
 
 describe("FormContainer", () => {
