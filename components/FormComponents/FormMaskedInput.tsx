@@ -54,14 +54,12 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
                   style={[styles.input, style]}
                   placeholderTextColor={secondary.dark}
                   onBlur={onBlur}
-                  // always drive form value with rawText; no need for external onChangeText
-                  onChangeText={(masked, raw) => onChange(raw)}
+                  onChangeText={(_masked, raw) => onChange(raw)}
                   value={(value as any) ?? ""}
                   editable={!disabled}
                   {...rest}
                 />
               </View>
-
               <View style={styles.errorContainer}>
                 {error ? (
                   <Text
@@ -81,11 +79,14 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
   }
 );
 
+// Add display name to satisfy react/display-name rule
+FormMaskedInput.displayName = "FormMaskedInput";
+
 export default FormMaskedInput;
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8 // same as in FormInput
+    marginBottom: 8
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     borderColor: secondary.dark,
     borderRadius: 0,
     backgroundColor: "#fafafa",
-    minHeight: 40, // use minHeight instead of fixed height
+    minHeight: 40,
     paddingHorizontal: 8,
     justifyContent: "center"
   },
