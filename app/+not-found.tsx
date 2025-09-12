@@ -13,6 +13,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
       <ThemedView style={styles.container}>
+        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <SectionTitle>This screen doesn't exist.</SectionTitle>
         <Link href="/" style={styles.link}>
           <ThemedText type="link" style={styles.link}>
@@ -37,15 +38,15 @@ const styles = StyleSheet.create({
     minHeight: "100%",
     paddingTop: 40,
     flexGrow: 1,
-    flexDirection: "column",
+    flexDirection: "column"
   },
   link: {
     fontSize: 20,
     marginBottom: 20,
     paddingVertical: 20,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   fullWidth: {
-    width: "100%",
-  },
+    width: "100%"
+  }
 });

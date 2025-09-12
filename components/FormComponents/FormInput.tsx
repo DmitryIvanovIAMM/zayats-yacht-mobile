@@ -30,9 +30,9 @@ const FormInput = forwardRef<FormInputRef, Props>(
       keyboardType,
       multiline,
       numberOfLines,
-      disabled, // NEW
-      secureTextEntry, // add
-      autoCapitalize, // add
+      disabled,
+      secureTextEntry,
+      autoCapitalize
     },
     ref
   ) => {
@@ -40,13 +40,14 @@ const FormInput = forwardRef<FormInputRef, Props>(
     const { control } = useFormContext();
 
     useImperativeHandle(ref, () => ({
-      focus: () => inputRef.current?.focus(),
+      focus: () => inputRef.current?.focus()
     }));
 
     return (
       <View
         style={styles.inputGroup}
         onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
+        testID="form-input-group"
       >
         <Text style={styles.label}>{label}</Text>
         <Controller
@@ -54,7 +55,7 @@ const FormInput = forwardRef<FormInputRef, Props>(
           name={name}
           render={({
             field: { onChange, onBlur, value },
-            fieldState: { error },
+            fieldState: { error }
           }) => (
             <>
               <View
@@ -65,7 +66,7 @@ const FormInput = forwardRef<FormInputRef, Props>(
                   // optional: size by numberOfLines
                   multiline && numberOfLines
                     ? { minHeight: numberOfLines * 24 + 16 }
-                    : undefined,
+                    : undefined
                 ]}
               >
                 <TextInput
@@ -104,14 +105,17 @@ const FormInput = forwardRef<FormInputRef, Props>(
   }
 );
 
+// ADD display name to satisfy react/display-name
+FormInput.displayName = "FormInput";
+
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8,
+    marginBottom: 8
   },
   label: {
     fontSize: Platform.select({ default: 15, android: 13 }) as number,
     marginBottom: Platform.select({ default: 6, android: 4 }) as number,
-    color: secondary.dark,
+    color: secondary.dark
   },
   paperLikeInput: {
     borderWidth: 1,
@@ -121,36 +125,36 @@ const styles = StyleSheet.create({
     // height: 40,           // remove fixed height
     minHeight: 40, // allow multiline to grow
     paddingHorizontal: 8,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   paperLikeMultiline: {
     justifyContent: "flex-start",
     paddingTop: 8,
-    paddingBottom: 8,
+    paddingBottom: 8
   },
   input: {
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
     color: secondary.dark,
-    padding: 0,
+    padding: 0
   },
   inputMultiline: {
     textAlignVertical: "top",
     paddingTop: 0,
-    paddingBottom: 0,
+    paddingBottom: 0
   },
   inputError: {
-    borderColor: errorColor,
+    borderColor: errorColor
   },
   errorContainer: {
     minHeight: 18, // reserve space for one line of error
     marginTop: 2,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   error: {
     color: errorColor,
-    fontSize: 14,
+    fontSize: 14
     // The error text is sized to fit within the reserved minHeight of errorContainer.
-  },
+  }
 });
 
 export default FormInput;

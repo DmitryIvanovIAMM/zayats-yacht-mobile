@@ -3,35 +3,38 @@ import React from "react";
 import { Linking } from "react-native";
 import ContactUs from "./ContactUs";
 
-// Mocks to avoid native/complex deps
+// SectionTitle mock (no require())
 jest.mock("@/components/SectionTitle/SectionTitle", () => {
-  const React = require("react");
-  const { Text } = require("react-native");
-  return {
-    __esModule: true,
-    default: ({ children }: any) => <Text>{children}</Text>,
-  };
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { Text } =
+    jest.requireActual<typeof import("react-native")>("react-native");
+  const SectionTitle = ({ children }: any) => <Text>{children}</Text>;
+  SectionTitle.displayName = "MockSectionTitle";
+  return { __esModule: true, default: SectionTitle };
 });
 
+// ThemedText mock (if used inside ContactUs)
 jest.mock("../ThemedText", () => {
-  const React = require("react");
-  const { Text } = require("react-native");
-  return {
-    __esModule: true,
-    ThemedText: ({ children, style }: any) => (
-      <Text style={style}>{children}</Text>
-    ),
-  };
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { Text } =
+    jest.requireActual<typeof import("react-native")>("react-native");
+  const ThemedText = ({ children, style }: any) => (
+    <Text style={style}>{children}</Text>
+  );
+  ThemedText.displayName = "MockThemedText";
+  return { __esModule: true, ThemedText };
 });
 
+// Icons mock
 jest.mock("@expo/vector-icons", () => {
-  const React = require("react");
-  const { View } = require("react-native");
-  return {
-    MaterialIcons: (props: any) => (
-      <View accessibilityRole="image" {...props} />
-    ),
-  };
+  const React = jest.requireActual<typeof import("react")>("react");
+  const { View } =
+    jest.requireActual<typeof import("react-native")>("react-native");
+  const MaterialIcons = (props: any) => (
+    <View accessibilityRole="image" {...props} />
+  );
+  MaterialIcons.displayName = "MockMaterialIcons";
+  return { MaterialIcons };
 });
 
 describe("ContactUs", () => {

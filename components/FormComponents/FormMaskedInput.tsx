@@ -2,29 +2,22 @@ import { errorColor, secondary } from "@/constants/Colors";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
-import { MaskedTextInput, MaskedTextInputProps } from "react-native-mask-text";
+import {
+  MaskedTextInput,
+  type MaskedTextInputProps
+} from "react-native-mask-text";
 import { FormInputRef } from "./FormInput";
 
-interface FormMaskedInputProps extends MaskedTextInputProps {
+type FormMaskedInputProps = {
   name: string;
   label: string;
-  onLayoutY?: (y: number) => void; // report Y position like FormInput
-  disabled?: boolean; // NEW
-}
+  placeholder?: string;
+  disabled?: boolean;
+  onLayoutY?: (y: number) => void;
+} & Omit<MaskedTextInputProps, "onChangeText" | "value" | "defaultValue">;
 
 const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
-  (
-    {
-      name,
-      label,
-      style,
-      onLayoutY,
-      disabled,
-      onChangeText: userOnChangeText,
-      ...props
-    },
-    ref
-  ) => {
+  ({ name, label, style, onLayoutY, disabled, ...rest }, ref) => {
     const inputRef = useRef<TextInput | null>(null);
     const containerRef = useRef<View | null>(null);
     const { control } = useFormContext();
@@ -32,7 +25,7 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
     useImperativeHandle(ref, () => ({
       focus: () => {
         inputRef.current?.focus();
-      },
+      }
     }));
 
     return (
@@ -47,13 +40,13 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
           name={name}
           render={({
             field: { onChange, onBlur, value },
-            fieldState: { error },
+            fieldState: { error }
           }) => (
             <>
               <View
                 style={[
                   styles.paperLikeInput,
-                  error ? styles.inputError : styles.inputBorder,
+                  error ? styles.inputError : styles.inputBorder
                 ]}
               >
                 <MaskedTextInput
@@ -61,13 +54,12 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
                   style={[styles.input, style]}
                   placeholderTextColor={secondary.dark}
                   onBlur={onBlur}
-                  onChangeText={(text, rawText) => onChange(rawText)}
+                  onChangeText={(_masked, raw) => onChange(raw)}
                   value={(value as any) ?? ""}
                   editable={!disabled}
-                  {...props}
+                  {...rest}
                 />
               </View>
-
               <View style={styles.errorContainer}>
                 {error ? (
                   <Text
@@ -87,44 +79,47 @@ const FormMaskedInput = forwardRef<FormInputRef, FormMaskedInputProps>(
   }
 );
 
+// Add display name to satisfy react/display-name rule
+FormMaskedInput.displayName = "FormMaskedInput";
+
 export default FormMaskedInput;
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginBottom: 8, // same as in FormInput
+    marginBottom: 8
   },
   label: Platform.select({
     default: { fontSize: 15, marginBottom: 6, color: secondary.dark },
-    android: { fontSize: 13, marginBottom: 4, color: secondary.dark },
+    android: { fontSize: 13, marginBottom: 4, color: secondary.dark }
   }),
   paperLikeInput: {
     borderWidth: 1,
     borderColor: secondary.dark,
     borderRadius: 0,
     backgroundColor: "#fafafa",
-    minHeight: 40, // use minHeight instead of fixed height
+    minHeight: 40,
     paddingHorizontal: 8,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   input: {
     fontSize: Platform.select({ default: 16, android: 14 }) as number,
     color: secondary.dark,
     padding: 0,
-    margin: 0,
+    margin: 0
   },
   inputBorder: {
-    borderColor: secondary.dark,
+    borderColor: secondary.dark
   },
   inputError: {
-    borderColor: errorColor,
+    borderColor: errorColor
   },
   errorContainer: {
     minHeight: 18,
     marginTop: 2,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   error: {
     color: errorColor,
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 });

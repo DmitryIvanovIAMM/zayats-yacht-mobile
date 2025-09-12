@@ -132,7 +132,7 @@ exports[`AppBarWithIcon matches snapshot (logged out) 1`] = `
 </View>
 `;
 
-exports[`AppBarWithIcon shows spinner when validating and hides login/logout 1`] = `
+exports[`AppBarWithIcon shows spinner when validating 1`] = `
 <View
   style={
     {

@@ -19,14 +19,14 @@ export default function TabLayout() {
           ios: {
             // Use a transparent background on iOS to show the blur effect
             position: "absolute",
-            backgroundColor: secondary.dark,
+            backgroundColor: secondary.dark
           },
           android: {
             // Use a solid background on Android
-            backgroundColor: secondary.dark,
+            backgroundColor: secondary.dark
           },
-          default: { backgroundColor: secondary.dark },
-        }),
+          default: { backgroundColor: secondary.dark }
+        })
       }}
     >
       <Tabs.Screen
@@ -36,7 +36,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
-          tabBarItemStyle: { backgroundColor: secondary.dark },
+          tabBarItemStyle: { backgroundColor: secondary.dark }
         }}
       />
       <Tabs.Screen
@@ -46,7 +46,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
-          tabBarItemStyle: { backgroundColor: secondary.dark },
+          tabBarItemStyle: { backgroundColor: secondary.dark }
         }}
       />
       <Tabs.Screen
@@ -56,7 +56,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="message.badge" color={color} />
           ),
-          tabBarItemStyle: { backgroundColor: secondary.dark },
+          tabBarItemStyle: { backgroundColor: secondary.dark }
         }}
       />
       <Tabs.Screen
@@ -66,7 +66,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="book.fill" color={color} />
           ),
-          tabBarItemStyle: { backgroundColor: secondary.dark },
+          tabBarItemStyle: { backgroundColor: secondary.dark }
         }}
       />
     </Tabs>

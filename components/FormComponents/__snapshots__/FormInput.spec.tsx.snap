@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormInput matches snapshot 1`] = `
+<View
+  onLayout={[Function]}
+  style={
+    {
+      "marginBottom": 8,
+    }
+  }
+  testID="form-input-group"
+>
+  <Text
+    style={
+      {
+        "color": "#006666",
+        "fontSize": 15,
+        "marginBottom": 6,
+      }
+    }
+  >
+    Test Label
+  </Text>
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "white",
+          "borderColor": "#006666",
+          "borderRadius": 0,
+          "borderWidth": 1,
+          "justifyContent": "center",
+          "minHeight": 40,
+          "paddingHorizontal": 8,
+        },
+        undefined,
+        undefined,
+        undefined,
+      ]
+    }
+  >
+    <TextInput
+      editable={true}
+      onBlur={[Function]}
+      onChangeText={[Function]}
+      placeholderTextColor="#006666"
+      style={
+        [
+          {
+            "color": "#006666",
+            "fontSize": 16,
+            "padding": 0,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
+  <View
+    style={
+      {
+        "justifyContent": "center",
+        "marginTop": 2,
+        "minHeight": 18,
+      }
+    }
+  />
+</View>
+`;

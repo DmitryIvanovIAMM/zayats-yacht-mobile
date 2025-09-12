@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TextStyle,
-  View,
+  View
 } from "react-native";
 
 type SectionTitleProps = {
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
       textTransform: "uppercase",
       color: secondary.dark, // Use the color constant
       textAlign: "center",
-      marginVertical: 16,
+      marginVertical: 16
     },
     android: {
       fontSize: 20, // Adjusted for Android
@@ -36,13 +36,13 @@ const styles = StyleSheet.create({
       textTransform: "uppercase",
       color: secondary.dark,
       textAlign: "center",
-      marginVertical: 12,
-    },
+      marginVertical: 12
+    }
   }),
   container: {
     width: "80%",
-    alignSelf: "center",
-  },
+    alignSelf: "center"
+  }
 });
 
 export default SectionTitle;

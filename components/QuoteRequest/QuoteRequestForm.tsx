@@ -10,22 +10,23 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import { Snackbar } from "react-native-paper";
 import FormDropdown from "../FormComponents/FormDropdown";
 import FormInput, { FormInputRef } from "../FormComponents/FormInput";
 import FormMaskedInput from "../FormComponents/FormMaskedInput";
 import { handleServerValidationErrors } from "../FormComponents/handleServerValidationErrors";
 import { postQuoteRequest } from "./postQuoteRequest";
 import {
-  defaultQuoteRequest,
+  defaultNonEmptyQuoteRequest,
   LENGTH_METRIC,
   lengthMetricViewConnector,
   PURPOSE_OF_TRANSPORT,
   QuoteRequestForm,
   quoteRequestSchema,
   WEIGHT_METRIC,
-  weightMetricViewConnector,
+  weightMetricViewConnector
 } from "./quoteRequestTypes";
 
 export default function QuoteForm() {
@@ -53,25 +54,22 @@ export default function QuoteForm() {
   };
 
   const methods = useForm<QuoteRequestForm>({
-    defaultValues: defaultQuoteRequest,
-    // defaultValues: defaultNonEmptyQuoteRequest,
+    // defaultValues: defaultQuoteRequest,
+    defaultValues: defaultNonEmptyQuoteRequest,
     mode: "onBlur",
     reValidateMode: "onChange",
-    resolver: yupResolver(quoteRequestSchema),
+    resolver: yupResolver(quoteRequestSchema) as any
   });
 
   const {
     register,
-    setValue,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { isSubmitting, isValid },
     watch,
-    setError,
-    control,
+    setError
   } = methods;
 
   // dropdown-driven fields
-  const purpose = watch("purpose");
   const lengthUnit = watch("lengthUnit");
   const beamUnit = watch("beamUnit");
   const weightUnit = watch("weightUnit");
@@ -105,7 +103,8 @@ export default function QuoteForm() {
 
   const onSubmit = async (data: QuoteRequestForm) => {
     try {
-      const res = await postQuoteRequest({ ...data, email: "la-la" });
+      const res = await postQuoteRequest({ ...data, phoneNumber: "" });
+      // showSnackbar(Messages.QuoteRequestSent, "green");
 
       if (res.success) {
         showSnackbar(Messages.QuoteRequestSent, "green");
@@ -118,7 +117,7 @@ export default function QuoteForm() {
             setError,
             scrollRef: scrollRef as React.RefObject<ScrollView>,
             inputPositions: inputPositions.current,
-            scrollOffset: 30,
+            scrollOffset: 30
           });
 
         if (handled && firstErrorField) {
@@ -130,7 +129,8 @@ export default function QuoteForm() {
         showSnackbar(Messages.QuoteRequestFailed, "red");
       }
     } catch (err) {
-      console.error(err);
+      // eslint-disable-next-line no-console
+      console.error("QuoteRequestForm onSubmit error: ", err);
       showSnackbar(Messages.QuoteRequestFailed, "red");
     }
   };
@@ -185,12 +185,6 @@ export default function QuoteForm() {
             placeholder="+1 111 111 1111"
             keyboardType="phone-pad"
             mask="+1 999 999 9999"
-            onChangeText={(text, rawText) => {
-              setValue("phoneNumber", text, {
-                shouldValidate: true,
-                shouldDirty: true,
-              });
-            }}
             ref={(el) => {
               inputRefs.current.phoneNumber = el;
             }}
@@ -257,13 +251,13 @@ export default function QuoteForm() {
               inputRefs.current.purpose = el;
             }}
             name="purpose"
-            label="Purpose of Transport"
+            label="Purpose of Transport *"
             options={Object.keys(PURPOSE_OF_TRANSPORT).map((key) => ({
               label:
                 PURPOSE_OF_TRANSPORT[
                   key as keyof typeof PURPOSE_OF_TRANSPORT
                 ] || "",
-              value: key,
+              value: key
             }))}
             onLayoutY={(y) => {
               inputPositions.current.purpose = y;
@@ -301,7 +295,7 @@ export default function QuoteForm() {
                     lengthMetricViewConnector[
                       key as keyof typeof lengthMetricViewConnector
                     ] || String(key),
-                  value: key,
+                  value: key
                 }))}
                 onLayoutY={(y) => {
                   inputPositions.current.lengthUnit = y;
@@ -339,7 +333,7 @@ export default function QuoteForm() {
                     lengthMetricViewConnector[
                       key as keyof typeof lengthMetricViewConnector
                     ] || String(key),
-                  value: key,
+                  value: key
                 }))}
                 onLayoutY={(y) => {
                   inputPositions.current.beamUnit = y;
@@ -377,7 +371,7 @@ export default function QuoteForm() {
                     weightMetricViewConnector[
                       key as keyof typeof weightMetricViewConnector
                     ] || String(key),
-                  value: key,
+                  value: key
                 }))}
                 onLayoutY={(y) => {
                   inputPositions.current.weightUnit = y;
@@ -458,7 +452,7 @@ export default function QuoteForm() {
           <TouchableOpacity
             style={[
               styles.button,
-              (formDisabled || !isValid) && { opacity: 0.6 },
+              (formDisabled || !isValid) && { opacity: 0.6 }
             ]}
             onPress={handleSubmit(onSubmit)}
             disabled={formDisabled || !isValid}
@@ -471,6 +465,20 @@ export default function QuoteForm() {
             <Text style={styles.buttonText}>Send</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Snackbar */}
+        <Snackbar
+          visible={snackbar.visible}
+          onDismiss={() => setSnackbar({ ...snackbar, visible: false })}
+          duration={3000}
+          style={{
+            backgroundColor: snackbar.color,
+            height: 50,
+            marginBottom: 80
+          }}
+        >
+          {snackbar.message}
+        </Snackbar>
       </ScrollView>
     </FormProvider>
   );
@@ -482,7 +490,7 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     backgroundColor: "#fff",
-    paddingBottom: 100,
+    paddingBottom: 100
   },
   title: Platform.select({
     android: {
@@ -490,7 +498,7 @@ const styles = StyleSheet.create({
       fontWeight: "500",
       color: secondary.dark,
       marginBottom: 20,
-      textAlign: "center",
+      textAlign: "center"
     },
     default: {
       fontSize: 22,
@@ -498,19 +506,19 @@ const styles = StyleSheet.create({
       color: secondary.dark,
       marginBottom: 24,
       paddingTop: 20,
-      textAlign: "center",
-    },
+      textAlign: "center"
+    }
   }),
   row: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "flex-start"
   },
   col: {
-    flex: 1,
+    flex: 1
   },
   colUnit: {
     width: 160,
-    marginLeft: 12,
+    marginLeft: 12
   },
   button: Platform.select({
     default: {
@@ -522,7 +530,7 @@ const styles = StyleSheet.create({
       display: "flex",
       justifyContent: "center",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "center"
     },
     android: {
       backgroundColor: secondary.dark,
@@ -533,25 +541,25 @@ const styles = StyleSheet.create({
       display: "flex",
       justifyContent: "center",
       flexDirection: "row",
-      alignItems: "center",
-    },
+      alignItems: "center"
+    }
   }),
   buttonText: Platform.select({
     default: {
       color: "#fff",
       fontWeight: "600",
-      fontSize: 16,
+      fontSize: 16
     },
     android: {
       color: "#fff",
       fontWeight: "500",
-      fontSize: 12,
-    },
+      fontSize: 12
+    }
   }),
   spinnerContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingRight: 16,
-  },
+    paddingRight: 16
+  }
 });

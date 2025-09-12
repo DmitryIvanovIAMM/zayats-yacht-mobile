@@ -10,13 +10,12 @@ export interface LeftNavigationProps {
 
 export const LeftNavigation = ({
   setMenuIsOpen,
-  visible,
+  visible
 }: LeftNavigationProps) => {
   const router = useRouter();
   const menuLinks = getMenuLinks(false);
 
   const handleMenuItemPress = (link: string = "/", section: string = "") => {
-    console.log(`Navigating to ${link}`);
     setMenuIsOpen(false);
     if (!link) return;
 

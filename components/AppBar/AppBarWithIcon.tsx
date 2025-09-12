@@ -8,7 +8,7 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 import { Appbar } from "react-native-paper";
 
@@ -91,35 +91,35 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
+    width: "100%"
   },
   firstDiv: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   secondDiv: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   thirdDiv: {
     flexDirection: "row",
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-end"
   },
   alliedIcon: {
     height: 55,
     width: 80,
     bottom: 0,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   userNameWithIcon: {
     width: "100%",
     maxWidth: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "flex-end"
   },
   userName: Platform.select({
     default: {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
       marginRight: 8,
       fontWeight: "bold",
       textAlign: "right",
-      alignSelf: "center",
+      alignSelf: "center"
     },
     android: {
       color: secondary.dark,
@@ -137,22 +137,22 @@ const styles = StyleSheet.create({
       textWrap: "wrap",
       width: "100%",
       textAlign: "right",
-      alignSelf: "center",
-    },
+      alignSelf: "center"
+    }
   }),
   activityIndicator: {
-    marginRight: 16,
+    marginRight: 16
   },
   singAppBarIcon: {
-    padding: 0,
+    padding: 0
   },
   appBarIconWitName: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
   appBarIconAfterNName: {
     marginLeft: 0,
     padding: 0,
-    width: "auto",
-  },
+    width: "auto"
+  }
 });

@@ -11,7 +11,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import * as yup from "yup";
 import FormInput from "../FormComponents/FormInput";
@@ -29,8 +29,11 @@ const loginSchema = yup.object({
     .string()
     .email("Enter a valid email")
     .required("Email is required"),
-  password: yup.string().required("Password is required"),
-  // .matches(passwordRules, { message: "Please create a stronger password" }),
+  //   password: yup.string().required("Password is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .matches(passwordRules, { message: "Please create a stronger password" })
 });
 
 export default function LoginForm() {
@@ -40,12 +43,12 @@ export default function LoginForm() {
     mode: "onBlur",
     reValidateMode: "onChange",
     resolver: yupResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "" }
   });
 
   const {
     handleSubmit,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting, isValid }
   } = methods;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +57,7 @@ export default function LoginForm() {
     setAuthState((prev) => ({
       ...prev,
       isValidating: false,
-      error: undefined,
+      error: undefined
     }));
   }, [setAuthState]);
 
@@ -94,7 +97,7 @@ export default function LoginForm() {
               style={{
                 position: "absolute",
                 right: 8,
-                top: Platform.select({ default: 34, android: 34 }),
+                top: Platform.select({ default: 34, android: 34 })
               }}
               disabled={formDisabled}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -110,7 +113,7 @@ export default function LoginForm() {
           <TouchableOpacity
             style={[
               styles.button,
-              (formDisabled || !isValid) && { opacity: 0.6 },
+              (formDisabled || !isValid) && { opacity: 0.6 }
             ]}
             onPress={handleSubmit(onSubmit)}
             disabled={formDisabled || !isValid}
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff",
     borderRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   title: Platform.select({
     android: {
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
       fontWeight: "500",
       color: secondary.dark,
       marginBottom: 20,
-      textAlign: "center",
+      textAlign: "center"
     },
     default: {
       fontSize: 22,
@@ -156,8 +159,8 @@ const styles = StyleSheet.create({
       color: secondary.dark,
       marginBottom: 24,
       paddingTop: 40,
-      textAlign: "center",
-    },
+      textAlign: "center"
+    }
   }),
   button: Platform.select({
     default: {
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
       display: "flex",
       justifyContent: "center",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "center"
     },
     android: {
       backgroundColor: secondary.dark,
@@ -180,24 +183,24 @@ const styles = StyleSheet.create({
       display: "flex",
       justifyContent: "center",
       flexDirection: "row",
-      alignItems: "center",
-    },
+      alignItems: "center"
+    }
   }),
   buttonText: Platform.select({
     default: { color: "#fff", fontWeight: "600", fontSize: 16 },
-    android: { color: "#fff", fontWeight: "500", fontSize: 12 },
+    android: { color: "#fff", fontWeight: "500", fontSize: 12 }
   }),
   spinnerContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingRight: 16,
+    paddingRight: 16
   },
   errorText: {
     color: errorColor,
     fontSize: 14,
     marginTop: 8,
     textAlign: "center",
-    justifyContent: "center",
-  },
+    justifyContent: "center"
+  }
 });

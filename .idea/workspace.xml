@@ -5,9 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="efb42fd1-3033-49c7-8fd1-4f5f3e98f795" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sections/Pages/Instructions/Instructions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Sections/Pages/Instructions/Instructions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/explore.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/explore.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/+not-found.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/+not-found.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/AppBar/AppBarWithIcon.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/AppBar/AppBarWithIcon.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/AppBar/AppBarWithIcon.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/AppBar/AppBarWithIcon.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Collapsible.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Collapsible.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ContactUs/ContactUs.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ContactUs/ContactUs.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ContactUs/ContactUs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ContactUs/ContactUs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/FormDropdown.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/FormDropdown.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/FormDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/FormDropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/FormInput.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/FormInput.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/FormInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/FormInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/FormMaskedInput.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/FormMaskedInput.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/FormMaskedInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/FormMaskedInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/handleServerValidationErrors.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/handleServerValidationErrors.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormComponents/handleServerValidationErrors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormComponents/handleServerValidationErrors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormContainer/FormContainer.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormContainer/FormContainer.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FormContainer/FormContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/FormContainer/FormContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/HelloWave.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/HelloWave.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/LeftNavigation/LeftNavigation.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/LeftNavigation/LeftNavigation.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/LeftNavigation/LeftNavigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/LeftNavigation/LeftNavigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Login/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Login/LoginForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ParallaxScrollView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ParallaxScrollView.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/QuoteRequest/QuoteRequestForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/QuoteRequest/QuoteRequestForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/QuoteRequest/postQuoteRequest.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/QuoteRequest/postQuoteRequest.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/QuoteRequest/quoteRequestTypes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/QuoteRequest/quoteRequestTypes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ScheduleSection/SailingCard.spec.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ScheduleSection/SailingCard.spec.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ScheduleSection/SailingCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ScheduleSection/SailingCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ScheduleSection/ScheduleSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ScheduleSection/ScheduleSection.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ScheduleSection/useSchedule.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/ScheduleSection/useSchedule.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/SectionTitle/SectionTitle.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/SectionTitle/SectionTitle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ThemedText.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ThemedText.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/IconSymbol.ios.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ui/IconSymbol.ios.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/IconSymbol.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ui/IconSymbol.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/eslint.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +80,8 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ZYM-2-Add-Instructions-page&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ZYM-9-Add-testing-configuration&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/zayats/IdeaProjects/zayats-yacht-mobile/assets/images&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -82,8 +118,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
-        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>
@@ -103,6 +139,7 @@
       <workItem from="1753757713392" duration="57000" />
       <workItem from="1753778123213" duration="24000" />
       <workItem from="1753780303105" duration="14000" />
+      <workItem from="1757577909053" duration="350000" />
     </task>
     <servers />
   </component>
