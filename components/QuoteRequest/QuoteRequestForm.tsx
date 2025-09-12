@@ -104,25 +104,21 @@ export default function QuoteForm() {
   const onSubmit = async (data: QuoteRequestForm) => {
     try {
       const res = await postQuoteRequest({ ...data, phoneNumber: "" });
-      // showSnackbar(Messages.QuoteRequestSent, "green");
 
       if (res.success) {
         showSnackbar(Messages.QuoteRequestSent, "green");
       } else {
         const { handled, firstErrorField } =
           handleServerValidationErrors<QuoteRequestForm>({
-            data: res.data,
-            message: res.message,
-            expectedMessage: Messages.ValidationError,
+            response: res,
             setError,
             scrollRef: scrollRef as React.RefObject<ScrollView>,
-            inputPositions: inputPositions.current,
-            scrollOffset: 30
+            inputPositions: inputPositions.current
           });
 
         if (handled && firstErrorField) {
           // queue focus until submit finishes (inputs are disabled while submitting)
-          pendingFocusRef.current = firstErrorField;
+          pendingFocusRef.current = firstErrorField as keyof QuoteRequestForm;
           return;
         }
 

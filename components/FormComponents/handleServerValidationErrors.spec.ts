@@ -7,23 +7,24 @@ type Form = {
   firstName: string;
 };
 
-describe("handleServerValidationErrors", () => {
-  it("returns handled=false when data is missing or not an object", () => {
+describe("handleServerValidationErrors (refactored API)", () => {
+  it("returns handled=false when response.data is missing or not an object", () => {
     const setError = jest.fn();
+
     const r1 = handleServerValidationErrors<Form>({
-      data: undefined,
+      response: { success: false, data: undefined },
       setError
     });
     expect(r1.handled).toBe(false);
 
     const r2 = handleServerValidationErrors<Form>({
-      data: null as any,
+      response: { success: false, data: null as any },
       setError
     });
     expect(r2.handled).toBe(false);
 
     const r3 = handleServerValidationErrors<Form>({
-      data: "oops" as any,
+      response: { success: false, data: "oops" as any },
       setError
     });
     expect(r3.handled).toBe(false);
@@ -31,12 +32,10 @@ describe("handleServerValidationErrors", () => {
     expect(setError).not.toHaveBeenCalled();
   });
 
-  it("returns handled=false when message does not match expectedMessage", () => {
+  it("returns handled=false when response.data is an object without field keys", () => {
     const setError = jest.fn();
     const r = handleServerValidationErrors<Form>({
-      data: { email: "Invalid" },
-      message: "Other",
-      expectedMessage: "ValidationError",
+      response: { success: false, data: {} },
       setError
     });
     expect(r.handled).toBe(false);
@@ -56,9 +55,11 @@ describe("handleServerValidationErrors", () => {
     };
 
     const r = handleServerValidationErrors<Form>({
-      data: { email: ["Invalid email"], password: "Password required" },
-      message: "ValidationError",
-      expectedMessage: "ValidationError",
+      response: {
+        success: false,
+        data: { email: ["Invalid email"], password: "Password required" },
+        message: "ValidationError"
+      },
       setError,
       scrollRef,
       inputPositions,
@@ -68,7 +69,6 @@ describe("handleServerValidationErrors", () => {
     expect(r.handled).toBe(true);
     expect(r.firstErrorField).toBe("email");
 
-    // setError called with normalized messages
     expect(setError).toHaveBeenCalledWith("email", {
       message: "Invalid email"
     });
@@ -76,20 +76,53 @@ describe("handleServerValidationErrors", () => {
       message: "Password required"
     });
 
-    // scrolled to email y - offset
     expect(scrollTo).toHaveBeenCalledWith({
+      x: 0,
       y: Math.max(120 - 40, 0),
       animated: true
     });
+  });
+
+  it("supports errors nested under data.errors and data.fieldErrors", () => {
+    const setError = jest.fn();
+    const scrollTo = jest.fn();
+    const scrollRef = {
+      current: { scrollTo }
+    } as unknown as React.RefObject<ScrollView>;
+
+    handleServerValidationErrors<Form>({
+      response: { success: false, data: { errors: { firstName: "Required" } } },
+      setError,
+      scrollRef,
+      inputPositions: { firstName: 80 },
+      scrollOffset: 10
+    });
+
+    expect(setError).toHaveBeenCalledWith("firstName", { message: "Required" });
+    expect(scrollTo).toHaveBeenCalledWith({ x: 0, y: 70, animated: true });
+
+    jest.clearAllMocks();
+
+    handleServerValidationErrors<Form>({
+      response: {
+        success: false,
+        data: { fieldErrors: { firstName: "Required" } }
+      },
+      setError,
+      scrollRef,
+      inputPositions: { firstName: 50 },
+      scrollOffset: 60
+    });
+
+    expect(setError).toHaveBeenCalledWith("firstName", { message: "Required" });
+    expect(scrollTo).toHaveBeenCalledWith({ x: 0, y: 0, animated: true });
   });
 
   it("does not scroll if scrollRef or inputPositions are missing", () => {
     const setError = jest.fn();
 
     const r1 = handleServerValidationErrors<Form>({
-      data: { firstName: "Required" },
-      message: "ValidationError",
-      expectedMessage: "ValidationError",
+      response: { success: false, data: { firstName: "Required" } },
       setError,
       // no scrollRef
       inputPositions: { firstName: 80 }
@@ -101,10 +134,9 @@ describe("handleServerValidationErrors", () => {
     const scrollRef = {
       current: { scrollTo }
     } as unknown as React.RefObject<ScrollView>;
+
     const r2 = handleServerValidationErrors<Form>({
-      data: { firstName: "Required" },
-      message: "ValidationError",
-      expectedMessage: "ValidationError",
+      response: { success: false, data: { firstName: "Required" } },
       setError,
       scrollRef
       // no inputPositions
@@ -122,15 +154,13 @@ describe("handleServerValidationErrors", () => {
     } as unknown as React.RefObject<ScrollView>;
 
     handleServerValidationErrors<Form>({
-      data: { email: "Invalid" },
-      message: "ValidationError",
-      expectedMessage: "ValidationError",
+      response: { success: false, data: { email: "Invalid" } },
       setError,
       scrollRef,
       inputPositions: { email: 10 },
       scrollOffset: 30
     });
 
-    expect(scrollTo).toHaveBeenCalledWith({ y: 0, animated: true });
+    expect(scrollTo).toHaveBeenCalledWith({ x: 0, y: 0, animated: true });
   });
 });
