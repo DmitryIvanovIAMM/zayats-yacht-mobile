@@ -13,6 +13,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
       <ThemedView style={styles.container}>
+        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <SectionTitle>This screen doesn't exist.</SectionTitle>
         <Link href="/" style={styles.link}>
           <ThemedText type="link" style={styles.link}>
