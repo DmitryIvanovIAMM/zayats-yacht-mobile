@@ -1,5 +1,6 @@
+import { Messages } from "@/helpers/messages";
 import type { RefObject } from "react";
-import type { UseFormSetError, FieldValues } from "react-hook-form";
+import type { FieldValues, UseFormSetError } from "react-hook-form";
 import type { ScrollView } from "react-native";
 
 type MinimalActionResult = {
@@ -23,6 +24,9 @@ export function handleServerValidationErrors<T extends FieldValues>({
   inputPositions,
   scrollOffset = 0
 }: ValidationErrorContext<T>): { handled: boolean; firstErrorField?: string } {
+  if (response.success) return { handled: false };
+  if (response?.message !== Messages.ValidationError) return { handled: false };
+  
   const payload = response?.data;
 
   if (!payload || typeof payload !== "object") {

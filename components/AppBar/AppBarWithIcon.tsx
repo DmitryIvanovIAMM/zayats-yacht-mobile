@@ -40,7 +40,9 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
       <Appbar.Content
         title={
           <Image
-            source={require("@/assets/images/zayats-logo-transparent.png")}
+            // source={require("@/assets/images/zayats-logo-transparent.png")} //ZAYATS_embedded
+            // source={require("@/assets/images/ZAYATS_embedded.svg")} //ZAYATS_embedded
+            source={require("@/assets/images/zayats-logo-white.png")} //ZAYATS_embedded
             style={styles.alliedIcon}
           />
         }
