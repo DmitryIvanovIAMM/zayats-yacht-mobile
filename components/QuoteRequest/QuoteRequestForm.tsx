@@ -1,6 +1,5 @@
 import { secondary } from "@/constants/Colors";
 import { Messages } from "@/helpers/messages";
-import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import {
@@ -24,14 +23,12 @@ import {
   lengthMetricViewConnector,
   PURPOSE_OF_TRANSPORT,
   QuoteRequestForm,
-  quoteRequestSchema,
   WEIGHT_METRIC,
   weightMetricViewConnector
 } from "./quoteRequestTypes";
 
 export default function QuoteForm() {
   const scrollRef = React.useRef<ScrollView>(null);
-  const contentRef = React.useRef<View>(null);
 
   // capture refs to focus fields programmatically
   const inputRefs = React.useRef<Record<string, FormInputRef | null>>({});
@@ -57,8 +54,8 @@ export default function QuoteForm() {
     // defaultValues: defaultQuoteRequest,
     defaultValues: defaultNonEmptyQuoteRequest,
     mode: "onBlur",
-    reValidateMode: "onChange",
-    resolver: yupResolver(quoteRequestSchema) as any
+    reValidateMode: "onChange"
+    // resolver: yupResolver(quoteRequestSchema) as any
   });
 
   const {
@@ -103,26 +100,23 @@ export default function QuoteForm() {
 
   const onSubmit = async (data: QuoteRequestForm) => {
     try {
-      const res = await postQuoteRequest({ ...data, phoneNumber: "" });
-      // showSnackbar(Messages.QuoteRequestSent, "green");
+      // const res = await postQuoteRequest({ ...data, phoneNumber: "" });
+      const res = await postQuoteRequest({ ...data, email: "la-la" });
 
       if (res.success) {
         showSnackbar(Messages.QuoteRequestSent, "green");
       } else {
         const { handled, firstErrorField } =
           handleServerValidationErrors<QuoteRequestForm>({
-            data: res.data,
-            message: res.message,
-            expectedMessage: Messages.ValidationError,
+            response: res,
             setError,
             scrollRef: scrollRef as React.RefObject<ScrollView>,
-            inputPositions: inputPositions.current,
-            scrollOffset: 30
+            inputPositions: inputPositions.current
           });
 
         if (handled && firstErrorField) {
           // queue focus until submit finishes (inputs are disabled while submitting)
-          pendingFocusRef.current = firstErrorField;
+          pendingFocusRef.current = firstErrorField as keyof QuoteRequestForm;
           return;
         }
 
@@ -151,7 +145,7 @@ export default function QuoteForm() {
   return (
     <FormProvider {...methods}>
       <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
-        <View ref={contentRef}>
+        <View>
           <Text style={styles.title}>Get Quote</Text>
 
           {/* Contact */}
@@ -179,6 +173,19 @@ export default function QuoteForm() {
             }}
             disabled={formDisabled}
           />
+          <FormInput
+            name="email"
+            label="Email *"
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            ref={(el) => {
+              inputRefs.current.email = el;
+            }}
+            onLayoutY={(y) => {
+              inputPositions.current.email = y;
+            }}
+            disabled={formDisabled}
+          />
           <FormMaskedInput
             name="phoneNumber"
             label="Phone Number *"
@@ -193,19 +200,7 @@ export default function QuoteForm() {
             }}
             disabled={formDisabled}
           />
-          <FormInput
-            name="email"
-            label="Email *"
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            ref={(el) => {
-              inputRefs.current.email = el;
-            }}
-            onLayoutY={(y) => {
-              inputPositions.current.email = y;
-            }}
-            disabled={formDisabled}
-          />
+
           <FormInput
             name="bestTimeToContact"
             label="Best Time to Contact"

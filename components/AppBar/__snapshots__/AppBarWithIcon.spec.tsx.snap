@@ -69,7 +69,7 @@ exports[`AppBarWithIcon matches snapshot (logged out) 1`] = `
     <Image
       source={
         {
-          "testUri": "../../../assets/images/zayats-logo-transparent.png",
+          "testUri": "../../../assets/images/zayats-logo-white.png",
         }
       }
       style={
@@ -201,7 +201,7 @@ exports[`AppBarWithIcon shows spinner when validating 1`] = `
     <Image
       source={
         {
-          "testUri": "../../../assets/images/zayats-logo-transparent.png",
+          "testUri": "../../../assets/images/zayats-logo-white.png",
         }
       }
       style={

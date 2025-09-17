@@ -112,6 +112,7 @@ export default function HomeScreen() {
     if (readyToScroll) {
       scrollToSectionIfAny(sectionToScroll);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyToScroll, sectionToScroll]);
 
   // Helper: scroll to a section without calling measureLayout on ScrollView
