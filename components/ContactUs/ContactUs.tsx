@@ -5,7 +5,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import {
   Linking,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,7 +15,7 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+15555555555";
 
-const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
+const ContactUs = ({ ref }: { ref?: React.RefObject<View | null> }) => {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
   };
@@ -26,11 +25,7 @@ const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      id={SECTIONS.contactUs}
-      ref={ref}
-    >
+    <View style={styles.container} id={SECTIONS.contactUs}>
       <View style={styles.innerContainer}>
         <View style={styles.title}>
           <SectionTitle>Contact Us</SectionTitle>
@@ -85,7 +80,7 @@ const ContactUs = ({ ref }: { ref: React.RefObject<ScrollView | null> }) => {
           </Text>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -93,7 +88,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F7F8F9",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    width: "100%",
+    paddingVertical: 20
   },
   innerContainer: {
     width: "90%",

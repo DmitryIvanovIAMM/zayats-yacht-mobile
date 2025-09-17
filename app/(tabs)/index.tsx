@@ -63,7 +63,7 @@ export default function HomeScreen() {
 
   // Example section refs (use your actual ones)
   const aboutUsRef = React.useRef<ScrollView | null>(null);
-  const contactUsRef = React.useRef<ScrollView | null>(null);
+  const contactUsRef = React.useRef<View | null>(null);
   const scheduleRef = React.useRef<ScrollView | null>(null);
   const testimonialsRef = React.useRef<ScrollView | null>(null);
 
@@ -87,7 +87,7 @@ export default function HomeScreen() {
         break;
       case SECTIONS.contactUs:
         // scrollToSectionRef(contactUsRef);
-        scrollToSection(contactUsRef);
+        scrollToContactUs();
         break;
       default:
         break;
@@ -139,6 +139,13 @@ export default function HomeScreen() {
     );
   }
 
+  // Helper: scroll to ContactUs (at bottom)
+  function scrollToContactUs() {
+    const scroll = scrollViewRef.current;
+    if (!scroll) return;
+    scroll.scrollToEnd({ animated: true });
+  }
+
   return (
     <ScrollView
       refreshControl={
@@ -150,10 +157,14 @@ export default function HomeScreen() {
       ref={scrollViewRef}
     >
       <View style={styles.container}>
-        <ScheduleSection scheduleState={scheduleState} ref={scheduleRef} />
-        <Testimonials ref={testimonialsRef} />
-        <AboutUs ref={aboutUsRef} />
-        <ContactUs ref={contactUsRef} />
+        <View style={styles.contentContainer}>
+          <ScheduleSection scheduleState={scheduleState} ref={scheduleRef} />
+          <Testimonials ref={testimonialsRef} />
+          <AboutUs ref={aboutUsRef} />
+        </View>
+        <View style={styles.contactContainer}>
+          <ContactUs ref={contactUsRef} />
+        </View>
       </View>
     </ScrollView>
   );
@@ -167,6 +178,7 @@ const styles = StyleSheet.create({
       display: "flex",
       flexDirection: "column",
       flex: 1,
+      justifyContent: "space-between",
       marginBottom: 80
     },
     android: {
@@ -174,9 +186,16 @@ const styles = StyleSheet.create({
       color: secondary.dark,
       display: "flex",
       flexDirection: "column",
-      flex: 1
+      flex: 1,
+      justifyContent: "space-between"
     }
-  })
+  }),
+  contentContainer: {
+    flex: 1
+  },
+  contactContainer: {
+    flexShrink: 0
+  }
 });
 
 // export default function HomeScreen() {
