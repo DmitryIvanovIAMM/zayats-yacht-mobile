@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function NotFoundScreen() {
-  const fakeContactUsRef = useRef<View>(null);
+  const fakeContactUsRef = useRef(null);
 
   return (
     <>
