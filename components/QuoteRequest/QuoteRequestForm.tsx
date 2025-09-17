@@ -54,7 +54,7 @@ export default function QuoteForm() {
     // defaultValues: defaultQuoteRequest,
     defaultValues: defaultNonEmptyQuoteRequest,
     mode: "onBlur",
-    reValidateMode: "onChange",
+    reValidateMode: "onChange"
     // resolver: yupResolver(quoteRequestSchema) as any
   });
 
@@ -173,7 +173,7 @@ export default function QuoteForm() {
             }}
             disabled={formDisabled}
           />
-           <FormInput
+          <FormInput
             name="email"
             label="Email *"
             placeholder="Enter your email"
@@ -200,7 +200,7 @@ export default function QuoteForm() {
             }}
             disabled={formDisabled}
           />
-         
+
           <FormInput
             name="bestTimeToContact"
             label="Best Time to Contact"
