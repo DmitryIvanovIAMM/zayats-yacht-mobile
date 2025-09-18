@@ -34,7 +34,8 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
         <Appbar.Action
           icon="menu"
           onPress={toggleMenu}
-          color={secondary.dark}
+          //color={secondary.dark}
+          style={styles.singAppBarIcon}
         />
       </View>
       <Appbar.Content
@@ -93,7 +94,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
+    ...Platform.select({
+      web: {
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+        boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
+      },
+      default: {
+        elevation: 4
+      }
+    })
   },
   firstDiv: {
     flex: 1,
@@ -146,7 +158,10 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   singAppBarIcon: {
-    padding: 0
+    padding: 0,
+    backgroundColor: "transparent",
+    color: secondary.dark,
+    zIndex: 2000
   },
   appBarIconWitName: {
     flexDirection: "row",
