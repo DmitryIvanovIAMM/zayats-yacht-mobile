@@ -34,8 +34,7 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
         <Appbar.Action
           icon="menu"
           onPress={toggleMenu}
-          //color={secondary.dark}
-          style={styles.singAppBarIcon}
+          color={secondary.dark}
         />
       </View>
       <Appbar.Content
@@ -158,10 +157,7 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   singAppBarIcon: {
-    padding: 0,
-    backgroundColor: "transparent",
-    color: secondary.dark,
-    zIndex: 2000
+    padding: 0
   },
   appBarIconWitName: {
     flexDirection: "row",
