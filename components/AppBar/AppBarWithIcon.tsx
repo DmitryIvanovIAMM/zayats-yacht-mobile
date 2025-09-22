@@ -11,6 +11,7 @@ import {
   View
 } from "react-native";
 import { Appbar } from "react-native-paper";
+import WebAppBar from "./WebAppBar";
 
 export interface AppBarWithIconProps {
   toggleMenu: () => void;
@@ -27,6 +28,11 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
       router.push("/login" as RelativePathString);
     }
   };
+
+  // Use web-specific AppBar for web platform
+  if (Platform.OS === 'web') {
+    return <WebAppBar toggleMenu={toggleMenu} />;
+  }
 
   return (
     <Appbar.Header style={styles.container}>
