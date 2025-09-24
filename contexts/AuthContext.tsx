@@ -2,7 +2,7 @@ import { LoginCredentials } from "@/components/Login/LoginForm";
 import {
   api,
   createLoginBody,
-  mapObjectToFormUrlEncoded,
+  mapObjectToFormUrlEncoded
 } from "@/helpers/API/api";
 import { API_PATHS } from "@/helpers/API/apiPaths";
 import { PATHS } from "@/helpers/paths";
@@ -29,7 +29,7 @@ export const defaultAuthState: AuthState = {
   isAuthenticated: false,
   userInfo: undefined,
   isValidating: false,
-  error: undefined,
+  error: undefined
 };
 
 export interface AuthContextType {
@@ -53,11 +53,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setAuthState((prev) => ({
         ...prev,
         isValidating: true,
-        error: undefined,
+        error: undefined
       }));
       // https://github.com/nextauthjs/next-auth/issues/1110
       const csrfTokenRequest = await (
-        await api.get(API_PATHS.GET_CSRF_TOKEN)
+        await api.get(API_PATHS.GET_CSRF_TOKEN, undefined, true)
       ).json();
       const csrfToken = csrfTokenRequest.csrfToken;
 
@@ -67,9 +67,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         API_PATHS.SIGN_IN_WITH_CREDENTIALS,
         body,
         {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/x-www-form-urlencoded"
         },
-        false
+        false,
+        true
       );
 
       if (loginRequest.status === 200) {
@@ -80,18 +81,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         return setAuthState({
           ...defaultAuthState,
-          error: "Invalid credentials",
+          error: "Invalid credentials"
         });
       }
     } catch (error) {
       setAuthState({
         ...defaultAuthState,
-        error: "Login failed",
+        error: "Login failed"
       });
     } finally {
       setAuthState((prev) => ({
         ...prev,
-        isValidating: false,
+        isValidating: false
       }));
     }
   };
@@ -99,13 +100,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const getUserInfo = async (): Promise<boolean> => {
     try {
       const userInfo: UserInfo = await api
-        .get(API_PATHS.GET_USER_SESSION)
+        .get(API_PATHS.GET_USER_SESSION, undefined, true)
         .then((res) => res.json());
+      console.log("User Info: ", userInfo);
 
       if (!userInfo || !userInfo.user) {
         setAuthState({
           ...defaultAuthState,
-          error: "Invalid credentials",
+          error: "Invalid credentials"
         });
         return false;
       }
@@ -114,13 +116,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated: true,
         userInfo,
         isValidating: false,
-        error: undefined,
+        error: undefined
       });
       return true;
     } catch (error) {
       setAuthState({
         ...defaultAuthState,
-        error: "Failed to fetch user info",
+        error: "Failed to fetch user info"
       });
       return false;
     }
@@ -131,10 +133,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setAuthState((prev) => ({
         ...prev,
         isValidating: true,
-        error: undefined,
+        error: undefined
       }));
 
-      const csrfTokenRequest = await (await api.get("auth/csrf")).json();
+      const csrfTokenRequest = await (
+        await api.get("auth/csrf", undefined, true)
+      ).json();
       const csrfToken = csrfTokenRequest.csrfToken;
 
       const logoutRequest = await api.post(
@@ -142,10 +146,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         mapObjectToFormUrlEncoded({
           csrfToken,
           redirect: false,
-          json: true,
+          json: true
         }),
         { "Content-Type": "application/x-www-form-urlencoded" },
-        false
+        false,
+        true
       );
 
       if (logoutRequest.status !== 200) {
@@ -160,17 +165,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ...defaultAuthState,
         isAuthenticated: false,
         userInfo: undefined,
-        error: undefined,
+        error: undefined
       });
     } catch (error) {
       setAuthState({
         ...defaultAuthState,
-        error: "Logout failed",
+        error: "Logout failed"
       });
     } finally {
       setAuthState((prev) => ({
         ...prev,
-        isValidating: false,
+        isValidating: false
       }));
     }
   };

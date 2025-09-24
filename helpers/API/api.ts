@@ -6,7 +6,7 @@ console.log("API_BASE_URL: ", API_BASE_URL);
 //const AUTH_TOKEN = "your-auth-token"; // Replace with your actual token or import from config
 
 const defaultHeaders = {
-  "Content-Type": "application/json",
+  "Content-Type": "application/json"
   //Authorization: `Bearer ${AUTH_TOKEN}`,
 };
 
@@ -15,22 +15,23 @@ async function request(
   endpoint: string,
   data?: any,
   customHeaders: Record<string, string> = {},
-  dataToJSON: boolean = true
+  dataToJSON: boolean = true,
+  withCredentials: boolean = false
 ) {
   const url = `${API_BASE_URL}${endpoint}`;
   const options: RequestInit = {
     method,
     headers: {
       ...defaultHeaders,
-      ...customHeaders,
-    },
-    credentials: "include",
+      ...customHeaders
+    }
   };
-
+  if (withCredentials) {
+    options.credentials = "include";
+  }
   if (data) {
     dataToJSON ? (options.body = JSON.stringify(data)) : (options.body = data);
   }
-
   const response = await fetch(url, options);
   if (!response.ok) {
     console.error(
@@ -42,18 +43,29 @@ async function request(
 }
 
 export const api = {
-  get: (endpoint: string, headers?: Record<string, string>) =>
-    request("GET", endpoint, undefined, headers),
+  get: (
+    endpoint: string,
+    headers?: Record<string, string>,
+    withCredentials: boolean = false
+  ) => request("GET", endpoint, undefined, headers, true, withCredentials),
   post: (
     endpoint: string,
     data: any = {},
     headers?: Record<string, string>,
-    dataToJSON: boolean = true
-  ) => request("POST", endpoint, data, headers, dataToJSON),
-  put: (endpoint: string, data?: any, headers?: Record<string, string>) =>
-    request("PUT", endpoint, data, headers),
-  delete: (endpoint: string, headers?: Record<string, string>) =>
-    request("DELETE", endpoint, undefined, headers),
+    dataToJSON: boolean = true,
+    withCredentials: boolean = false
+  ) => request("POST", endpoint, data, headers, dataToJSON, withCredentials),
+  put: (
+    endpoint: string,
+    data?: any,
+    headers?: Record<string, string>,
+    withCredentials: boolean = false
+  ) => request("PUT", endpoint, data, headers, true, withCredentials),
+  delete: (
+    endpoint: string,
+    headers?: Record<string, string>,
+    withCredentials: boolean = false
+  ) => request("DELETE", endpoint, undefined, headers, true, withCredentials)
 };
 
 export const createLoginBody = (
@@ -69,7 +81,7 @@ export const createLoginBody = (
     password: "Yacht123",
     callbackUrl: "/",
     redirect: false,
-    json: true,
+    json: true
   });
 };
 
