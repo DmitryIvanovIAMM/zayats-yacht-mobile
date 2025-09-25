@@ -2,10 +2,10 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { secondary } from "@/constants/Colors";
 import { SECTIONS } from "@/helpers/paths";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text } from "react-native";
+import { Image, Platform, ScrollView, StyleSheet, Text } from "react-native";
 
 export default function AboutUs({
-  ref,
+  ref
 }: {
   ref: React.RefObject<ScrollView | null>;
 }) {
@@ -87,12 +87,24 @@ export default function AboutUs({
         Explore. Transport. Discover. With Zayats Yacht Transport.
       </Text>
       <Image
-        style={{
-          width: "100%",
-          height: 200,
-          resizeMode: "cover",
-          marginBottom: 40,
-        }}
+        style={[
+          Platform.OS === "web"
+            ? {
+                width: "100%",
+                maxWidth: 600,
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginBottom: 40,
+                resizeMode: "contain",
+                backgroundColor: "white"
+              }
+            : {
+                width: "100%",
+                height: 200,
+                resizeMode: "cover",
+                marginBottom: 40
+              }
+        ]}
         source={require("@/assets/images/aboutus.jpeg")}
       />
     </ScrollView>
@@ -103,22 +115,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 12,
+    padding: 12
   },
   header: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 16,
-    color: secondary.dark,
+    color: secondary.dark
   },
   body: {
     fontSize: 18,
     color: secondary.dark,
     lineHeight: 28,
-    marginBottom: 20,
+    marginBottom: 20
   },
   emphasizedTextStyle: {
     fontWeight: "bold",
-    color: secondary.dark,
-  },
+    color: secondary.dark
+  }
 });
