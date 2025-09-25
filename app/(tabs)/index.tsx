@@ -119,6 +119,44 @@ export default function HomeScreen() {
   function scrollToSection(
     sectionRef: React.RefObject<View | ScrollView | null>
   ) {
+    // Web platform implementation
+    if (Platform.OS === 'web') {
+      const node = sectionRef.current;
+      if (!node) return;
+      
+      // Use DOM API for web
+      // @ts-ignore - accessing DOM properties
+      if (node.measureInWindow) {
+        // @ts-ignore - React Native Web specific
+        node.measureInWindow((x: number, y: number, width: number, height: number) => {
+          const scroll = scrollViewRef.current;
+          if (!scroll) return;
+          
+          // Get the scroll position relative to the scrollview
+          scroll.scrollTo({ x: 0, y, animated: true });
+        });
+      } else {
+        // Fallback for pure web elements
+        try {
+          // @ts-ignore - accessing DOM properties
+          const element = node._nativeTag || node;
+          if (element && element.getBoundingClientRect) {
+            const rect = element.getBoundingClientRect();
+            const scroll = scrollViewRef.current;
+            if (!scroll) return;
+            
+            // Get the scroll position
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            scroll.scrollTo({ x: 0, y: rect.top + scrollTop, animated: true });
+          }
+        } catch (error) {
+          console.error('Error scrolling on web:', error);
+        }
+      }
+      return;
+    }
+    
+    // Native platforms implementation (iOS, Android)
     const scroll = scrollViewRef.current;
     const node = sectionRef.current;
     if (!scroll || !node) return;
