@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
       maxWidth: 700,
       marginLeft: "auto",
       marginRight: "auto",
-      width: "100%"
+      width: "100%",
+      padding: 12
     },
     default: {
       backgroundColor: "#fff",
@@ -222,14 +223,16 @@ const styles = StyleSheet.create({
       display: "flex",
       flexDirection: "column",
       flex: 1,
-      marginBottom: 80
+      marginBottom: 80,
+      padding: 12
     },
     android: {
       backgroundColor: "#fff",
       color: secondary.dark,
       display: "flex",
       flexDirection: "column",
-      flex: 1
+      flex: 1,
+      padding: 12
     }
   })
 });
