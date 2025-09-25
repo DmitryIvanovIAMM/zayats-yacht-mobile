@@ -15,15 +15,16 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+15555555555";
 
-const ContactUs = React.forwardRef<View, {}>(function ContactUs(props, ref) {
+function ContactUsDetails() {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
   };
   const handlePhonePress = () => {
     Linking.openURL(`tel:${PHONE_NUMBER}`);
   };
+
   return (
-    <View ref={ref} style={styles.container}>
+    <View style={styles.container}>
       <SectionTitle>Contact Us</SectionTitle>
       <View style={styles.innerContainer}>
         {/* Address */}
@@ -80,6 +81,22 @@ const ContactUs = React.forwardRef<View, {}>(function ContactUs(props, ref) {
       </View>
     </View>
   );
+}
+
+const ContactUs = React.forwardRef<View, {}>(function ContactUs(props, ref) {
+  if ((Platform.OS as string) === "web") {
+    return (
+      <div ref={ref as any} id={"contact-us-section"} style={{ width: "100%" }}>
+        <ContactUsDetails />
+      </div>
+    );
+  }
+  // Native platforms
+  return (
+    <View ref={ref} style={styles.container}>
+      <ContactUsDetails />
+    </View>
+  );
 });
 
 const styles = StyleSheet.create({
@@ -87,8 +104,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F8F9",
     flexDirection: "column",
     alignItems: "center",
-    width: "100%",
-    paddingVertical: 20
+    width: "100%"
+    // paddingVertical: 20
   },
   innerContainer: {
     width: "90%",

@@ -36,18 +36,13 @@ const testimonials: Testimonial[] = [
   }
 ] as const;
 
-export default function Testimonials({
-  ref
-}: {
-  ref: React.RefObject<ScrollView | null>;
-}) {
+interface TestimonialsProps {
+  ref?: React.RefObject<any>;
+}
+
+function TestimonialSectionDetails() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: 24 }}
-      id={SECTIONS.testimonials}
-      ref={ref}
-    >
+    <>
       <SectionTitle>Testimonials</SectionTitle>
       {testimonials.map((testimonial, index) => (
         <View style={styles.testimonialContainer} key={index}>
@@ -69,6 +64,27 @@ export default function Testimonials({
           </View>
         </View>
       ))}
+    </>
+  );
+}
+
+export default function Testimonials({ ref }: TestimonialsProps) {
+  if ((Platform.OS as string) === "web") {
+    return (
+      <div id={SECTIONS.testimonials} style={{ width: "100%" }}>
+        <TestimonialSectionDetails />
+      </div>
+    );
+  }
+  // Native platforms
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 24 }}
+      id={SECTIONS.testimonials}
+      ref={ref}
+    >
+      <TestimonialSectionDetails />
     </ScrollView>
   );
 }

@@ -119,7 +119,8 @@ const styles = StyleSheet.create({
     default: {
       fontSize: 20,
       fontWeight: "bold",
-      marginBottom: 4
+      marginBottom: 4,
+      color: secondary.dark
     },
     android: {
       fontSize: 16,

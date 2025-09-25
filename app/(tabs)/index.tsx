@@ -6,7 +6,7 @@ import { SECTIONS } from "@/helpers/paths";
 import AboutUs from "@/Sections/Pages/AboutUs/AboutUs";
 import Testimonials from "@/Sections/Pages/Testimonials/Testimonials";
 import { useRoute } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   findNodeHandle,
   Platform,
@@ -24,19 +24,37 @@ type HomeScreenRouteParams = {
 
 export default function HomeScreen() {
   const route = useRoute();
-  // Safely cast params to your type
   const { section } = (route?.params as HomeScreenRouteParams) || {
     section: undefined
   };
   const { scheduleState, getNearestSailings } = useSailings();
-  // Сохраняем предыдущий section, чтобы реагировать на его изменение
-  const prevSectionRef = React.useRef<string | undefined>(undefined);
+  const [readyToScroll, setReadyToScroll] = useState(false);
+  // Section refs (still needed for native)
+  const scrollViewRef = useRef<ScrollView | null>(null);
+  const aboutUsRef = useRef<ScrollView | null>(null);
+  const contactUsRef = useRef<View | null>(null);
+  const scheduleRef = useRef<ScrollView | null>(null);
+  const testimonialsRef = useRef<ScrollView | null>(null);
+
+  const getNearestSailingsCallback = useCallback(async () => {
+    setReadyToScroll(false);
+    await getNearestSailings();
+    setReadyToScroll(true);
+  }, [getNearestSailings]);
 
   useEffect(() => {
-    if (section && section !== prevSectionRef.current) {
+    getNearestSailingsCallback();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (
+      readyToScroll &&
+      section &&
+      scheduleState.schedule &&
+      scheduleState.schedule.length > 0
+    ) {
       scrollToSectionIfAny(section);
-      prevSectionRef.current = section;
-      // Очищаем section в route.params, если нужно
       if (
         route &&
         route.params &&
@@ -46,84 +64,57 @@ export default function HomeScreen() {
         delete (route.params as HomeScreenRouteParams).section;
       }
     }
-  }, [section, route]);
+  }, [readyToScroll, section, scheduleState.schedule, route]);
 
-  // Keep your scroll view ref strongly typed
-  const scrollViewRef = React.useRef<ScrollView | null>(null);
-
-  // Example section refs (use your actual ones)
-  const aboutUsRef = React.useRef<ScrollView | null>(null);
-  const contactUsRef = React.useRef<View | null>(null);
-  const scheduleRef = React.useRef<ScrollView | null>(null);
-  const testimonialsRef = React.useRef<ScrollView | null>(null);
-
-  const scrollToSectionIfAny = (section: string | undefined) => {
+  function scrollToSectionIfAny(section: string | undefined) {
     if (!section) return;
     switch (section) {
       case SECTIONS.aboutUs:
-        scrollToSection(aboutUsRef);
-        break;
       case SECTIONS.schedule:
-        scrollToSection(scheduleRef);
-        break;
       case SECTIONS.testimonials:
-        scrollToSection(testimonialsRef);
+        if (Platform.OS === "web") {
+          const el = document.getElementById(section);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+            window.scrollTo({
+              top: rect.top + scrollTop - 20,
+              behavior: "smooth"
+            });
+          }
+        } else {
+          if (section === SECTIONS.aboutUs) scrollToSection(aboutUsRef);
+          if (section === SECTIONS.schedule) scrollToSection(scheduleRef);
+          if (section === SECTIONS.testimonials)
+            scrollToSection(testimonialsRef);
+        }
         break;
       case SECTIONS.contactUs:
-        scrollToSection(contactUsRef);
+        if (Platform.OS === "web") {
+          const el = document.getElementById("contact-us-section");
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+            window.scrollTo({
+              top: rect.top + scrollTop - 20,
+              behavior: "smooth"
+            });
+          }
+        } else {
+          scrollToSection(contactUsRef);
+        }
         break;
       default:
         break;
     }
-  };
+  }
 
-  // Если нужно, оставьте getNearestSailingsCallback/useEffect ниже, но без sectionToScroll
-
-  // Helper: scroll to a section without calling measureLayout on ScrollView
   function scrollToSection(
     sectionRef: React.RefObject<View | ScrollView | null>
   ) {
-    // Web platform implementation
-    if (Platform.OS === "web") {
-      const node = sectionRef.current;
-      if (!node) return;
-
-      // Use DOM API for web
-      // @ts-ignore - accessing DOM properties
-      if (node.measureInWindow) {
-        // @ts-ignore - React Native Web specific
-        node.measureInWindow(
-          (x: number, y: number, width: number, height: number) => {
-            const scroll = scrollViewRef.current;
-            if (!scroll) return;
-
-            // Get the scroll position relative to the scrollview
-            scroll.scrollTo({ x: 0, y, animated: true });
-          }
-        );
-      } else {
-        // Fallback for pure web elements
-        try {
-          // @ts-ignore - accessing DOM properties
-          const element = node._nativeTag || node;
-          if (element && element.getBoundingClientRect) {
-            const rect = element.getBoundingClientRect();
-            const scroll = scrollViewRef.current;
-            if (!scroll) return;
-
-            // Get the scroll position
-            const scrollTop =
-              window.pageYOffset || document.documentElement.scrollTop;
-            scroll.scrollTo({ x: 0, y: rect.top + scrollTop, animated: true });
-          }
-        } catch (error) {
-          console.error("Error scrolling on web:", error);
-        }
-      }
-      return;
-    }
-
-    // Native platforms implementation (iOS, Android)
+    // Native platforms only
     const scroll = scrollViewRef.current;
     const node = sectionRef.current;
     if (!scroll || !node) return;
@@ -135,12 +126,10 @@ export default function HomeScreen() {
     UIManager.measureLayout(
       nodeHandle,
       scrollHandle,
-      () => {
-        // ignore measure errors
-      },
+      () => {},
       (x: number, y: number, width: number, height: number) => {
         const s = scrollViewRef.current;
-        if (!s) return; // guard against null
+        if (!s) return;
         s.scrollTo({ x: 0, y, animated: true });
       }
     );
@@ -152,7 +141,7 @@ export default function HomeScreen() {
       refreshControl={
         <RefreshControl
           refreshing={false}
-          onRefresh={getNearestSailings}
+          onRefresh={getNearestSailingsCallback}
         />
       }
       ref={scrollViewRef}
@@ -188,7 +177,7 @@ const styles = StyleSheet.create({
       flexDirection: "column",
       flex: 1,
       marginBottom: 80,
-      padding: 12
+      padding: 0
     },
     android: {
       backgroundColor: "#fff",

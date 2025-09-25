@@ -3,12 +3,126 @@ import { secondary } from "@/constants/Colors";
 import { SECTIONS } from "@/helpers/paths";
 import React from "react";
 import { Image, Platform, ScrollView, StyleSheet, Text } from "react-native";
+interface AboutUsProps {
+  ref?: React.RefObject<any>;
+}
 
-export default function AboutUs({
-  ref
-}: {
-  ref: React.RefObject<ScrollView | null>;
-}) {
+export default function AboutUs({ ref }: AboutUsProps) {
+  if ((Platform.OS as string) === "web") {
+    return (
+      <div
+        id={SECTIONS.aboutUs}
+        style={{
+          width: "100%",
+          fontWeight: 400,
+          fontSize: `1.2em`,
+          lineHeight: "150%",
+          fontFamily: "Arial, sans-serif"
+        }}
+      >
+        <SectionTitle>About Us</SectionTitle>
+        <span style={styles.emphasizedTextStyle}>Zayats Yacht Transport</span>
+        <br />
+        Welcome to Zayats Yacht Transport, your trusted partner in global yacht
+        logistics and transportation services. At Zayats Yacht Transport, we
+        specialize in providing safe, reliable, and efficient transport
+        solutions for yachts of all sizes. Our mission is to deliver
+        unparalleled service that ensures your vessel reaches its destination
+        securely and on schedule.
+        <br />
+        <br />
+        <span style={styles.emphasizedTextStyle}>Our Heritage</span>
+        <br />
+        Founded on a passion for the sea and a deep understanding of the
+        complexities involved in yacht transportation, Zayats Yacht Transport
+        has grown to become a leading name in the industry. Under the leadership
+        of Vadim Yegudkin, our president who has been a prominent figure in the
+        yacht transport field for over 14 years, our team combines expertise
+        with personal service to manage every aspect of your yacht&#39;s
+        journey. From the bustling ports of North America to the serene waters
+        of the Mediterranean, we cover all major routes across the globe.
+        <br />
+        <br />
+        <span style={styles.emphasizedTextStyle}>Our Services</span>
+        <br />
+        Zayats Yacht Transport offers a comprehensive range of services tailored
+        to meet the unique needs of each client. Our services include.
+        <li>
+          <span style={styles.emphasizedTextStyle}>
+            International Yacht Shipping:
+          </span>
+          &nbsp;&nbsp;We handle all logistics, from inland transportation to
+          international shipping, ensuring your yacht is transported safely
+          across oceans.
+        </li>
+        <li>
+          <span style={styles.emphasizedTextStyle}>Customs Clearance:</span>
+          &nbsp;&nbsp;Our team takes care of all necessary customs documentation
+          and clearance procedures, making international transfers as smooth as
+          possible.
+        </li>
+        <li>
+          <span style={styles.emphasizedTextStyle}>
+            Cradling and Shrink Wrapping:
+          </span>
+          &nbsp;&nbsp;To guarantee the utmost safety during transport, we
+          provide custom cradling and professional shrink wrapping.
+        </li>
+        <li>
+          <span style={styles.emphasizedTextStyle}>
+            Load Master Supervision:
+          </span>
+          &nbsp;&nbsp;Our experienced load masters oversee every step of the
+          loading and unloading process, ensuring that each yacht is handled
+          with care.
+        </li>
+        <li>
+          <span style={styles.emphasizedTextStyle}>Insurance:</span>
+          &nbsp;&nbsp;We offer comprehensive marine insurance for peace of mind
+          throughout the transport process.
+        </li>
+        <br />
+        <span style={styles.emphasizedTextStyle}>Our Commitment</span>
+        <br />
+        At Zayats Yacht Transport, we are committed to excellence. Our dedicated
+        team works closely with each client, providing personalized service and
+        attention to detail that ensures every transport is executed flawlessly.
+        We use the latest technology and equipment to monitor each shipment,
+        giving our clients peace of mind knowing their valuable assets are in
+        safe hands.
+        <br />
+        <br />
+        <span style={styles.emphasizedTextStyle}>Join Us</span>
+        <br />
+        Whether you&#39;re relocating, attending international regattas, or
+        exploring new waters, Zayats Yacht Transport is here to make your yacht
+        transportation experience seamless and stress-free. Connect with us
+        today to learn more about how we can assist with your yacht transport
+        needs. Together, let&#39;s set the course for your next maritime
+        adventure.
+        <br />
+        <br />
+        <span style={styles.emphasizedTextStyle}>
+          Explore. Transport. Discover. With Zayats Yacht Transport.
+        </span>
+        <Image
+          style={[
+            {
+              width: "100%",
+              maxWidth: 600,
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginBottom: 40,
+              resizeMode: "contain",
+              backgroundColor: "white"
+            }
+          ]}
+          source={require("@/assets/images/aboutus.jpeg")}
+        />
+      </div>
+    );
+  }
+  // Native platforms
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -88,22 +202,12 @@ export default function AboutUs({
       </Text>
       <Image
         style={[
-          Platform.OS === "web"
-            ? {
-                width: "100%",
-                maxWidth: 600,
-                marginLeft: "auto",
-                marginRight: "auto",
-                marginBottom: 40,
-                resizeMode: "contain",
-                backgroundColor: "white"
-              }
-            : {
-                width: "100%",
-                height: 200,
-                resizeMode: "cover",
-                marginBottom: 40
-              }
+          {
+            width: "100%",
+            height: 200,
+            resizeMode: "cover",
+            marginBottom: 40
+          }
         ]}
         source={require("@/assets/images/aboutus.jpeg")}
       />
