@@ -11,7 +11,7 @@ import {
   View
 } from "react-native";
 import { Appbar } from "react-native-paper";
-import WebAppBar from "./WebAppBar";
+import WebAppBarWithIcon from "./WebAppBarWithIcon";
 
 export interface AppBarWithIconProps {
   toggleMenu: () => void;
@@ -31,7 +31,7 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
 
   // Use web-specific AppBar for web platform
   if (Platform.OS === 'web') {
-    return <WebAppBar toggleMenu={toggleMenu} />;
+    return <WebAppBarWithIcon toggleMenu={toggleMenu} />;
   }
 
   return (
