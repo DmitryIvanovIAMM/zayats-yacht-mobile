@@ -29,24 +29,14 @@ export default function HomeScreen() {
     section: undefined
   };
   const { scheduleState, getNearestSailings } = useSailings();
-  const [sectionToScroll, setSectionToScroll] = useState<string | undefined>(
-    section
-  );
-  if (section) {
-    setSectionToScroll(section);
-    if (
-      route &&
-      route.params &&
-      typeof route.params === "object" &&
-      "section" in route.params
-    ) {
-      delete (route.params as HomeScreenRouteParams).section;
-    }
-  }
+  // Сохраняем предыдущий section, чтобы реагировать на его изменение
+  const prevSectionRef = React.useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    if (section) {
-      setSectionToScroll(section);
+    if (section && section !== prevSectionRef.current) {
+      scrollToSectionIfAny(section);
+      prevSectionRef.current = section;
+      // Очищаем section в route.params, если нужно
       if (
         route &&
         route.params &&
@@ -67,53 +57,27 @@ export default function HomeScreen() {
   const scheduleRef = React.useRef<ScrollView | null>(null);
   const testimonialsRef = React.useRef<ScrollView | null>(null);
 
-  const [readyToScroll, setReadyToScroll] = useState(false);
-
   const scrollToSectionIfAny = (section: string | undefined) => {
     if (!section) return;
-
     switch (section) {
       case SECTIONS.aboutUs:
-        // scrollToSectionRef(aboutUsRef);
         scrollToSection(aboutUsRef);
         break;
       case SECTIONS.schedule:
-        // scrollToSectionRef(scheduleRef);
         scrollToSection(scheduleRef);
         break;
       case SECTIONS.testimonials:
-        // scrollToSectionRef(testimonialsRef);
         scrollToSection(testimonialsRef);
         break;
       case SECTIONS.contactUs:
-        // scrollToSectionRef(contactUsRef);
         scrollToSection(contactUsRef);
         break;
       default:
         break;
     }
-
-    // trick is here - do not forget to reset the section to be scrolled id
-    setSectionToScroll(undefined);
   };
 
-  const getNearestSailingsCallback = useCallback(() => {
-    const getNearestCall = async () => {
-      setReadyToScroll(false);
-      await getNearestSailings();
-      setReadyToScroll(true);
-    };
-    getNearestCall();
-  }, [getNearestSailings]);
-
-  useEffect(getNearestSailingsCallback, [getNearestSailingsCallback]);
-
-  useEffect(() => {
-    if (readyToScroll) {
-      scrollToSectionIfAny(sectionToScroll);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readyToScroll, sectionToScroll]);
+  // Если нужно, оставьте getNearestSailingsCallback/useEffect ниже, но без sectionToScroll
 
   // Helper: scroll to a section without calling measureLayout on ScrollView
   function scrollToSection(
@@ -188,7 +152,7 @@ export default function HomeScreen() {
       refreshControl={
         <RefreshControl
           refreshing={false}
-          onRefresh={getNearestSailingsCallback}
+          onRefresh={getNearestSailings}
         />
       }
       ref={scrollViewRef}
