@@ -94,17 +94,27 @@ export const SailingCard: React.FC<SailingCardProps> = ({
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 0,
-    padding: 0,
-    minHeight: 194,
-    margin: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 3
-  },
+  card: Platform.select({
+    web: {
+      backgroundColor: "#fff",
+      borderRadius: 0,
+      padding: 0,
+      minHeight: 194,
+      margin: 20,
+      boxShadow: "0 12px 48px 0 rgba(0,0,0,0.38), 0 6px 24px 0 rgba(0,0,0,0.32)"
+    },
+    default: {
+      backgroundColor: "#fff",
+      borderRadius: 0,
+      padding: 0,
+      minHeight: 194,
+      margin: 20,
+      shadowColor: "#000",
+      shadowOpacity: 0.3,
+      shadowRadius: 6,
+      elevation: 3
+    }
+  }),
   title: Platform.select({
     default: {
       fontSize: 20,
