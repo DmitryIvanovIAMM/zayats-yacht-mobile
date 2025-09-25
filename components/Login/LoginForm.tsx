@@ -143,7 +143,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff",
     borderRadius: 2,
-    elevation: 2
+    elevation: 2,
+    maxWidth: 480,
+    width: "100%",
+    alignSelf: "center",
+    marginHorizontal: "auto"
   },
   title: Platform.select({
     android: {
