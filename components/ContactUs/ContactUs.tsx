@@ -1,8 +1,7 @@
 import { secondary } from "@/constants/Colors";
 import { formatPhoneNumber } from "@/helpers/formatPhoneNumber";
-import { SECTIONS } from "@/helpers/paths";
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React from "react";
 import {
   Linking,
   Platform,
@@ -16,116 +15,72 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+15555555555";
 
-const ContactUs = ({ ref }: { ref?: React.RefObject<View | null> }) => {
+const ContactUs = React.forwardRef<View, {}>(function ContactUs(props, ref) {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
   };
-
   const handlePhonePress = () => {
     Linking.openURL(`tel:${PHONE_NUMBER}`);
   };
-
-  const [maxHeight, setMaxHeight] = useState(0);
-
-  const handleItemLayout = (e: any) => {
-    const h = e.nativeEvent.layout.height;
-    if (h > maxHeight) setMaxHeight(h);
-  };
-
   return (
-    <View style={styles.container} id={SECTIONS.contactUs}>
+    <View ref={ref} style={styles.container}>
+      <SectionTitle>Contact Us</SectionTitle>
       <View style={styles.innerContainer}>
-        <View style={styles.title}>
-          <SectionTitle>Contact Us</SectionTitle>
+        {/* Address */}
+        <View style={[styles.item, { width: 320 }]}>
+          <View style={styles.iconWrapper}>
+            <MaterialIcons
+              name="location-on"
+              size={32}
+              color={secondary.dark}
+            />
+          </View>
+          <Text style={styles.text}>
+            <ThemedText style={styles.bold}>Address</ThemedText>
+            {"\n"}
+            Zayats Yacht Transport, LLC{"\n"}
+            55555 Orange Drive, Suite 555{"\n"}
+            Fort Lauderdale, FL, 33330, USA
+          </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            width: "100%"
-          }}
-        >
-          {/* Address */}
-          <View
-            style={[
-              styles.item,
-              { width: 320, minHeight: maxHeight || undefined }
-            ]}
-            onLayout={handleItemLayout}
-          >
-            <View style={styles.iconWrapper}>
-              <MaterialIcons
-                name="location-on"
-                size={32}
-                color={secondary.dark}
-              />
-            </View>
-            <Text style={styles.text}>
-              <ThemedText style={styles.bold}>Address</ThemedText>
-              {"\n"}
-              Zayats Yacht Transport, LLC
-              {"\n"}
-              55555 Orange Drive, Suite 555
-              {"\n"}Fort Lauderdale, FL, 33330, USA
-            </Text>
+        {/* Email */}
+        <View style={[styles.item, { width: 320 }]}>
+          <View style={styles.iconWrapper}>
+            <MaterialIcons name="email" size={32} color={secondary.dark} />
           </View>
-
-          {/* Email */}
-          <View
-            style={[
-              styles.item,
-              { width: 320, minHeight: maxHeight || undefined }
-            ]}
-            onLayout={handleItemLayout}
-          >
-            <View style={styles.iconWrapper}>
-              <MaterialIcons name="email" size={32} color={secondary.dark} />
-            </View>
-            <Text style={styles.text}>
-              <ThemedText style={styles.bold}>Email</ThemedText>
-              {"\n"}
-              <TouchableOpacity
-                onPress={handleEmailPress}
-                accessibilityRole="button"
-                accessibilityLabel="Send email to info@zayats-yacht.com"
-              >
-                <Text style={[styles.link]}>info@zayats-yacht.com</Text>
-              </TouchableOpacity>
-            </Text>
+          <Text style={styles.text}>
+            <ThemedText style={styles.bold}>Email</ThemedText>
+            {"\n"}
+            <TouchableOpacity
+              onPress={handleEmailPress}
+              accessibilityRole="button"
+              accessibilityLabel="Send email to info@zayats-yacht.com"
+            >
+              <Text style={styles.link}>info@zayatsyacht.com</Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
+        {/* Phone */}
+        <View style={[styles.item, { width: 320 }]}>
+          <View style={styles.iconWrapper}>
+            <MaterialIcons name="phone" size={32} color={secondary.dark} />
           </View>
-
-          {/* Phone */}
-          <View
-            style={[
-              styles.item,
-              { width: 320, minHeight: maxHeight || undefined }
-            ]}
-            onLayout={handleItemLayout}
-          >
-            <View style={styles.iconWrapper}>
-              <MaterialIcons name="phone" size={32} color={secondary.dark} />
-            </View>
-            <Text style={styles.text}>
-              <ThemedText style={styles.bold}>Phone</ThemedText>
-              {"\n"}
-              <TouchableOpacity
-                onPress={handlePhonePress}
-                accessibilityRole="button"
-                accessibilityLabel="Call phone number +1 (555) 555-5555"
-              >
-                <Text style={styles.link}>
-                  {formatPhoneNumber(PHONE_NUMBER)}
-                </Text>
-              </TouchableOpacity>
-            </Text>
-          </View>
+          <Text style={styles.text}>
+            <ThemedText style={styles.bold}>Phone</ThemedText>
+            {"\n"}
+            <TouchableOpacity
+              onPress={handlePhonePress}
+              accessibilityRole="button"
+              accessibilityLabel="Call phone number +1 (555) 555-5555"
+            >
+              <Text style={styles.link}>{formatPhoneNumber(PHONE_NUMBER)}</Text>
+            </TouchableOpacity>
+          </Text>
         </View>
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
