@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
   alliedIcon: {
     height: 55,
     width: 80,
+    maxWidth: '100%',
     bottom: 0,
     alignSelf: "center"
   },
