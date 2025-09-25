@@ -41,10 +41,16 @@ const WebAppBar = ({ toggleMenu }: WebAppBarProps) => {
       </View>
       
       <View style={styles.secondDiv}>
-        <Image
-          source={require("@/assets/images/zayats-logo-white.png")}
-          style={styles.alliedIcon}
-        />
+        <TouchableOpacity 
+          onPress={() => router.push("/" as RelativePathString)}
+          accessibilityRole="link"
+          accessibilityLabel="Go to home page"
+        >
+          <Image
+            source={require("@/assets/images/zayats-logo-white.png")}
+            style={styles.alliedIcon}
+          />
+        </TouchableOpacity>
       </View>
       
       <View style={styles.thirdDiv}>

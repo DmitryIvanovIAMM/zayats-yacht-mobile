@@ -45,12 +45,18 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
       </View>
       <Appbar.Content
         title={
-          <Image
-            // source={require("@/assets/images/zayats-logo-transparent.png")} //ZAYATS_embedded
-            // source={require("@/assets/images/ZAYATS_embedded.svg")} //ZAYATS_embedded
-            source={require("@/assets/images/zayats-logo-white.png")} //ZAYATS_embedded
-            style={styles.alliedIcon}
-          />
+          <View style={styles.logoContainer}>
+            <Image
+              // source={require("@/assets/images/zayats-logo-transparent.png")} //ZAYATS_embedded
+              // source={require("@/assets/images/ZAYATS_embedded.svg")} //ZAYATS_embedded
+              source={require("@/assets/images/zayats-logo-white.png")} //ZAYATS_embedded
+              style={styles.alliedIcon}
+            />
+            <View 
+              style={styles.logoTouchable} 
+              onTouchEnd={() => router.push("/" as RelativePathString)}
+            />
+          </View>
         }
         style={styles.secondDiv}
       />
@@ -168,6 +174,19 @@ const styles = StyleSheet.create({
   appBarIconWitName: {
     flexDirection: "row",
     alignItems: "center"
+  },
+  logoContainer: {
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  logoTouchable: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1
   },
   appBarIconAfterNName: {
     marginLeft: 0,
