@@ -120,21 +120,23 @@ export default function HomeScreen() {
     sectionRef: React.RefObject<View | ScrollView | null>
   ) {
     // Web platform implementation
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       const node = sectionRef.current;
       if (!node) return;
-      
+
       // Use DOM API for web
       // @ts-ignore - accessing DOM properties
       if (node.measureInWindow) {
         // @ts-ignore - React Native Web specific
-        node.measureInWindow((x: number, y: number, width: number, height: number) => {
-          const scroll = scrollViewRef.current;
-          if (!scroll) return;
-          
-          // Get the scroll position relative to the scrollview
-          scroll.scrollTo({ x: 0, y, animated: true });
-        });
+        node.measureInWindow(
+          (x: number, y: number, width: number, height: number) => {
+            const scroll = scrollViewRef.current;
+            if (!scroll) return;
+
+            // Get the scroll position relative to the scrollview
+            scroll.scrollTo({ x: 0, y, animated: true });
+          }
+        );
       } else {
         // Fallback for pure web elements
         try {
@@ -144,18 +146,19 @@ export default function HomeScreen() {
             const rect = element.getBoundingClientRect();
             const scroll = scrollViewRef.current;
             if (!scroll) return;
-            
+
             // Get the scroll position
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
             scroll.scrollTo({ x: 0, y: rect.top + scrollTop, animated: true });
           }
         } catch (error) {
-          console.error('Error scrolling on web:', error);
+          console.error("Error scrolling on web:", error);
         }
       }
       return;
     }
-    
+
     // Native platforms implementation (iOS, Android)
     const scroll = scrollViewRef.current;
     const node = sectionRef.current;
@@ -181,6 +184,7 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
+      style={{ backgroundColor: "#fff" }}
       refreshControl={
         <RefreshControl
           refreshing={false}
@@ -201,6 +205,17 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: Platform.select({
+    web: {
+      backgroundColor: "#fff",
+      color: secondary.dark,
+      display: "flex",
+      flexDirection: "column",
+      marginBottom: 0,
+      maxWidth: 700,
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "100%"
+    },
     default: {
       backgroundColor: "#fff",
       color: secondary.dark,

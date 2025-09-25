@@ -1,7 +1,7 @@
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { primary, secondary } from "@/constants/Colors";
 import { SECTIONS } from "@/helpers/paths";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 interface Testimonial {
   quote: string;
@@ -74,6 +74,19 @@ export default function Testimonials({
 }
 
 const styles = StyleSheet.create({
+  container: Platform.select({
+    web: {
+      backgroundColor: "white",
+      maxWidth: 700,
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "100%"
+    },
+    default: {
+      flex: 1,
+      backgroundColor: "white"
+    }
+  }),
   testimonialContainer: {
     backgroundColor: "white",
     borderRadius: 2,
@@ -115,9 +128,5 @@ const styles = StyleSheet.create({
     color: secondary.dark,
     alignItems: "flex-end",
     justifyContent: "flex-end"
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "white"
   }
 });
