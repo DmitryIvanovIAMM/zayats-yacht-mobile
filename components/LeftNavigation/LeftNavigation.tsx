@@ -2,6 +2,7 @@ import { primary, secondary } from "@/constants/Colors";
 import { getMenuLinks } from "@/helpers/menuLinks";
 import { RelativePathString, useRouter } from "expo-router";
 import { Divider, Menu } from "react-native-paper";
+import { Platform } from "react-native";
 
 export interface LeftNavigationProps {
   setMenuIsOpen: (isOpen: boolean) => void;
@@ -31,7 +32,7 @@ export const LeftNavigation = ({
       visible={visible}
       onDismiss={() => setMenuIsOpen(false)}
       //anchor={<Button onPress={() => setMenuIsOpen(true)}>Show menu</Button>}
-      anchor={{ x: -10, y: 110 }}
+      anchor={Platform.OS === 'web' ? { x: 10, y: 60 } : { x: -10, y: 110 }}
       contentStyle={{ backgroundColor: secondary.dark }}
     >
       <>
