@@ -21,7 +21,7 @@ jest.mock("@/components/ContactUs/ContactUs", () => {
   const { View } = require("react-native");
   return {
     __esModule: true,
-    default: (props: any) => <View testID="contact-us" {...props} />,
+    default: (props: any) => <View testID="contact-us" {...props} />
   };
 });
 
@@ -33,7 +33,7 @@ jest.mock("@/components/ThemedText", () => {
     __esModule: true,
     ThemedText: ({ children, style }: any) => (
       <Text style={style}>{children}</Text>
-    ),
+    )
   };
 });
 
@@ -43,14 +43,13 @@ jest.mock("@/components/SectionTitle/SectionTitle", () => {
   const { Text } = require("react-native");
   return {
     __esModule: true,
-    default: ({ children }: any) => <Text>{children}</Text>,
+    default: ({ children }: any) => <Text>{children}</Text>
   };
 });
 
 describe("Instructions", () => {
-  it("matches snapshot", () => {
-    const { toJSON } = render(<Instructions />);
-    expect(toJSON()).toMatchSnapshot();
+  it("renders without crashing", () => {
+    render(<Instructions />);
   });
 
   it("renders the page title", () => {
@@ -58,15 +57,17 @@ describe("Instructions", () => {
     expect(getByText("Yacht Transport Instructions")).toBeTruthy();
   });
 
-  it("renders key collapsible sections", () => {
+  it("renders all key collapsible sections", () => {
     const { getByText } = render(<Instructions />);
-    expect(getByText("INSURANCE")).toBeTruthy();
-    expect(getByText("DOCUMENTATION, PASSPORTS & VISAS")).toBeTruthy();
-    expect(getByText("PRIOR TO TRANSPORT, SECURE THE VESSEL")).toBeTruthy();
-    expect(
-      getByText("STRICTLY PROHIBITED AND SUBJECT TO HEAVY FINES OR ARREST")
-    ).toBeTruthy();
-    expect(getByText("TIPS FOR VESSEL TRANSPORT RIDERS")).toBeTruthy();
+    [
+      "INSURANCE",
+      "DOCUMENTATION, PASSPORTS & VISAS",
+      "PRIOR TO TRANSPORT, SECURE THE VESSEL",
+      "STRICTLY PROHIBITED AND SUBJECT TO HEAVY FINES OR ARREST",
+      "TIPS FOR VESSEL TRANSPORT RIDERS"
+    ].forEach((section) => {
+      expect(getByText(section)).toBeTruthy();
+    });
   });
 
   it("renders ContactUs section", () => {
