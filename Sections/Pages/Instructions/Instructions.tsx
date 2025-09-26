@@ -287,42 +287,49 @@ export default function Instructions() {
 
 const styles = StyleSheet.create({
   scroll: {
-    flex: 1,
-    backgroundColor: "white",
-    paddingBottom: 40, // Ensure the scroll view has some margin at the bottom
+    backgroundColor: "white"
   },
-  container: {
-    width: "90%",
-    alignSelf: "center",
-    marginBottom: 40,
-  },
+  container: Platform.select({
+    web: {
+      backgroundColor: "white",
+      maxWidth: 700,
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "100%",
+      padding: 12
+    },
+    default: {
+      backgroundColor: "white",
+      padding: 12
+    }
+  }),
   intro: {
     color: secondary.dark,
     fontSize: 18,
-    marginBottom: 16,
+    marginBottom: 16
   },
   bold: {
     fontWeight: "bold",
-    color: secondary.dark,
+    color: secondary.dark
   },
   description: {
     color: secondary.dark,
     backgroundColor: "white",
     fontSize: 16,
-    marginBottom: 16,
+    marginBottom: 16
   },
   bottom: Platform.select({
     ios: {
       height: 30,
-      backgroundColor: "white",
+      backgroundColor: "white"
     },
     android: {
       height: 0,
-      backgroundColor: "white",
+      backgroundColor: "white"
     },
     default: {
       height: 0,
-      backgroundColor: "white",
-    },
-  }),
+      backgroundColor: "white"
+    }
+  })
 });

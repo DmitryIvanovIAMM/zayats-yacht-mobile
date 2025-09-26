@@ -34,6 +34,7 @@ exports[`SailingCard matches snapshot 1`] = `
     <Text
       style={
         {
+          "color": "#006666",
           "fontSize": 20,
           "fontWeight": "bold",
           "marginBottom": 4,

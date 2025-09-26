@@ -1,7 +1,7 @@
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { primary, secondary } from "@/constants/Colors";
 import { SECTIONS } from "@/helpers/paths";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 interface Testimonial {
   quote: string;
@@ -36,18 +36,13 @@ const testimonials: Testimonial[] = [
   }
 ] as const;
 
-export default function Testimonials({
-  ref
-}: {
-  ref: React.RefObject<ScrollView | null>;
-}) {
+interface TestimonialsProps {
+  ref?: React.RefObject<any>;
+}
+
+function TestimonialSectionDetails() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: 24 }}
-      id={SECTIONS.testimonials}
-      ref={ref}
-    >
+    <>
       <SectionTitle>Testimonials</SectionTitle>
       {testimonials.map((testimonial, index) => (
         <View style={styles.testimonialContainer} key={index}>
@@ -69,11 +64,45 @@ export default function Testimonials({
           </View>
         </View>
       ))}
+    </>
+  );
+}
+
+export default function Testimonials({ ref }: TestimonialsProps) {
+  if ((Platform.OS as string) === "web") {
+    return (
+      <div id={SECTIONS.testimonials} style={{ width: "100%" }}>
+        <TestimonialSectionDetails />
+      </div>
+    );
+  }
+  // Native platforms
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 24 }}
+      id={SECTIONS.testimonials}
+      ref={ref}
+    >
+      <TestimonialSectionDetails />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: Platform.select({
+    web: {
+      backgroundColor: "white",
+      maxWidth: 700,
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "100%"
+    },
+    default: {
+      flex: 1,
+      backgroundColor: "white"
+    }
+  }),
   testimonialContainer: {
     backgroundColor: "white",
     borderRadius: 2,
@@ -115,9 +144,5 @@ const styles = StyleSheet.create({
     color: secondary.dark,
     alignItems: "flex-end",
     justifyContent: "flex-end"
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "white"
   }
 });

@@ -219,12 +219,14 @@ exports[`AboutUs matches snapshot 1`] = `
         }
       }
       style={
-        {
-          "height": 200,
-          "marginBottom": 40,
-          "resizeMode": "cover",
-          "width": "100%",
-        }
+        [
+          {
+            "height": 200,
+            "marginBottom": 40,
+            "resizeMode": "cover",
+            "width": "100%",
+          },
+        ]
       }
     />
   </View>

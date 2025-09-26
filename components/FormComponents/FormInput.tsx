@@ -12,98 +12,99 @@ type Props = {
   label: string;
   placeholder?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-  secureTextEntry?: boolean; // add
-  autoCapitalize?: "none" | "sentences" | "words" | "characters"; // add
+  secureTextEntry?: boolean;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
   multiline?: boolean;
   numberOfLines?: number;
   onLayoutY?: (y: number) => void;
-  disabled?: boolean; // NEW
+  disabled?: boolean;
+  onSubmitEditing?: (e: any) => void;
 };
 
-const FormInput = forwardRef<FormInputRef, Props>(
-  (
-    {
-      onLayoutY,
-      name,
-      label,
-      placeholder,
-      keyboardType,
-      multiline,
-      numberOfLines,
-      disabled,
-      secureTextEntry,
-      autoCapitalize
-    },
-    ref
-  ) => {
-    const inputRef = useRef<TextInput | null>(null);
-    const { control } = useFormContext();
+const FormInput = forwardRef<FormInputRef, Props>((props, ref) => {
+  const {
+    onLayoutY,
+    name,
+    label,
+    placeholder,
+    keyboardType,
+    multiline,
+    numberOfLines,
+    disabled,
+    secureTextEntry,
+    autoCapitalize,
+    onSubmitEditing
+  } = props;
+  const inputRef = useRef<TextInput | null>(null);
+  const { control } = useFormContext();
 
-    useImperativeHandle(ref, () => ({
-      focus: () => inputRef.current?.focus()
-    }));
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus()
+  }));
 
-    return (
-      <View
-        style={styles.inputGroup}
-        onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
-        testID="form-input-group"
-      >
-        <Text style={styles.label}>{label}</Text>
-        <Controller
-          control={control}
-          name={name}
-          render={({
-            field: { onChange, onBlur, value },
-            fieldState: { error }
-          }) => (
-            <>
-              <View
-                style={[
-                  styles.paperLikeInput,
-                  error && styles.inputError,
-                  multiline && styles.paperLikeMultiline,
-                  // optional: size by numberOfLines
-                  multiline && numberOfLines
-                    ? { minHeight: numberOfLines * 24 + 16 }
+  return (
+    <View
+      style={styles.inputGroup}
+      onLayout={(e) => onLayoutY?.(e.nativeEvent.layout.y)}
+      testID="form-input-group"
+    >
+      <Text style={styles.label}>{label}</Text>
+      <Controller
+        control={control}
+        name={name}
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error }
+        }) => (
+          <>
+            <View
+              style={[
+                styles.paperLikeInput,
+                error && styles.inputError,
+                multiline && styles.paperLikeMultiline,
+                multiline && numberOfLines
+                  ? { minHeight: numberOfLines * 24 + 16 }
+                  : undefined
+              ]}
+            >
+              <TextInput
+                ref={inputRef}
+                style={[styles.input, multiline && styles.inputMultiline]}
+                placeholder={placeholder}
+                placeholderTextColor={secondary.dark}
+                value={value as any}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                keyboardType={keyboardType}
+                secureTextEntry={secureTextEntry}
+                autoCapitalize={autoCapitalize}
+                editable={!disabled}
+                multiline={multiline}
+                numberOfLines={numberOfLines}
+                onSubmitEditing={
+                  typeof onSubmitEditing === "function"
+                    ? onSubmitEditing
                     : undefined
-                ]}
-              >
-                <TextInput
-                  ref={inputRef}
-                  style={[styles.input, multiline && styles.inputMultiline]}
-                  placeholder={placeholder}
-                  placeholderTextColor={secondary.dark}
-                  value={value as any}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  keyboardType={keyboardType}
-                  secureTextEntry={secureTextEntry}
-                  autoCapitalize={autoCapitalize}
-                  editable={!disabled}
-                  multiline={multiline}
-                  numberOfLines={numberOfLines}
-                />
-              </View>
-
-              <View style={styles.errorContainer}>
-                {error ? (
-                  <Text
-                    style={styles.error}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {error.message}
-                  </Text>
-                ) : null}
-              </View>
-            </>
-          )}
-        />
-      </View>
-    );
-  }
-);
+                }
+              />
+            </View>
+            <View style={styles.errorContainer}>
+              {error ? (
+                <Text
+                  style={styles.error}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {error.message}
+                </Text>
+              ) : null}
+            </View>
+          </>
+        )}
+      />
+    </View>
+  );
+});
 
 // ADD display name to satisfy react/display-name
 FormInput.displayName = "FormInput";

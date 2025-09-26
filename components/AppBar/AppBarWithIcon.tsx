@@ -11,6 +11,7 @@ import {
   View
 } from "react-native";
 import { Appbar } from "react-native-paper";
+import WebAppBarWithIcon from "./WebAppBarWithIcon";
 
 export interface AppBarWithIconProps {
   toggleMenu: () => void;
@@ -28,6 +29,11 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
     }
   };
 
+  // Use web-specific AppBar for web platform
+  if (Platform.OS === "web") {
+    return <WebAppBarWithIcon toggleMenu={toggleMenu} />;
+  }
+
   return (
     <Appbar.Header style={styles.container}>
       <View style={styles.firstDiv}>
@@ -39,18 +45,25 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
       </View>
       <Appbar.Content
         title={
-          <Image
-            // source={require("@/assets/images/zayats-logo-transparent.png")} //ZAYATS_embedded
-            // source={require("@/assets/images/ZAYATS_embedded.svg")} //ZAYATS_embedded
-            source={require("@/assets/images/zayats-logo-white.png")} //ZAYATS_embedded
-            style={styles.alliedIcon}
-          />
+          <View style={styles.logoContainer}>
+            <Image
+              // source={require("@/assets/images/zayats-logo-transparent.png")} //ZAYATS_embedded
+              // source={require("@/assets/images/ZAYATS_embedded.svg")} //ZAYATS_embedded
+              source={require("@/assets/images/zayats-logo-white.png")} //ZAYATS_embedded
+              style={styles.alliedIcon}
+            />
+            <View
+              style={styles.logoTouchable}
+              onTouchEnd={() => router.push("/" as RelativePathString)}
+            />
+          </View>
         }
         style={styles.secondDiv}
       />
       <View style={styles.thirdDiv}>
         {authState.isValidating ? (
           <ActivityIndicator
+            testID="spinner"
             size="small"
             color={secondary.dark}
             style={styles.activityIndicator}
@@ -93,7 +106,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
+    ...Platform.select({
+      web: {
+        position: "sticky" as any,
+        top: 0,
+        zIndex: 1000,
+        boxShadow: "0 2px 6px rgba(0,0,0,0.08)" as any
+      },
+      default: {
+        elevation: 4
+      }
+    })
   },
   firstDiv: {
     flex: 1,
@@ -113,6 +137,7 @@ const styles = StyleSheet.create({
   alliedIcon: {
     height: 55,
     width: 80,
+    maxWidth: "100%",
     bottom: 0,
     alignSelf: "center"
   },
@@ -152,9 +177,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center"
   },
+  logoContainer: {
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  logoTouchable: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1
+  },
   appBarIconAfterNName: {
     marginLeft: 0,
     padding: 0,
     width: "auto"
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 4,
+    minWidth: 40,
+    minHeight: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent"
   }
 });

@@ -11,7 +11,7 @@ export interface SailingsState {
 }
 export const defaultSailingsState: SailingsState = {
   schedule: null,
-  isLoading: false,
+  isLoading: true,
   error: null
 };
 

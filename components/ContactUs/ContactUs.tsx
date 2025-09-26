@@ -1,7 +1,7 @@
 import { secondary } from "@/constants/Colors";
 import { formatPhoneNumber } from "@/helpers/formatPhoneNumber";
-import { SECTIONS } from "@/helpers/paths";
 import { MaterialIcons } from "@expo/vector-icons";
+import React from "react";
 import {
   Linking,
   Platform,
@@ -15,22 +15,20 @@ import { ThemedText } from "../ThemedText";
 
 const PHONE_NUMBER = "+15555555555";
 
-const ContactUs = ({ ref }: { ref?: React.RefObject<View | null> }) => {
+function ContactUsDetails() {
   const handleEmailPress = () => {
     Linking.openURL("mailto:info@zayats-yacht.com");
   };
-
   const handlePhonePress = () => {
     Linking.openURL(`tel:${PHONE_NUMBER}`);
   };
 
   return (
-    <View style={styles.container} id={SECTIONS.contactUs}>
+    <View style={styles.container}>
+      <SectionTitle>Contact Us</SectionTitle>
       <View style={styles.innerContainer}>
-        <View style={styles.title}>
-          <SectionTitle>Contact Us</SectionTitle>
-        </View>
-        <View style={styles.item}>
+        {/* Address */}
+        <View style={[styles.item, { width: 320 }]}>
           <View style={styles.iconWrapper}>
             <MaterialIcons
               name="location-on"
@@ -41,13 +39,13 @@ const ContactUs = ({ ref }: { ref?: React.RefObject<View | null> }) => {
           <Text style={styles.text}>
             <ThemedText style={styles.bold}>Address</ThemedText>
             {"\n"}
-            Zayats Yacht Transport, LLC
-            {"\n"}
-            55555 Orange Drive, Suite 555
-            {"\n"}Fort Lauderdale, FL, 33330, USA
+            Zayats Yacht Transport, LLC{"\n"}
+            55555 Orange Drive, Suite 555{"\n"}
+            Fort Lauderdale, FL, 33330, USA
           </Text>
         </View>
-        <View style={styles.item}>
+        {/* Email */}
+        <View style={[styles.item, { width: 320 }]}>
           <View style={styles.iconWrapper}>
             <MaterialIcons name="email" size={32} color={secondary.dark} />
           </View>
@@ -59,11 +57,12 @@ const ContactUs = ({ ref }: { ref?: React.RefObject<View | null> }) => {
               accessibilityRole="button"
               accessibilityLabel="Send email to info@zayats-yacht.com"
             >
-              <Text style={[styles.link]}>info@zayats-yacht.com</Text>
+              <Text style={styles.link}>info@zayatsyacht.com</Text>
             </TouchableOpacity>
           </Text>
         </View>
-        <View style={styles.item}>
+        {/* Phone */}
+        <View style={[styles.item, { width: 320 }]}>
           <View style={styles.iconWrapper}>
             <MaterialIcons name="phone" size={32} color={secondary.dark} />
           </View>
@@ -82,15 +81,37 @@ const ContactUs = ({ ref }: { ref?: React.RefObject<View | null> }) => {
       </View>
     </View>
   );
-};
+}
+
+const ContactUs = React.forwardRef<View, object>(
+  function ContactUs(props, ref) {
+    if ((Platform.OS as string) === "web") {
+      return (
+        <div
+          ref={ref as any}
+          id={"contact-us-section"}
+          style={{ width: "100%" }}
+        >
+          <ContactUsDetails />
+        </div>
+      );
+    }
+    // Native platforms
+    return (
+      <View ref={ref} style={styles.container}>
+        <ContactUsDetails />
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F7F8F9",
     flexDirection: "column",
     alignItems: "center",
-    width: "100%",
-    paddingVertical: 20
+    width: "100%"
+    // paddingVertical: 20
   },
   innerContainer: {
     width: "90%",

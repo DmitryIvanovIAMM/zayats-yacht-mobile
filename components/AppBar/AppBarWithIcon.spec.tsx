@@ -63,9 +63,12 @@ describe("AppBarWithIcon", () => {
     });
   });
 
-  it("matches snapshot (logged out)", () => {
-    const { toJSON } = render(<AppBarWithIcon toggleMenu={toggleMenu} />);
-    expect(toJSON()).toMatchSnapshot();
+  it("renders login icon when logged out", () => {
+    const { getByLabelText, queryByText } = render(
+      <AppBarWithIcon toggleMenu={toggleMenu} />
+    );
+    expect(getByLabelText("login")).toBeTruthy();
+    expect(queryByText("logout")).toBeNull();
   });
 
   it("calls toggleMenu on menu press", () => {
@@ -93,12 +96,13 @@ describe("AppBarWithIcon", () => {
         userInfo: undefined
       }
     });
-    const { toJSON, queryByLabelText } = render(
+    const { queryByLabelText, getByTestId } = render(
       <AppBarWithIcon toggleMenu={toggleMenu} />
     );
     expect(queryByLabelText("login")).toBeNull();
     expect(queryByLabelText("logout")).toBeNull();
-    expect(toJSON()).toMatchSnapshot();
+    // Ожидаем индикатор загрузки (spinner)
+    expect(getByTestId("spinner")).toBeTruthy();
   });
 
   it("shows user name and logs out", () => {
@@ -130,5 +134,23 @@ describe("AppBarWithIcon", () => {
     });
     const { getByText } = render(<AppBarWithIcon toggleMenu={toggleMenu} />);
     expect(getByText("john@example.com")).toBeTruthy();
+  });
+
+  it("shows nothing if userInfo is missing", () => {
+    (useAuth as jest.Mock).mockReturnValue({
+      logout: jest.fn(),
+      authState: {
+        isAuthenticated: true,
+        isValidating: false,
+        userInfo: undefined
+      }
+    });
+    const { queryByLabelText, queryByText } = render(
+      <AppBarWithIcon toggleMenu={toggleMenu} />
+    );
+    expect(queryByLabelText("logout")).toBeTruthy();
+    // Не должно быть имени или email
+    expect(queryByText("John Doe")).toBeNull();
+    expect(queryByText("john@example.com")).toBeNull();
   });
 });
