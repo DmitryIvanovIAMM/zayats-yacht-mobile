@@ -30,7 +30,7 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
   };
 
   // Use web-specific AppBar for web platform
-  if (Platform.OS === 'web') {
+  if (Platform.OS === "web") {
     return <WebAppBarWithIcon toggleMenu={toggleMenu} />;
   }
 
@@ -52,8 +52,8 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
               source={require("@/assets/images/zayats-logo-white.png")} //ZAYATS_embedded
               style={styles.alliedIcon}
             />
-            <View 
-              style={styles.logoTouchable} 
+            <View
+              style={styles.logoTouchable}
               onTouchEnd={() => router.push("/" as RelativePathString)}
             />
           </View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   alliedIcon: {
     height: 55,
     width: 80,
-    maxWidth: '100%',
+    maxWidth: "100%",
     bottom: 0,
     alignSelf: "center"
   },
@@ -193,5 +193,14 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     padding: 0,
     width: "auto"
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 4,
+    minWidth: 40,
+    minHeight: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent"
   }
 });

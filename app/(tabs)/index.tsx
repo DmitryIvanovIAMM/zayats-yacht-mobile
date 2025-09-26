@@ -73,16 +73,30 @@ export default function HomeScreen() {
       case SECTIONS.schedule:
       case SECTIONS.testimonials:
         if (Platform.OS === "web") {
-          const el = document.getElementById(section);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const scrollTop =
-              window.pageYOffset || document.documentElement.scrollTop;
-            window.scrollTo({
-              top: rect.top + scrollTop - 20,
-              behavior: "smooth"
-            });
-          }
+          // Add a small delay to ensure elements are rendered
+          setTimeout(() => {
+            const el = document.getElementById(section);
+            if (el) {
+              // Use scrollIntoView - most reliable method
+              try {
+                el.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                  inline: "nearest"
+                });
+              } catch (error) {
+                // Fallback to window.scrollTo
+                const rect = el.getBoundingClientRect();
+                const scrollTop =
+                  window.pageYOffset || document.documentElement.scrollTop;
+                const targetPosition = Math.max(0, rect.top + scrollTop - 80);
+                window.scrollTo({
+                  top: targetPosition,
+                  behavior: "smooth"
+                });
+              }
+            }
+          }, 500);
         } else {
           if (section === SECTIONS.aboutUs) scrollToSection(aboutUsRef);
           if (section === SECTIONS.schedule) scrollToSection(scheduleRef);
@@ -92,16 +106,46 @@ export default function HomeScreen() {
         break;
       case SECTIONS.contactUs:
         if (Platform.OS === "web") {
-          const el = document.getElementById("contact-us-section");
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const scrollTop =
-              window.pageYOffset || document.documentElement.scrollTop;
-            window.scrollTo({
-              top: rect.top + scrollTop - 20,
-              behavior: "smooth"
-            });
-          }
+          // Add a small delay to ensure elements are rendered
+          setTimeout(() => {
+            console.log(`Looking for element with id: contact-us-section`);
+            const el = document.getElementById("contact-us-section");
+            if (el) {
+              console.log(`Found element:`, el);
+              console.log(`Element position:`, el.getBoundingClientRect());
+              const rect = el.getBoundingClientRect();
+              const scrollTop =
+                window.pageYOffset || document.documentElement.scrollTop;
+              const targetPosition = Math.max(0, rect.top + scrollTop - 80);
+              console.log(`Scrolling to position: ${targetPosition}`);
+
+              // Use scrollIntoView - most reliable method
+              try {
+                el.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                  inline: "nearest"
+                });
+                console.log("Scrolling to element with scrollIntoView");
+              } catch (error) {
+                console.error("Scroll error:", error);
+                // Fallback to window.scrollTo
+                window.scrollTo({
+                  top: targetPosition,
+                  behavior: "smooth"
+                });
+                console.log("Fallback: window.scrollTo called");
+              }
+            } else {
+              console.log(`Element with id 'contact-us-section' not found`);
+              // Try to find all elements with IDs
+              const allElements = document.querySelectorAll("[id]");
+              console.log(
+                "All elements with IDs:",
+                Array.from(allElements).map((el) => el.id)
+              );
+            }
+          }, 500); // Increased delay
         } else {
           scrollToSection(contactUsRef);
         }
