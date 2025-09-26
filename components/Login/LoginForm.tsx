@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PATHS } from "@/helpers/paths";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
@@ -14,6 +14,7 @@ import {
   View
 } from "react-native";
 import * as yup from "yup";
+import type { FormInputRef } from "../FormComponents/FormInput";
 import FormInput from "../FormComponents/FormInput";
 import { FormContainer } from "../FormContainer/FormContainer";
 
@@ -37,10 +38,11 @@ const loginSchema = yup.object({
 });
 
 export default function LoginForm() {
+  const passwordRef = useRef<FormInputRef>(null);
   const { login, authState, setAuthState } = useAuth();
 
   const methods = useForm<LoginCredentials>({
-    mode: "onBlur",
+    mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(loginSchema),
     defaultValues: { email: "", password: "" }
@@ -67,72 +69,75 @@ export default function LoginForm() {
 
   const formDisabled = isSubmitting || authState.isValidating;
 
-  return (
-    <View style={styles.container}>
-      <FormProvider {...methods}>
-        <FormContainer>
-          <Text style={styles.title}>Sign in to your account</Text>
+  const isWeb = Platform.OS === "web";
+  const content = (
+    <FormProvider {...methods}>
+      <FormContainer>
+        <Text style={styles.title}>Sign in to your account</Text>
 
+        <FormInput
+          name="email"
+          label="Email"
+          placeholder="you@example.com"
+          keyboardType="email-address"
+          disabled={formDisabled}
+          onSubmitEditing={() => passwordRef.current?.focus()}
+        />
+
+        <View style={{ position: "relative" }}>
           <FormInput
-            name="email"
-            label="Email"
-            placeholder="you@example.com"
-            keyboardType="email-address"
+            ref={passwordRef}
+            name="password"
+            label="Password"
+            placeholder="••••••••"
             disabled={formDisabled}
-            // autoCapitalize is set to "none" to prevent automatic capitalization in email input
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            onSubmitEditing={handleSubmit(onSubmit)}
           />
-
-          <View style={{ position: "relative" }}>
-            <FormInput
-              name="password"
-              label="Password"
-              placeholder="••••••••"
-              disabled={formDisabled}
-              secureTextEntry={!showPassword}
-              autoCapitalize="none"
-            />
-            {/* Toggle password visibility */}
-            <TouchableOpacity
-              onPress={() => setShowPassword((v) => !v)}
-              style={{
-                position: "absolute",
-                right: 8,
-                top: Platform.select({ default: 34, android: 34 })
-              }}
-              disabled={formDisabled}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Ionicons
-                name={showPassword ? "eye-off" : "eye"}
-                size={20}
-                color={secondary.dark}
-              />
-            </TouchableOpacity>
-          </View>
-
+          {/* Toggle password visibility */}
           <TouchableOpacity
-            style={[
-              styles.button,
-              (formDisabled || !isValid) && { opacity: 0.6 }
-            ]}
-            onPress={handleSubmit(onSubmit)}
-            disabled={formDisabled || !isValid}
+            onPress={() => setShowPassword((v) => !v)}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: Platform.select({ default: 34, android: 34 })
+            }}
+            disabled={formDisabled}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            {formDisabled && (
-              <View style={styles.spinnerContainer}>
-                <ActivityIndicator size="small" color="white" />
-              </View>
-            )}
-            <Text style={styles.buttonText}>Sign In</Text>
+            <Ionicons
+              name={showPassword ? "eye-off" : "eye"}
+              size={20}
+              color={secondary.dark}
+            />
           </TouchableOpacity>
+        </View>
 
-          {authState.error && (
-            <Text style={styles.errorText}>{authState.error}</Text>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            (formDisabled || !isValid) && { opacity: 0.6 }
+          ]}
+          onPress={handleSubmit(onSubmit)}
+          disabled={formDisabled || !isValid}
+        >
+          {formDisabled && (
+            <View style={styles.spinnerContainer}>
+              <ActivityIndicator size="small" color="white" />
+            </View>
           )}
-        </FormContainer>
-      </FormProvider>
-    </View>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+
+        {authState.error && (
+          <Text style={styles.errorText}>{authState.error}</Text>
+        )}
+      </FormContainer>
+    </FormProvider>
   );
+
+  return <View style={styles.container}>{content}</View>;
 }
 
 const styles = StyleSheet.create({
