@@ -1,6 +1,7 @@
 import * as AuthContext from "@/contexts/AuthContext";
 import { fireEvent, render } from "@testing-library/react-native";
 import React from "react";
+import { ActivityIndicator } from "react-native";
 import WebAppBarWithIcon from "./WebAppBarWithIcon";
 
 // Mock dependencies
@@ -96,8 +97,6 @@ describe("WebAppBarWithIcon", () => {
       <WebAppBarWithIcon toggleMenu={jest.fn()} />
     );
     // ActivityIndicator is rendered
-    expect(
-      UNSAFE_getByType(require("react-native").ActivityIndicator)
-    ).toBeTruthy();
+    expect(UNSAFE_getByType(ActivityIndicator)).toBeTruthy();
   });
 });

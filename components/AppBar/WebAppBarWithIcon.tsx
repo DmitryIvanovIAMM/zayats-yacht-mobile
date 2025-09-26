@@ -10,12 +10,6 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-// @ts-ignore
-const RNWDiv =
-  (typeof document !== "undefined" &&
-    (require("react-native-web").default ||
-      require("react-native-web").View)) ||
-  View;
 
 export interface WebAppBarWithIconProps {
   toggleMenu: () => void;
