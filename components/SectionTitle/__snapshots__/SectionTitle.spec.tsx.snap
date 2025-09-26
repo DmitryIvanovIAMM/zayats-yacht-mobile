@@ -5,7 +5,7 @@ exports[`SectionTitle matches snapshot 1`] = `
   style={
     {
       "alignSelf": "center",
-      "width": "80%",
+      "width": "100%",
     }
   }
 >
