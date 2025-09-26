@@ -105,12 +105,16 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 64,
     paddingHorizontal: 16,
-    position: "sticky",
-    top: 0,
-    zIndex: 1000,
-    boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0"
+    borderBottomColor: "#e0e0e0",
+    ...(typeof window !== "undefined" && window.document
+      ? {
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
+        }
+      : {})
   },
   firstDiv: {
     flex: 1,
@@ -130,7 +134,7 @@ const styles = StyleSheet.create({
   alliedIcon: {
     height: 55,
     width: 80,
-    maxWidth: '100%',
+    maxWidth: "100%",
     alignSelf: "center"
   },
   menuButton: {
