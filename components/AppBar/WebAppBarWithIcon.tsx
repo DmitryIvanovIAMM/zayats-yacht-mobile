@@ -10,6 +10,12 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+// @ts-ignore
+const RNWDiv =
+  (typeof document !== "undefined" &&
+    (require("react-native-web").default ||
+      require("react-native-web").View)) ||
+  View;
 
 export interface WebAppBarWithIconProps {
   toggleMenu: () => void;
@@ -27,8 +33,100 @@ const WebAppBarWithIcon = ({ toggleMenu }: WebAppBarWithIconProps) => {
     }
   };
 
+  const isWeb = typeof window !== "undefined" && window.document;
+  const webStickyStyle = isWeb
+    ? {
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+        boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
+      }
+    : {};
+
+  if (isWeb) {
+    return (
+      <div
+        style={{
+          backgroundColor: "white",
+          display: "flex",
+          flexDirection: "row" as const,
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          maxWidth: "100vw",
+          boxSizing: "border-box",
+          height: 64,
+          padding: "0 16px",
+          borderBottom: "1px solid #e0e0e0",
+          ...(webStickyStyle as React.CSSProperties)
+        }}
+      >
+        {/* ...existing code... */}
+        <View style={styles.firstDiv}>
+          <TouchableOpacity
+            onPress={toggleMenu}
+            style={styles.menuButton}
+            accessibilityRole="button"
+            accessibilityLabel="Toggle menu"
+          >
+            <Text style={styles.menuIcon}>☰</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.secondDiv}>
+          <TouchableOpacity
+            onPress={() => router.push("/" as RelativePathString)}
+            accessibilityRole="link"
+            accessibilityLabel="Go to home page"
+          >
+            <Image
+              source={require("@/assets/images/zayats-logo-white.png")}
+              style={styles.alliedIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.thirdDiv}>
+          {authState.isValidating ? (
+            <ActivityIndicator
+              size="small"
+              color={secondary.dark}
+              style={styles.activityIndicator}
+            />
+          ) : authState.isAuthenticated ? (
+            <View style={styles.appBarIconWitName}>
+              <View style={styles.userNameWithIcon}>
+                <Text style={styles.userName}>
+                  {authState.userInfo?.user?.name
+                    ? (authState?.userInfo?.user?.name ?? "User")
+                    : (authState?.userInfo?.user?.email ?? "User")}
+                </Text>
+                <TouchableOpacity
+                  onPress={handleLoginPress}
+                  style={styles.logoutButton}
+                  accessibilityRole="button"
+                  accessibilityLabel="Logout"
+                >
+                  <Text style={styles.logoutIcon}>⏻</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={handleLoginPress}
+              style={styles.loginButton}
+              accessibilityRole="button"
+              accessibilityLabel="Login"
+            >
+              <Text style={styles.loginIcon}>👤</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </div>
+    );
+  }
+
   return (
     <View style={styles.container}>
+      {/* ...existing code... */}
       <View style={styles.firstDiv}>
         <TouchableOpacity
           onPress={toggleMenu}
@@ -106,15 +204,7 @@ const styles = StyleSheet.create({
     height: 64,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
-    ...(typeof window !== "undefined" && window.document
-      ? {
-          position: "sticky",
-          top: 0,
-          zIndex: 1000,
-          boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
-        }
-      : {})
+    borderBottomColor: "#e0e0e0"
   },
   firstDiv: {
     flex: 1,
