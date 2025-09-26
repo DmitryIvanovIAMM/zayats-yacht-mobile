@@ -44,6 +44,7 @@ export const LeftNavigation = ({
         style={styles.overlay}
         activeOpacity={1}
         onPress={() => setMenuIsOpen(false)}
+        testID="overlay"
       >
         <TouchableOpacity
           style={styles.menuContainer}
