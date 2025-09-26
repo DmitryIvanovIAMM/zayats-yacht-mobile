@@ -109,10 +109,10 @@ const styles = StyleSheet.create({
     width: "100%",
     ...Platform.select({
       web: {
-        position: "sticky",
+        position: "sticky" as any,
         top: 0,
         zIndex: 1000,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
+        boxShadow: "0 2px 6px rgba(0,0,0,0.08)" as any
       },
       default: {
         elevation: 4
