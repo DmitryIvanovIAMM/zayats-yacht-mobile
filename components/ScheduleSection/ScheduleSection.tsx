@@ -50,10 +50,6 @@ function ScheduleSectionDetails({
 }
 
 const ScheduleSection = ({ scheduleState, ref }: ScheduleSectionProps) => {
-  const scheduleList = Array.isArray(scheduleState.schedule)
-    ? scheduleState.schedule
-    : [];
-
   if ((Platform.OS as string) === "web") {
     // For web, use a div for DOM-based scrolling
     return (

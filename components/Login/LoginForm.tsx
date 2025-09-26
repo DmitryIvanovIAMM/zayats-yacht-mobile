@@ -69,7 +69,6 @@ export default function LoginForm() {
 
   const formDisabled = isSubmitting || authState.isValidating;
 
-  const isWeb = Platform.OS === "web";
   const content = (
     <FormProvider {...methods}>
       <FormContainer>

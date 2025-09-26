@@ -83,21 +83,27 @@ function ContactUsDetails() {
   );
 }
 
-const ContactUs = React.forwardRef<View, {}>(function ContactUs(props, ref) {
-  if ((Platform.OS as string) === "web") {
+const ContactUs = React.forwardRef<View, object>(
+  function ContactUs(props, ref) {
+    if ((Platform.OS as string) === "web") {
+      return (
+        <div
+          ref={ref as any}
+          id={"contact-us-section"}
+          style={{ width: "100%" }}
+        >
+          <ContactUsDetails />
+        </div>
+      );
+    }
+    // Native platforms
     return (
-      <div ref={ref as any} id={"contact-us-section"} style={{ width: "100%" }}>
+      <View ref={ref} style={styles.container}>
         <ContactUsDetails />
-      </div>
+      </View>
     );
   }
-  // Native platforms
-  return (
-    <View ref={ref} style={styles.container}>
-      <ContactUsDetails />
-    </View>
-  );
-});
+);
 
 const styles = StyleSheet.create({
   container: {
