@@ -2,7 +2,7 @@ import { primary, secondary } from "@/constants/Colors";
 import { getMenuLinks } from "@/helpers/menuLinks";
 import { RelativePathString, useRouter } from "expo-router";
 import React from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export interface WebLeftNavigationProps {
   setMenuIsOpen: (isOpen: boolean) => void;
@@ -35,8 +35,16 @@ export const WebLeftNavigation = ({
       animationType="fade"
       onRequestClose={() => setMenuIsOpen(false)}
     >
-      <View style={styles.overlay}>
-        <View style={styles.menuContainer}>
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={() => setMenuIsOpen(false)}
+      >
+        <TouchableOpacity
+          style={styles.menuContainer}
+          activeOpacity={1}
+          onPress={(e) => e.stopPropagation()}
+        >
           {menuLinks.map((menuLinkItem, index) => {
             const { label, link, section } = menuLinkItem;
             return (
@@ -49,8 +57,8 @@ export const WebLeftNavigation = ({
               </TouchableOpacity>
             );
           })}
-        </View>
-      </View>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   );
 };
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
   },
   menuContainer: {
     backgroundColor: secondary.dark,
-    borderRadius: 8,
+    borderRadius: 4,
     minWidth: 200,
     shadowColor: "#000",
     shadowOffset: {
