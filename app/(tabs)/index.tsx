@@ -64,6 +64,7 @@ export default function HomeScreen() {
         delete (route.params as HomeScreenRouteParams).section;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyToScroll, section, scheduleState.schedule, route]);
 
   function scrollToSectionIfAny(section: string | undefined) {
@@ -84,7 +85,7 @@ export default function HomeScreen() {
                   block: "start",
                   inline: "nearest"
                 });
-              } catch (error) {
+              } catch {
                 // Fallback to window.scrollTo
                 const rect = el.getBoundingClientRect();
                 const scrollTop =
@@ -108,16 +109,12 @@ export default function HomeScreen() {
         if (Platform.OS === "web") {
           // Add a small delay to ensure elements are rendered
           setTimeout(() => {
-            console.log(`Looking for element with id: contact-us-section`);
             const el = document.getElementById("contact-us-section");
             if (el) {
-              console.log(`Found element:`, el);
-              console.log(`Element position:`, el.getBoundingClientRect());
               const rect = el.getBoundingClientRect();
               const scrollTop =
                 window.pageYOffset || document.documentElement.scrollTop;
               const targetPosition = Math.max(0, rect.top + scrollTop - 80);
-              console.log(`Scrolling to position: ${targetPosition}`);
 
               // Use scrollIntoView - most reliable method
               try {
@@ -126,24 +123,17 @@ export default function HomeScreen() {
                   block: "start",
                   inline: "nearest"
                 });
-                console.log("Scrolling to element with scrollIntoView");
-              } catch (error) {
-                console.error("Scroll error:", error);
+              } catch {
                 // Fallback to window.scrollTo
                 window.scrollTo({
                   top: targetPosition,
                   behavior: "smooth"
                 });
-                console.log("Fallback: window.scrollTo called");
               }
             } else {
-              console.log(`Element with id 'contact-us-section' not found`);
               // Try to find all elements with IDs
               const allElements = document.querySelectorAll("[id]");
-              console.log(
-                "All elements with IDs:",
-                Array.from(allElements).map((el) => el.id)
-              );
+              Array.from(allElements).map((el) => el.id);
             }
           }, 500); // Increased delay
         } else {
