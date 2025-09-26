@@ -63,6 +63,7 @@ const AppBarWithIcon = ({ toggleMenu }: AppBarWithIconProps) => {
       <View style={styles.thirdDiv}>
         {authState.isValidating ? (
           <ActivityIndicator
+            testID="spinner"
             size="small"
             color={secondary.dark}
             style={styles.activityIndicator}
