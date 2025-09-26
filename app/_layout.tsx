@@ -1,6 +1,5 @@
 import AppBarWithIcon from "@/components/AppBar/AppBarWithIcon";
 import { LeftNavigation } from "@/components/LeftNavigation/LeftNavigation";
-import { WebLeftNavigation } from "@/components/LeftNavigation/WebLeftNavigation";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
@@ -13,7 +12,6 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Platform } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import "react-native-reanimated";
 
@@ -46,17 +44,7 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <PaperProvider>
           <AppBarWithIcon toggleMenu={toggleMenu} />
-          {Platform.OS === "web" ? (
-            <WebLeftNavigation
-              setMenuIsOpen={setMenuIsOpen}
-              visible={menuIsOpen}
-            />
-          ) : (
-            <LeftNavigation
-              setMenuIsOpen={setMenuIsOpen}
-              visible={menuIsOpen}
-            />
-          )}
+          <LeftNavigation setMenuIsOpen={setMenuIsOpen} visible={menuIsOpen} />
           <Stack>
             <Stack.Screen name="login" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

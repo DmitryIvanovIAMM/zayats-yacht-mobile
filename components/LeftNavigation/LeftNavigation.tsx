@@ -1,8 +1,14 @@
 import { primary, secondary } from "@/constants/Colors";
 import { getMenuLinks } from "@/helpers/menuLinks";
 import { RelativePathString, useRouter } from "expo-router";
-import { Divider, Menu } from "react-native-paper";
-import { Platform } from "react-native";
+import React from "react";
+import {
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity
+} from "react-native";
 
 export interface LeftNavigationProps {
   setMenuIsOpen: (isOpen: boolean) => void;
@@ -28,27 +34,70 @@ export const LeftNavigation = ({
   };
 
   return (
-    <Menu
+    <Modal
       visible={visible}
-      onDismiss={() => setMenuIsOpen(false)}
-      //anchor={<Button onPress={() => setMenuIsOpen(true)}>Show menu</Button>}
-      anchor={Platform.OS === 'web' ? { x: 10, y: 60 } : { x: -10, y: 110 }}
-      contentStyle={{ backgroundColor: secondary.dark }}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={() => setMenuIsOpen(false)}
     >
-      <>
-        {menuLinks.map((menuLinkItem, index) => {
-          const { label, link, section } = menuLinkItem;
-          return (
-            <Menu.Item
-              key={`menu-item-${index}`}
-              onPress={() => handleMenuItemPress(link, section)}
-              title={label}
-              titleStyle={{ color: primary.contrastText }}
-            />
-          );
-        })}
-        <Divider />
-      </>
-    </Menu>
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={() => setMenuIsOpen(false)}
+      >
+        <TouchableOpacity
+          style={styles.menuContainer}
+          activeOpacity={1}
+          onPress={(e) => e.stopPropagation()}
+        >
+          {menuLinks.map((menuLinkItem, index) => {
+            const { label, link, section } = menuLinkItem;
+            return (
+              <TouchableOpacity
+                key={`menu-item-${index}`}
+                onPress={() => handleMenuItemPress(link, section)}
+                style={styles.menuItem}
+              >
+                <Text style={styles.menuItemText}>{label}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "transparent",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    paddingTop: Platform.OS === "web" ? 60 : 120,
+    paddingLeft: 10
+  },
+  menuContainer: {
+    backgroundColor: secondary.dark,
+    borderRadius: 4,
+    minWidth: 200,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  menuItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.1)"
+  },
+  menuItemText: {
+    color: primary.contrastText,
+    fontSize: 16
+  }
+});
