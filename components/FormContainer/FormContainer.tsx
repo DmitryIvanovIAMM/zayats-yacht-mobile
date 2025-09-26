@@ -1,7 +1,7 @@
 import { secondary } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { FC, PropsWithChildren, useEffect, useRef } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, Platform, StyleSheet, View } from "react-native";
 interface FormContainerProps {
   borderWidth?: number;
 }
@@ -18,7 +18,7 @@ export const FormContainer: FC<PropsWithChildren<FormContainerProps>> = ({
         Animated.timing(rotateValue, {
           toValue: 1,
           duration: 6000,
-          useNativeDriver: true
+          useNativeDriver: Platform.OS !== "web"
         })
       ).start();
     };
